@@ -23,6 +23,7 @@ Paginated list of cancels.
 using System.Collections.Generic;
 using System.Globalization;
 using UnivaPay.Models;
+using UnivaPay.Models.Containers;
 using UnivaPay.Utilities;
 
 CancelList cancelList = new CancelList
@@ -45,6 +46,9 @@ CancelList cancelList = new CancelList
             Metadata = new GenericMetadata
             {
                 OrderId = "ORD-987",
+                UnivapayName = "univapay-name8",
+                UnivapayPhoneNumber = "univapay-phone-number2",
+                ["exampleAdditionalProperty"] = GenericMetadataValue.FromString("String4"),
             },
             Mode = ChargeMode.Live,
             CreatedOn = DateTime.ParseExact("2026-04-09T07:35:50.000000Z", "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK",
@@ -71,6 +75,9 @@ CancelList cancelList = new CancelList
             Metadata = new GenericMetadata
             {
                 OrderId = "ORD-988",
+                UnivapayName = "univapay-name8",
+                UnivapayPhoneNumber = "univapay-phone-number2",
+                ["exampleAdditionalProperty"] = GenericMetadataValue.FromString("String4"),
             },
             Mode = ChargeMode.Live,
             CreatedOn = DateTime.ParseExact("2026-04-10T10:00:00.000000Z", "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK",

@@ -22,14 +22,12 @@ Base Bank Transfer Data schema.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 BaseBankTransferData baseBankTransferData = new BaseBankTransferData
 {
     Brand = "aozora_bank",
     ExpirationPeriod = "PT168H",
     ExpirationTimeShift = "23:59:59+09:00",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

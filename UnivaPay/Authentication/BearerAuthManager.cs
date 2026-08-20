@@ -86,6 +86,19 @@ namespace UnivaPay.Authentication
             }
 
             /// <summary>
+            /// Single-token overload retained only so the generated
+            /// CreateFromEnvironment branch that reads UNIVA_PAY_ACCESS_TOKEN still
+            /// compiles. This SDK authenticates with a secret key plus a JWT token, so
+            /// that branch is inert and this constructor is never reached. Internal, so
+            /// it adds nothing to the public surface. Keeping the generated code
+            /// untouched matters: it sits beside the base-URL block codegen rewrites
+            /// whenever the server list changes.
+            /// </summary>
+            internal Builder(string accessToken) =>
+                throw new NotSupportedException(
+                    "This SDK requires a secret key and a JWT token. Use Builder(secretKey, jwtToken).");
+
+            /// <summary>
             /// Sets SecretKey.
             /// </summary>
             /// <param name="secretKey">SecretKey.</param>

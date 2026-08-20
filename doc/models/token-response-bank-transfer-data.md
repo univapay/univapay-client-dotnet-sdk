@@ -28,7 +28,6 @@ Token Response Bank Transfer Data schema.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 TokenResponseBankTransferData tokenResponseBankTransferData = new TokenResponseBankTransferData
 {
@@ -41,7 +40,6 @@ TokenResponseBankTransferData tokenResponseBankTransferData = new TokenResponseB
     BranchName = "Test Branch",
     AccountNumber = "1234567",
     AccountHolderName = "TARO YAMADA",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

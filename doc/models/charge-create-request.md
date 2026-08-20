@@ -22,29 +22,19 @@ Request payload for creating a charge.
 | `Metadata` | [`GenericMetadata`](../../doc/models/generic-metadata.md) | Optional | A free-form dictionary for custom metadata. |
 | `ClientMetadata` | [`ChargeCreateRequestClientMetadata`](../../doc/models/charge-create-request-client-metadata.md) | Optional | Charge Create Request Client Metadata schema. |
 | `Redirect` | [`ChargeCreateRequestRedirect`](../../doc/models/charge-create-request-redirect.md) | Optional | Charge Create Request Redirect schema. |
-| `ThreeDs` | [`ChargeCreateRequestThreeDs`](../../doc/models/charge-create-request-three-ds.md) | Optional | Charge Create Request Three Ds schema. |
+| `ThreeDs` | [`ChargeCreateRequestThreeDs`](../../doc/models/charge-create-request-three-ds.md) | Optional | Charge Create Request Three Ds schema. Either supply `mode` (and optionally `redirect_endpoint`) to have Univapay run 3DS, or supply all six external-MPI fields (`authentication_value` through `transaction_status`) when 3DS authentication was already completed outside of Univapay — in that case `mode` is set to `provided` automatically and must not be sent. |
 | `AdditionalProperties` | `object this[string key]` | Optional | - |
 
 ## Example
 
 ```csharp
-using System.Globalization;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 ChargeCreateRequest chargeCreateRequest = new ChargeCreateRequest
 {
     TransactionTokenId = new Guid("af834c88-7a8f-47ac-aee9-0386a0f98b0d"),
     Amount = 1000,
     Currency = "JPY",
-    Capture = false,
-    CaptureAt = DateTime.ParseExact("2016-03-13T12:52:32.123Z", "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK",
-        provider: CultureInfo.InvariantCulture,
-        DateTimeStyles.RoundtripKind),
-    MerchantTransactionId = "merchant_transaction_id0",
-    Metadata = null,
-    ClientMetadata = null,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

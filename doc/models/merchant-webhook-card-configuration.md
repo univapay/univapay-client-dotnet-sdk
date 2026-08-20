@@ -36,19 +36,15 @@ Card payment settings.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookCardConfiguration merchantWebhookCardConfiguration = new MerchantWebhookCardConfiguration
 {
     Enabled = true,
     DebitEnabled = true,
     PrepaidEnabled = false,
-    DebitAuthorizationEnabled = false,
-    PrepaidAuthorizationEnabled = false,
     ForeignCardsAllowed = false,
     ThreeDsRequired = true,
     AllowDirectTokenCreation = false,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

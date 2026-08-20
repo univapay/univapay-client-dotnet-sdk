@@ -1,7 +1,7 @@
 
 # Merchant Webhook Configuration
 
-Merchant configuration object serialized by gyron-payments-api.
+Merchant configuration object as serialized by the backend.
 
 *This model accepts additional fields of type object.*
 
@@ -49,7 +49,6 @@ Merchant configuration object serialized by gyron-payments-api.
 ```csharp
 using System.Collections.Generic;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookConfiguration merchantWebhookConfiguration = new MerchantWebhookConfiguration
 {
@@ -60,10 +59,8 @@ MerchantWebhookConfiguration merchantWebhookConfiguration = new MerchantWebhookC
         {
             Amount = 100,
             Currency = "JPY",
-            ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
         },
     },
-    LogoUrl = "logo_url4",
     Country = "JP",
     Language = "ja",
     DisplayTimeZone = "Asia/Tokyo",
@@ -255,7 +252,6 @@ MerchantWebhookConfiguration merchantWebhookConfiguration = new MerchantWebhookC
     },
     PlatformCredentialsEnabled = true,
     TaggedPlatformCredentialsEnabled = false,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

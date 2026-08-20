@@ -26,7 +26,6 @@ Installment plan configuration.
 ```csharp
 using System.Collections.Generic;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookInstallmentPlanConfiguration merchantWebhookInstallmentPlanConfiguration = new MerchantWebhookInstallmentPlanConfiguration
 {
@@ -35,7 +34,6 @@ MerchantWebhookInstallmentPlanConfiguration merchantWebhookInstallmentPlanConfig
     {
         Revolving = true,
         FixedCycle = true,
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
     SupportedPaymentTypes = new List<string>
     {
@@ -45,11 +43,9 @@ MerchantWebhookInstallmentPlanConfiguration merchantWebhookInstallmentPlanConfig
     {
         Amount = 3000,
         Currency = "JPY",
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
     MaxPayoutPeriod = "P12M",
     OnlyWithProcessor = true,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

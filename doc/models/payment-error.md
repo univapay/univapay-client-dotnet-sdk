@@ -23,14 +23,12 @@ The HTTP status will return success (2xx), but the resource `status` will be `fa
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 PaymentError paymentError = new PaymentError
 {
     Code = 301,
     Message = "Card number error.",
     Detail = "The provided card number failed validation.",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

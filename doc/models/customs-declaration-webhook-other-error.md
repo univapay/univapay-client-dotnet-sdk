@@ -22,21 +22,12 @@ Nested customs-processing error entry returned in `others`.
 ## Example
 
 ```csharp
-using System.Collections.Generic;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 CustomsDeclarationWebhookOtherError customsDeclarationWebhookOtherError = new CustomsDeclarationWebhookOtherError
 {
     Type = "related_item",
-    CredentialsId = new Guid("00000b8c-0000-0000-0000-000000000000"),
-    Message = new List<string>
-    {
-        "message4",
-        "message3",
-    },
     ItemName = "charge",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

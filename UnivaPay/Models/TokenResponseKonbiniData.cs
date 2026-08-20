@@ -3,7 +3,6 @@
 //
 // This file was automatically generated for Univapay by APIMATIC v3.0 ( https://www.apimatic.io ).
 // </copyright>
-using APIMatic.Core.Utilities.Converters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
@@ -90,7 +89,6 @@ namespace UnivaPay.Models
         /// <summary>
         /// Customer name.
         /// </summary>
-        [JsonConverter(typeof(JsonStringConverter))]
         [JsonProperty("customer_name", NullValueHandling = NullValueHandling.Ignore)]
         public string CustomerName { get; set; }
 
@@ -103,14 +101,12 @@ namespace UnivaPay.Models
         /// <summary>
         /// ISO-8601 Duration (e.g., 'P7D'). Default is 30 days.
         /// </summary>
-        [JsonConverter(typeof(JsonStringConverter))]
         [JsonProperty("expiration_period", NullValueHandling = NullValueHandling.Ignore)]
         public string ExpirationPeriod { get; set; }
 
         /// <summary>
         /// Time shift applied to the expiration, typically pushing it to the end of the day in a specific timezone (e.g., '23:59:59.999999+09:00').
         /// </summary>
-        [JsonConverter(typeof(JsonStringConverter))]
         [JsonProperty("expiration_time_shift")]
         public string ExpirationTimeShift
         {

@@ -16,7 +16,7 @@ Store resource returned by the backend `FullStore` formatter. It combines core s
 | `Id` | `Guid?` | Optional | Store identifier. |
 | `Name` | `string` | Optional | Store display name. |
 | `CreatedOn` | `DateTime?` | Optional | Timestamp when the store was created. |
-| `Configuration` | [`MerchantWebhookConfiguration`](../../doc/models/merchant-webhook-configuration.md) | Optional | Store-scoped configuration snapshot serialized by gyron-payments-api. It uses the same flattened serializer as merchant configuration, but omits `transfer_schedule`. |
+| `Configuration` | [`MerchantWebhookConfiguration`](../../doc/models/merchant-webhook-configuration.md) | Optional | Store-scoped configuration snapshot as serialized by the backend. It uses the same flattened serializer as merchant configuration, but omits `transfer_schedule`. |
 | `AdditionalProperties` | `object this[string key]` | Optional | - |
 
 ## Example
@@ -25,7 +25,6 @@ Store resource returned by the backend `FullStore` formatter. It combines core s
 using System.Collections.Generic;
 using System.Globalization;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 Store store = new Store
 {
@@ -37,11 +36,6 @@ Store store = new Store
     Configuration = new MerchantWebhookConfiguration
     {
         PercentFee = 3.6,
-        FlatFees = new List<MerchantWebhookMoneyAmount>
-        {
-            null,
-        },
-        LogoUrl = "logo_url4",
         Country = "JP",
         Language = "ja",
         MinimumChargeAmounts = new List<MerchantWebhookMoneyAmount>
@@ -66,12 +60,84 @@ Store store = new Store
             NotifyCustomer = true,
             NotifyOnWebhookFailure = true,
         },
+        RecurringTokenConfiguration = new MerchantWebhookRecurringTokenConfiguration
+        {
+            RecurringType = "infinite",
+            ChargeWaitPeriod = "P7D",
+            CardChargeCvvConfirmation = new MerchantWebhookRecurringCvvConfirmationConfig
+            {
+                Enabled = false,
+            },
+        },
+        SecurityConfiguration = new MerchantWebhookSecurityConfiguration
+        {
+            CardChargeCooldown = "PT5M",
+            SubscriptionCooldown = "PT10M",
+            RestrictIpAfterFailedCharge = new RestrictIpAfterFailedChargeConfig
+            {
+                Enabled = true,
+                Count = 5,
+                Cooldown = "PT1H",
+            },
+            RefundPercentLimit = 100,
+            ConfirmationRequired = false,
+            MinRefundThreshold = 100,
+            LimitRefundBySales = new MerchantWebhookLimitRefundBySalesConfiguration
+            {
+                Enabled = true,
+                Period = "monthly",
+                RollingWindow = true,
+            },
+        },
+        InstallmentsConfiguration = new MerchantWebhookInstallmentPlanConfiguration
+        {
+            Enabled = true,
+            CardProcessor = new CardProcessorInstallmentConfig
+            {
+                Revolving = true,
+                FixedCycle = true,
+            },
+            SupportedPaymentTypes = new List<string>
+            {
+                "card",
+            },
+            MinChargeAmount = new MerchantWebhookMoneyAmount
+            {
+                Amount = 3000,
+                Currency = "JPY",
+            },
+            MaxPayoutPeriod = "P12M",
+            OnlyWithProcessor = true,
+        },
+        CardBrandPercentFees = new MerchantWebhookCardBrandPercentFees
+        {
+            Visa = 3.6,
+            Mastercard = 3.6,
+            Jcb = 3.8,
+        },
         CardConfiguration = new MerchantWebhookCardConfiguration
         {
             Enabled = true,
             DebitEnabled = true,
             PrepaidEnabled = false,
             ThreeDsRequired = true,
+        },
+        QrScanConfiguration = new MerchantWebhookQrScanConfiguration
+        {
+            Enabled = true,
+            ForbiddenQrScanGateways = new List<string>
+            {
+                "wechat",
+            },
+        },
+        ConvenienceConfiguration = new MerchantWebhookConvenienceConfiguration
+        {
+            Enabled = true,
+            Expiration = "P3D",
+        },
+        PaidyConfiguration = new MerchantWebhookPaidyConfiguration
+        {
+            Enabled = false,
         },
         OnlineConfiguration = new MerchantWebhookOnlineConfiguration
         {
@@ -83,9 +149,7 @@ Store store = new Store
             MatchAmount = true,
             Expiration = "P7D",
         },
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

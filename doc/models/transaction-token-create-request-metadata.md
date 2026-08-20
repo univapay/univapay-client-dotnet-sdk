@@ -23,15 +23,11 @@ A free-form dictionary for custom metadata.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Models.Containers;
 
 TransactionTokenCreateRequestMetadata transactionTokenCreateRequestMetadata = new TransactionTokenCreateRequestMetadata
 {
     UnivapayReferenceId = "ref-998877",
     UnivapayCustomerId = new Guid("0fd29949-07d5-4a91-8eaf-fbce0897d944"),
-    UnivapayName = "univapay-name2",
-    UnivapayPhoneNumber = "univapay-phone-number6",
-    ["exampleAdditionalProperty"] = TransactionTokenCreateMetadataProps.FromString("String8"),
 };
 ```
 

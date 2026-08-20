@@ -1,8 +1,9 @@
-// <copyright file="TransactionToken.cs" company="APIMatic">
+// <copyright file="QrScanTransactionToken.cs" company="APIMatic">
 // UnivaPay
 //
 // This file was automatically generated for Univapay by APIMATIC v3.0 ( https://www.apimatic.io ).
 // </copyright>
+using APIMatic.Core.Utilities.Converters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
@@ -16,9 +17,9 @@ using UnivaPay.Utilities;
 namespace UnivaPay.Models
 {
     /// <summary>
-    /// TransactionToken.
+    /// QrScanTransactionToken.
     /// </summary>
-    public class TransactionToken
+    public class QrScanTransactionToken
     {
         [JsonExtensionData]
         private readonly IDictionary<string, JToken> additionalProperties;
@@ -59,21 +60,22 @@ namespace UnivaPay.Models
         };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransactionToken"/> class.
+        /// Initializes a new instance of the <see cref="QrScanTransactionToken"/> class.
         /// </summary>
-        public TransactionToken()
+        public QrScanTransactionToken()
         {
             this.additionalProperties = new Dictionary<string, JToken>();
             this.propertyName = this.GetPropertyNames();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransactionToken"/> class.
+        /// Initializes a new instance of the <see cref="QrScanTransactionToken"/> class.
         /// </summary>
+        /// <param name="paymentType">payment_type.</param>
+        /// <param name="data">data.</param>
         /// <param name="id">id.</param>
         /// <param name="storeId">store_id.</param>
         /// <param name="email">email.</param>
-        /// <param name="paymentType">payment_type.</param>
         /// <param name="active">active.</param>
         /// <param name="mode">mode.</param>
         /// <param name="type">type.</param>
@@ -83,12 +85,12 @@ namespace UnivaPay.Models
         /// <param name="createdOn">created_on.</param>
         /// <param name="updatedOn">updated_on.</param>
         /// <param name="lastUsedOn">last_used_on.</param>
-        /// <param name="data">data.</param>
-        public TransactionToken(
+        public QrScanTransactionToken(
+            string paymentType,
+            Models.TokenResponseQrScanData data,
             Guid? id = null,
             Guid? storeId = null,
             string email = null,
-            Models.TransactionTokenPaymentType? paymentType = null,
             bool? active = null,
             Models.TransactionTokenMode? mode = null,
             Models.TransactionTokenType? type = null,
@@ -97,8 +99,7 @@ namespace UnivaPay.Models
             Dictionary<string, TransactionTokenMetadataAdditionalProperties> metadata = null,
             DateTime? createdOn = null,
             DateTime? updatedOn = null,
-            DateTime? lastUsedOn = null,
-            TransactionTokenData data = null)
+            DateTime? lastUsedOn = null)
         {
             this.additionalProperties = new Dictionary<string, JToken>();
             this.propertyName = this.GetPropertyNames();
@@ -109,7 +110,6 @@ namespace UnivaPay.Models
             {
                 this.Email = email;
             }
-            this.PaymentType = paymentType;
             this.Active = active;
             this.Mode = mode;
             this.Type = type;
@@ -131,6 +131,7 @@ namespace UnivaPay.Models
             {
                 this.LastUsedOn = lastUsedOn;
             }
+            this.PaymentType = paymentType;
             this.Data = data;
         }
 
@@ -149,6 +150,7 @@ namespace UnivaPay.Models
         /// <summary>
         /// Customer email address.
         /// </summary>
+        [JsonConverter(typeof(JsonStringConverter))]
         [JsonProperty("email")]
         public string Email
         {
@@ -163,12 +165,6 @@ namespace UnivaPay.Models
                 this.email = value;
             }
         }
-
-        /// <summary>
-        /// Transaction Token Payment Type schema.
-        /// </summary>
-        [JsonProperty("payment_type", NullValueHandling = NullValueHandling.Ignore)]
-        public Models.TransactionTokenPaymentType? PaymentType { get; set; }
 
         /// <summary>
         /// Whether the resource is active.
@@ -191,6 +187,7 @@ namespace UnivaPay.Models
         /// <summary>
         /// Usage limit applied to the token.
         /// </summary>
+        [JsonConverter(typeof(JsonStringConverter))]
         [JsonProperty("usage_limit")]
         public string UsageLimit
         {
@@ -264,17 +261,26 @@ namespace UnivaPay.Models
         }
 
         /// <summary>
-        /// Transaction token data payload. The actual structure depends on `payment_type` — card, konbini, online (QR / 3DS), or bank transfer.
+        /// Payment method type. Always `qr_scan` for this variant.
         /// </summary>
-        [JsonProperty("data", NullValueHandling = NullValueHandling.Ignore)]
-        public TransactionTokenData Data { get; set; }
+        [JsonConverter(typeof(JsonStringConverter), true)]
+        [JsonProperty("payment_type")]
+        [JsonRequired]
+        public string PaymentType { get; set; }
+
+        /// <summary>
+        /// Token Response Qr Scan Data schema.
+        /// </summary>
+        [JsonProperty("data")]
+        [JsonRequired]
+        public Models.TokenResponseQrScanData Data { get; set; }
 
         /// <inheritdoc/>
         public override string ToString()
         {
             var toStringOutput = new List<string>();
             this.ToString(toStringOutput);
-            return $"TransactionToken : ({string.Join(", ", toStringOutput)})";
+            return $"QrScanTransactionToken : ({string.Join(", ", toStringOutput)})";
         }
 
         /// <summary>
@@ -351,7 +357,6 @@ namespace UnivaPay.Models
             toStringOutput.Add($"Id = {(this.Id == null ? "null" : this.Id.ToString())}");
             toStringOutput.Add($"StoreId = {(this.StoreId == null ? "null" : this.StoreId.ToString())}");
             toStringOutput.Add($"Email = {this.Email ?? "null"}");
-            toStringOutput.Add($"PaymentType = {(this.PaymentType == null ? "null" : this.PaymentType.ToString())}");
             toStringOutput.Add($"Active = {(this.Active == null ? "null" : this.Active.ToString())}");
             toStringOutput.Add($"Mode = {(this.Mode == null ? "null" : this.Mode.ToString())}");
             toStringOutput.Add($"Type = {(this.Type == null ? "null" : this.Type.ToString())}");
@@ -361,6 +366,7 @@ namespace UnivaPay.Models
             toStringOutput.Add($"CreatedOn = {(this.CreatedOn == null ? "null" : this.CreatedOn.ToString())}");
             toStringOutput.Add($"UpdatedOn = {(this.UpdatedOn == null ? "null" : this.UpdatedOn.ToString())}");
             toStringOutput.Add($"LastUsedOn = {(this.LastUsedOn == null ? "null" : this.LastUsedOn.ToString())}");
+            toStringOutput.Add($"PaymentType = {this.PaymentType ?? "null"}");
             toStringOutput.Add($"Data = {(this.Data == null ? "null" : this.Data.ToString())}");
 
             additionalProperties?

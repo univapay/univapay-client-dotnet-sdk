@@ -21,13 +21,11 @@ Monetary amount object serialized by backend config models.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookMoneyAmount merchantWebhookMoneyAmount = new MerchantWebhookMoneyAmount
 {
     Amount = 1000,
     Currency = "JPY",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

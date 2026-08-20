@@ -23,7 +23,6 @@ Customer-management defaults.
 ```csharp
 using System.Collections.Generic;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookCustomerManagementConfiguration merchantWebhookCustomerManagementConfiguration = new MerchantWebhookCustomerManagementConfiguration
 {
@@ -33,7 +32,6 @@ MerchantWebhookCustomerManagementConfiguration merchantWebhookCustomerManagement
         "end_user",
     },
     DefaultMode = "live",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

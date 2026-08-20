@@ -407,41 +407,41 @@ namespace UnivaPay.Apis
               .ExecuteAsync(cancellationToken).ConfigureAwait(false);
 
         /// <summary>
-        /// Captures a previously authorized charge (where `capture` was set to false during creation).  The capture amount must be less than or equal to the authorized amount, and the currency must match.
+        /// Captures a previously authorized charge (where `capture` was set to false during creation).  The capture amount must be less than or equal to the authorized amount, and the currency must match. The request body — and both of its fields — is optional: if omitted entirely, the full outstanding authorized amount (in the originally requested currency) is captured.
         /// </summary>
         /// <param name="storeId">Required parameter: The unique identifier of the store..</param>
         /// <param name="id">Required parameter: The unique identifier of the resource..</param>
-        /// <param name="body">Required parameter: Request payload for capturing an authorized charge..</param>
         /// <param name="idempotencyKey">Optional parameter: An optional idempotency key to prevent double charges and duplicate operations. We recommend a randomly generated UUID (v4)..</param>
+        /// <param name="body">Optional parameter: Optional request payload for capturing an authorized charge. Omit entirely to capture the full outstanding authorized amount..</param>
         /// <returns>Returns the ApiResponse of object response from the API call.</returns>
         public ApiResponse<object> CaptureCharge(
                 Guid storeId,
                 Guid id,
-                Models.ChargeCaptureRequest body,
-                string idempotencyKey = null)
-            => CoreHelper.RunTask(CaptureChargeAsync(storeId, id, body, idempotencyKey));
+                string idempotencyKey = null,
+                Models.ChargeCaptureRequest body = null)
+            => CoreHelper.RunTask(CaptureChargeAsync(storeId, id, idempotencyKey, body));
 
         /// <summary>
-        /// Captures a previously authorized charge (where `capture` was set to false during creation).  The capture amount must be less than or equal to the authorized amount, and the currency must match.
+        /// Captures a previously authorized charge (where `capture` was set to false during creation).  The capture amount must be less than or equal to the authorized amount, and the currency must match. The request body — and both of its fields — is optional: if omitted entirely, the full outstanding authorized amount (in the originally requested currency) is captured.
         /// </summary>
         /// <param name="storeId">Required parameter: The unique identifier of the store..</param>
         /// <param name="id">Required parameter: The unique identifier of the resource..</param>
-        /// <param name="body">Required parameter: Request payload for capturing an authorized charge..</param>
         /// <param name="idempotencyKey">Optional parameter: An optional idempotency key to prevent double charges and duplicate operations. We recommend a randomly generated UUID (v4)..</param>
+        /// <param name="body">Optional parameter: Optional request payload for capturing an authorized charge. Omit entirely to capture the full outstanding authorized amount..</param>
         /// <param name="cancellationToken"> cancellationToken. </param>
         /// <returns>Returns the ApiResponse of object response from the API call.</returns>
         public async Task<ApiResponse<object>> CaptureChargeAsync(
                 Guid storeId,
                 Guid id,
-                Models.ChargeCaptureRequest body,
                 string idempotencyKey = null,
+                Models.ChargeCaptureRequest body = null,
                 CancellationToken cancellationToken = default)
             => await CreateApiCall<object>()
               .RequestBuilder(requestBuilder => requestBuilder
                   .Setup(HttpMethod.Post, "/stores/{storeId}/charges/{id}/capture")
                   .WithAuth("JWT_TOKEN")
                   .Parameters(parameters => parameters
-                      .Body(b => b.Setup(body).Required())
+                      .Body(b => b.Setup(body))
                       .Template(template => template.Setup("storeId", storeId))
                       .Template(template => template.Setup("id", id))
                       .Header(header => header.Setup("Content-Type", "application/json"))

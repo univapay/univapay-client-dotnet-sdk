@@ -27,18 +27,14 @@ Transfer schedule configuration inherited by the merchant.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookTransferScheduleConfiguration merchantWebhookTransferScheduleConfiguration = new MerchantWebhookTransferScheduleConfiguration
 {
     WaitPeriod = "P7D",
     Period = "weekly",
     FullPeriodRequired = false,
-    DayOfWeek = "day_of_week8",
-    WeekOfMonth = 26,
     WeeklyClosingDay = "sunday",
     WeeklyPayoutDay = "friday",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

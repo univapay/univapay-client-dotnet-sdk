@@ -15,7 +15,7 @@ Webhook envelope for transaction token lifecycle events. Fired as `token_created
 |  --- | --- | --- | --- |
 | `Id` | `Guid` | Required | Unique ID of this webhook delivery. |
 | `Event` | [`TokenEvent`](../../doc/models/token-event.md) | Required | Event type discriminator — `token_created`, `token_updated`, `token_three_d_s_updated`, `token_cvv_auth_updated`, `token_cvv_auth_check_updated`, `token_replaced`, or `recurring_token_deleted`. |
-| `Data` | [`TransactionToken`](../../doc/models/transaction-token.md) | Optional | Stored transaction token resource. |
+| `Data` | [`TransactionToken`](../../doc/models/containers/transaction-token.md) | Optional | Stored transaction token resource. `payment_type` discriminates which variant applies — and therefore the concrete shape of `data` — per the mapping above. |
 | `CreatedOn` | `DateTime` | Required | Timestamp when the event was fired. |
 | `AdditionalProperties` | `object this[string key]` | Optional | - |
 
@@ -26,7 +26,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using UnivaPay.Models;
 using UnivaPay.Models.Containers;
-using UnivaPay.Utilities;
 
 TokenWebhookEvent tokenWebhookEvent = new TokenWebhookEvent
 {
@@ -35,29 +34,40 @@ TokenWebhookEvent tokenWebhookEvent = new TokenWebhookEvent
     CreatedOn = DateTime.ParseExact("2026-04-09T07:35:50.000000Z", "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK",
         provider: CultureInfo.InvariantCulture,
         DateTimeStyles.RoundtripKind),
-    Data = new TransactionToken
-    {
-        Id = new Guid("6426bbd2-17bd-41bf-883b-1fe970db48ee"),
-        StoreId = new Guid("fc264608-9a9e-495e-844e-a08129a81af4"),
-        Email = "test@univapay.com",
-        PaymentType = TransactionTokenPaymentType.Card,
-        Active = true,
-        Mode = TransactionTokenMode.Live,
-        Type = TransactionTokenType.Recurring,
-        Confirmed = true,
-        Metadata = new Dictionary<string, TransactionTokenMetadataAdditionalProperties>
+    Data = TransactionToken.FromCardTransactionToken(
+        new CardTransactionToken
         {
-            ["customer_id"] = ,
-        },
-        CreatedOn = DateTime.ParseExact("2026-04-09T07:35:50.000000Z", "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK",
-            provider: CultureInfo.InvariantCulture,
-            DateTimeStyles.RoundtripKind),
-        UpdatedOn = DateTime.ParseExact("2026-04-09T07:35:50.000000Z", "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK",
-            provider: CultureInfo.InvariantCulture,
-            DateTimeStyles.RoundtripKind),
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
-    },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
+            PaymentType = "card",
+            Data = new TokenResponseCardData
+            {
+                Card = new TokenResponseCardDataCard
+                {
+                    Cardholder = "TARO YAMADA",
+                    ExpMonth = 12,
+                    ExpYear = 2026,
+                    LastFour = "4242",
+                    Brand = "visa",
+                },
+            },
+            Id = new Guid("6426bbd2-17bd-41bf-883b-1fe970db48ee"),
+            StoreId = new Guid("fc264608-9a9e-495e-844e-a08129a81af4"),
+            Email = "test@univapay.com",
+            Active = true,
+            Mode = TransactionTokenMode.Live,
+            Type = TransactionTokenType.Recurring,
+            Confirmed = true,
+            Metadata = new Dictionary<string, TransactionTokenMetadataAdditionalProperties>
+            {
+                ["customer_id"] = TransactionTokenMetadataAdditionalProperties.FromString("cust_12345"),
+            },
+            CreatedOn = DateTime.ParseExact("2026-04-09T07:35:50.000000Z", "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK",
+                provider: CultureInfo.InvariantCulture,
+                DateTimeStyles.RoundtripKind),
+            UpdatedOn = DateTime.ParseExact("2026-04-09T07:35:50.000000Z", "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK",
+                provider: CultureInfo.InvariantCulture,
+                DateTimeStyles.RoundtripKind),
+        }
+    ),
 };
 ```
 

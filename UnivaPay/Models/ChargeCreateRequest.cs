@@ -149,7 +149,7 @@ namespace UnivaPay.Models
         public Models.ChargeCreateRequestRedirect Redirect { get; set; }
 
         /// <summary>
-        /// Charge Create Request Three Ds schema.
+        /// Charge Create Request Three Ds schema. Either supply `mode` (and optionally `redirect_endpoint`) to have Univapay run 3DS, or supply all six external-MPI fields (`authentication_value` through `transaction_status`) when 3DS authentication was already completed outside of Univapay — in that case `mode` is set to `provided` automatically and must not be sent.
         /// </summary>
         [JsonProperty("three_ds", NullValueHandling = NullValueHandling.Ignore)]
         public Models.ChargeCreateRequestThreeDs ThreeDs { get; set; }

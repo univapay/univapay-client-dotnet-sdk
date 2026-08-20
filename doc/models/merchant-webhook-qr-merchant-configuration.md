@@ -20,12 +20,10 @@ QR merchant payment settings.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookQrMerchantConfiguration merchantWebhookQrMerchantConfiguration = new MerchantWebhookQrMerchantConfiguration
 {
     Enabled = false,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

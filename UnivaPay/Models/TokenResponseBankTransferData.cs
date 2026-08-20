@@ -3,7 +3,6 @@
 //
 // This file was automatically generated for Univapay by APIMATIC v3.0 ( https://www.apimatic.io ).
 // </copyright>
-using APIMatic.Core.Utilities.Converters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
@@ -132,28 +131,24 @@ namespace UnivaPay.Models
         /// <summary>
         /// The bank brand identifier (e.g., 'aozora_bank').
         /// </summary>
-        [JsonConverter(typeof(JsonStringConverter))]
         [JsonProperty("brand", NullValueHandling = NullValueHandling.Ignore)]
         public string Brand { get; set; }
 
         /// <summary>
         /// ISO 8601 duration format (e.g., 'PT168H').
         /// </summary>
-        [JsonConverter(typeof(JsonStringConverter))]
         [JsonProperty("expiration_period", NullValueHandling = NullValueHandling.Ignore)]
         public string ExpirationPeriod { get; set; }
 
         /// <summary>
         /// Time shift applied to the expiration, typically pushing it to the end of the day  in a specific timezone (e.g., '23:59:59+09:00').
         /// </summary>
-        [JsonConverter(typeof(JsonStringConverter))]
         [JsonProperty("expiration_time_shift", NullValueHandling = NullValueHandling.Ignore)]
         public string ExpirationTimeShift { get; set; }
 
         /// <summary>
         /// Bank code value.
         /// </summary>
-        [JsonConverter(typeof(JsonStringConverter))]
         [JsonProperty("bank_code")]
         public string BankCode
         {
@@ -172,7 +167,6 @@ namespace UnivaPay.Models
         /// <summary>
         /// Bank name value.
         /// </summary>
-        [JsonConverter(typeof(JsonStringConverter))]
         [JsonProperty("bank_name")]
         public string BankName
         {
@@ -191,7 +185,6 @@ namespace UnivaPay.Models
         /// <summary>
         /// Bank branch code.
         /// </summary>
-        [JsonConverter(typeof(JsonStringConverter))]
         [JsonProperty("branch_code")]
         public string BranchCode
         {
@@ -210,7 +203,6 @@ namespace UnivaPay.Models
         /// <summary>
         /// Bank branch name.
         /// </summary>
-        [JsonConverter(typeof(JsonStringConverter))]
         [JsonProperty("branch_name")]
         public string BranchName
         {
@@ -229,7 +221,6 @@ namespace UnivaPay.Models
         /// <summary>
         /// Bank account number.
         /// </summary>
-        [JsonConverter(typeof(JsonStringConverter))]
         [JsonProperty("account_number")]
         public string AccountNumber
         {
@@ -248,7 +239,6 @@ namespace UnivaPay.Models
         /// <summary>
         /// Bank account holder name.
         /// </summary>
-        [JsonConverter(typeof(JsonStringConverter))]
         [JsonProperty("account_holder_name")]
         public string AccountHolderName
         {

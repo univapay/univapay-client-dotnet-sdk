@@ -21,9 +21,7 @@ Recurring token configuration inherited by the merchant.
 ## Example
 
 ```csharp
-using System.Collections.Generic;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookRecurringTokenConfiguration merchantWebhookRecurringTokenConfiguration = new MerchantWebhookRecurringTokenConfiguration
 {
@@ -32,13 +30,7 @@ MerchantWebhookRecurringTokenConfiguration merchantWebhookRecurringTokenConfigur
     CardChargeCvvConfirmation = new MerchantWebhookRecurringCvvConfirmationConfig
     {
         Enabled = false,
-        Threshold = new List<MerchantWebhookMoneyAmount>
-        {
-            null,
-        },
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

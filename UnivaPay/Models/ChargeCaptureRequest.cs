@@ -58,8 +58,8 @@ namespace UnivaPay.Models
         /// <param name="amount">amount.</param>
         /// <param name="currency">currency.</param>
         public ChargeCaptureRequest(
-            int amount,
-            string currency)
+            int? amount = null,
+            string currency = null)
         {
             this.additionalProperties = new Dictionary<string, JToken>();
             this.propertyName = this.GetPropertyNames();
@@ -68,15 +68,15 @@ namespace UnivaPay.Models
         }
 
         /// <summary>
-        /// The amount to capture. Must be less than or equal to the authorized amount.
+        /// The amount to capture. Must be less than or equal to the authorized amount. If omitted, the full outstanding authorized amount is captured.
         /// </summary>
-        [JsonProperty("amount")]
-        public int Amount { get; set; }
+        [JsonProperty("amount", NullValueHandling = NullValueHandling.Ignore)]
+        public int? Amount { get; set; }
 
         /// <summary>
-        /// ISO-4217 currency code. Must exactly match the currency used during authorization.
+        /// ISO-4217 currency code. Must exactly match the currency used during authorization. If omitted, defaults to the currency originally requested on the charge.
         /// </summary>
-        [JsonProperty("currency")]
+        [JsonProperty("currency", NullValueHandling = NullValueHandling.Ignore)]
         public string Currency { get; set; }
 
         /// <inheritdoc/>
@@ -93,7 +93,7 @@ namespace UnivaPay.Models
         /// <param name="toStringOutput">List of strings.</param>
         protected void ToString(List<string> toStringOutput)
         {
-            toStringOutput.Add($"Amount = {this.Amount}");
+            toStringOutput.Add($"Amount = {(this.Amount == null ? "null" : this.Amount.ToString())}");
             toStringOutput.Add($"Currency = {this.Currency ?? "null"}");
 
             additionalProperties?

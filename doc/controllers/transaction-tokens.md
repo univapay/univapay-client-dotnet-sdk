@@ -16,6 +16,8 @@ TransactionTokensApi transactionTokensApi = client.TransactionTokensApi;
 * [Get Transaction Token](../../doc/controllers/transaction-tokens.md#get-transaction-token)
 * [Update Transaction Token](../../doc/controllers/transaction-tokens.md#update-transaction-token)
 * [Delete Transaction Token](../../doc/controllers/transaction-tokens.md#delete-transaction-token)
+* [Enable Token Three Ds](../../doc/controllers/transaction-tokens.md#enable-token-three-ds)
+* [Disable Token Three Ds](../../doc/controllers/transaction-tokens.md#disable-token-three-ds)
 * [Get Token Three Ds Issuer Token](../../doc/controllers/transaction-tokens.md#get-token-three-ds-issuer-token)
 
 
@@ -44,7 +46,7 @@ This endpoint requires [JWT_TOKEN](../../doc/auth/oauth-2-bearer-token.md)
 
 **201**: Token Created
 
-This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [Models.TransactionToken](../../doc/models/transaction-token.md).
+This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type TransactionToken.
 
 ## Example Usage
 
@@ -87,6 +89,49 @@ TransactionTokenCreateRequest body = new TransactionTokenCreateRequest
 try
 {
     ApiResponse<TransactionToken> result = await transactionTokensApi.CreateTransactionTokenAsync(body);
+    result.Data.Match<VoidType>(
+        cardTransactionToken: cardTransactionToken =>
+        {
+            // TODO: handle cardTransactionToken here
+            Console.WriteLine(cardTransactionToken);
+            return null;
+        },
+        konbiniTransactionToken: konbiniTransactionToken =>
+        {
+            // TODO: handle konbiniTransactionToken here
+            Console.WriteLine(konbiniTransactionToken);
+            return null;
+        },
+        onlineTransactionToken: onlineTransactionToken =>
+        {
+            // TODO: handle onlineTransactionToken here
+            Console.WriteLine(onlineTransactionToken);
+            return null;
+        },
+        bankTransferTransactionToken: bankTransferTransactionToken =>
+        {
+            // TODO: handle bankTransferTransactionToken here
+            Console.WriteLine(bankTransferTransactionToken);
+            return null;
+        },
+        paidyTransactionToken: paidyTransactionToken =>
+        {
+            // TODO: handle paidyTransactionToken here
+            Console.WriteLine(paidyTransactionToken);
+            return null;
+        },
+        qrScanTransactionToken: qrScanTransactionToken =>
+        {
+            // TODO: handle qrScanTransactionToken here
+            Console.WriteLine(qrScanTransactionToken);
+            return null;
+        },
+        qrMerchantTransactionToken: qrMerchantTransactionToken =>
+        {
+            // TODO: handle qrMerchantTransactionToken here
+            Console.WriteLine(qrMerchantTransactionToken);
+            return null;
+        });
 }
 catch (ApiException e)
 {
@@ -98,9 +143,9 @@ catch (ApiException e)
 }
 ```
 
-## Example Response *(as JSON)*
+## Example Response
 
-```json
+```
 {
   "id": "11f11e85-e9e9-b198-b990-c3a715943241",
   "store_id": "11f0e274-1e3b-4752-9513-33d3e07ede13",
@@ -184,6 +229,11 @@ Lists all transaction tokens across all stores.
 
 ```csharp
 ListAllTransactionTokensAsync(
+    string search = null,
+    Guid? customerId = null,
+    Models.TransactionTokenListType? type = null,
+    Models.ModeQuery? mode = null,
+    Models.TransactionTokenActiveFilter? active = Models.TransactionTokenActiveFilter.Active,
     int? limit = 10,
     Guid? cursor = null,
     Models.CursorDirectionQuery? cursorDirection = Models.CursorDirectionQuery.Desc)
@@ -197,6 +247,11 @@ This endpoint requires [JWT_TOKEN](../../doc/auth/oauth-2-bearer-token.md)
 
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
+| `search` | `string` | Query, Optional | Case-insensitive free-text search. |
+| `customerId` | `Guid?` | Query, Optional | Filter by customer ID. |
+| `type` | [`TransactionTokenListType?`](../../doc/models/transaction-token-list-type.md) | Query, Optional | Filter by token type. `one_time` tokens are excluded from listings and cannot be filtered on; filtering to `recurring` requires the App Token Secret. |
+| `mode` | [`ModeQuery?`](../../doc/models/mode-query.md) | Query, Optional | Filter by environment mode. |
+| `active` | [`TransactionTokenActiveFilter?`](../../doc/models/transaction-token-active-filter.md) | Query, Optional | Filter recurring tokens by whether they are still active.<br><br>**Default**: `TransactionTokenActiveFilter.active` |
 | `limit` | `int?` | Query, Optional | Maximum number of resources to return in one page.<br><br>**Default**: `10`<br><br>**Constraints**: `<= 100` |
 | `cursor` | `Guid?` | Query, Optional | Cursor pointing to the resource after which pagination should continue. |
 | `cursorDirection` | [`CursorDirectionQuery?`](../../doc/models/cursor-direction-query.md) | Query, Optional | Pagination direction relative to the supplied cursor.<br><br>**Default**: `CursorDirectionQuery.desc` |
@@ -210,12 +265,22 @@ This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The 
 ## Example Usage
 
 ```csharp
+string search = "tokyo";
+Guid? customerId = new Guid("8a3f1b8e-2c1a-4b7a-9c2e-6f6b6f6e2b10");
+TransactionTokenListType? type = TransactionTokenListType.Recurring;
+ModeQuery? mode = ModeQuery.Live;
+TransactionTokenActiveFilter? active = TransactionTokenActiveFilter.Active;
 int? limit = 10;
 Guid? cursor = new Guid("3541d4fa-596d-428e-8a36-f274e1b3d505");
 CursorDirectionQuery? cursorDirection = CursorDirectionQuery.Asc;
 try
 {
     ApiResponse<TransactionTokenList> result = await transactionTokensApi.ListAllTransactionTokensAsync(
+        search,
+        customerId,
+        type,
+        mode,
+        active,
         limit,
         cursor,
         cursorDirection
@@ -310,6 +375,11 @@ Lists all transaction tokens for a specific store.
 ```csharp
 ListStoreTransactionTokensAsync(
     Guid storeId,
+    string search = null,
+    Guid? customerId = null,
+    Models.TransactionTokenListType? type = null,
+    Models.ModeQuery? mode = null,
+    Models.TransactionTokenActiveFilter? active = Models.TransactionTokenActiveFilter.Active,
     int? limit = 10,
     Guid? cursor = null,
     Models.CursorDirectionQuery? cursorDirection = Models.CursorDirectionQuery.Desc)
@@ -324,6 +394,11 @@ This endpoint requires [JWT_TOKEN](../../doc/auth/oauth-2-bearer-token.md)
 | Parameter | Type | Tags | Description |
 |  --- | --- | --- | --- |
 | `storeId` | `Guid` | Template, Required | The unique identifier of the store. |
+| `search` | `string` | Query, Optional | Case-insensitive free-text search. |
+| `customerId` | `Guid?` | Query, Optional | Filter by customer ID. |
+| `type` | [`TransactionTokenListType?`](../../doc/models/transaction-token-list-type.md) | Query, Optional | Filter by token type. `one_time` tokens are excluded from listings and cannot be filtered on; filtering to `recurring` requires the App Token Secret. |
+| `mode` | [`ModeQuery?`](../../doc/models/mode-query.md) | Query, Optional | Filter by environment mode. |
+| `active` | [`TransactionTokenActiveFilter?`](../../doc/models/transaction-token-active-filter.md) | Query, Optional | Filter recurring tokens by whether they are still active.<br><br>**Default**: `TransactionTokenActiveFilter.active` |
 | `limit` | `int?` | Query, Optional | Maximum number of resources to return in one page.<br><br>**Default**: `10`<br><br>**Constraints**: `<= 100` |
 | `cursor` | `Guid?` | Query, Optional | Cursor pointing to the resource after which pagination should continue. |
 | `cursorDirection` | [`CursorDirectionQuery?`](../../doc/models/cursor-direction-query.md) | Query, Optional | Pagination direction relative to the supplied cursor.<br><br>**Default**: `CursorDirectionQuery.desc` |
@@ -338,6 +413,11 @@ This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The 
 
 ```csharp
 Guid storeId = new Guid("0cab399b-5621-425b-993b-f8507eba1e78");
+string search = "tokyo";
+Guid? customerId = new Guid("8a3f1b8e-2c1a-4b7a-9c2e-6f6b6f6e2b10");
+TransactionTokenListType? type = TransactionTokenListType.Recurring;
+ModeQuery? mode = ModeQuery.Live;
+TransactionTokenActiveFilter? active = TransactionTokenActiveFilter.Active;
 int? limit = 10;
 Guid? cursor = new Guid("3541d4fa-596d-428e-8a36-f274e1b3d505");
 CursorDirectionQuery? cursorDirection = CursorDirectionQuery.Asc;
@@ -345,6 +425,11 @@ try
 {
     ApiResponse<TransactionTokenList> result = await transactionTokensApi.ListStoreTransactionTokensAsync(
         storeId,
+        search,
+        customerId,
+        type,
+        mode,
+        active,
         limit,
         cursor,
         cursorDirection
@@ -439,7 +524,8 @@ Retrieves the details of an existing transaction token.
 ```csharp
 GetTransactionTokenAsync(
     Guid storeId,
-    Guid id)
+    Guid id,
+    bool? polling = null)
 ```
 
 ## Authentication
@@ -452,24 +538,70 @@ This endpoint requires [JWT_TOKEN](../../doc/auth/oauth-2-bearer-token.md)
 |  --- | --- | --- | --- |
 | `storeId` | `Guid` | Template, Required | The unique identifier of the store. |
 | `id` | `Guid` | Template, Required | The unique identifier of the resource. |
+| `polling` | `bool?` | Query, Optional | If set to true, instructs the API to internally poll the token's 3DS or CVV authorization sub-status until it transitions to another status, or until the ~3 second server-side timeout is reached. |
 
 ## Response Type
 
 **200**: Token Details
 
-This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [Models.TransactionToken](../../doc/models/transaction-token.md).
+This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type TransactionToken.
 
 ## Example Usage
 
 ```csharp
 Guid storeId = new Guid("0cab399b-5621-425b-993b-f8507eba1e78");
 Guid id = new Guid("c4e87129-cad4-47fb-8ded-b4c0a4ae0dd4");
+bool? polling = true;
 try
 {
     ApiResponse<TransactionToken> result = await transactionTokensApi.GetTransactionTokenAsync(
         storeId,
-        id
+        id,
+        polling
     );
+    result.Data.Match<VoidType>(
+        cardTransactionToken: cardTransactionToken =>
+        {
+            // TODO: handle cardTransactionToken here
+            Console.WriteLine(cardTransactionToken);
+            return null;
+        },
+        konbiniTransactionToken: konbiniTransactionToken =>
+        {
+            // TODO: handle konbiniTransactionToken here
+            Console.WriteLine(konbiniTransactionToken);
+            return null;
+        },
+        onlineTransactionToken: onlineTransactionToken =>
+        {
+            // TODO: handle onlineTransactionToken here
+            Console.WriteLine(onlineTransactionToken);
+            return null;
+        },
+        bankTransferTransactionToken: bankTransferTransactionToken =>
+        {
+            // TODO: handle bankTransferTransactionToken here
+            Console.WriteLine(bankTransferTransactionToken);
+            return null;
+        },
+        paidyTransactionToken: paidyTransactionToken =>
+        {
+            // TODO: handle paidyTransactionToken here
+            Console.WriteLine(paidyTransactionToken);
+            return null;
+        },
+        qrScanTransactionToken: qrScanTransactionToken =>
+        {
+            // TODO: handle qrScanTransactionToken here
+            Console.WriteLine(qrScanTransactionToken);
+            return null;
+        },
+        qrMerchantTransactionToken: qrMerchantTransactionToken =>
+        {
+            // TODO: handle qrMerchantTransactionToken here
+            Console.WriteLine(qrMerchantTransactionToken);
+            return null;
+        });
 }
 catch (ApiException e)
 {
@@ -481,9 +613,9 @@ catch (ApiException e)
 }
 ```
 
-## Example Response *(as JSON)*
+## Example Response
 
-```json
+```
 {
   "id": "11f11e85-e9e9-b198-b990-c3a715943241",
   "store_id": "11f0e274-1e3b-4752-9513-33d3e07ede13",
@@ -595,7 +727,7 @@ This endpoint requires [JWT_TOKEN](../../doc/auth/oauth-2-bearer-token.md)
 
 **200**: Token Updated Successfully
 
-This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type [Models.TransactionToken](../../doc/models/transaction-token.md).
+This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type TransactionToken.
 
 ## Example Usage
 
@@ -634,6 +766,49 @@ try
         null,
         body
     );
+    result.Data.Match<VoidType>(
+        cardTransactionToken: cardTransactionToken =>
+        {
+            // TODO: handle cardTransactionToken here
+            Console.WriteLine(cardTransactionToken);
+            return null;
+        },
+        konbiniTransactionToken: konbiniTransactionToken =>
+        {
+            // TODO: handle konbiniTransactionToken here
+            Console.WriteLine(konbiniTransactionToken);
+            return null;
+        },
+        onlineTransactionToken: onlineTransactionToken =>
+        {
+            // TODO: handle onlineTransactionToken here
+            Console.WriteLine(onlineTransactionToken);
+            return null;
+        },
+        bankTransferTransactionToken: bankTransferTransactionToken =>
+        {
+            // TODO: handle bankTransferTransactionToken here
+            Console.WriteLine(bankTransferTransactionToken);
+            return null;
+        },
+        paidyTransactionToken: paidyTransactionToken =>
+        {
+            // TODO: handle paidyTransactionToken here
+            Console.WriteLine(paidyTransactionToken);
+            return null;
+        },
+        qrScanTransactionToken: qrScanTransactionToken =>
+        {
+            // TODO: handle qrScanTransactionToken here
+            Console.WriteLine(qrScanTransactionToken);
+            return null;
+        },
+        qrMerchantTransactionToken: qrMerchantTransactionToken =>
+        {
+            // TODO: handle qrMerchantTransactionToken here
+            Console.WriteLine(qrMerchantTransactionToken);
+            return null;
+        });
 }
 catch (ApiException e)
 {
@@ -645,9 +820,9 @@ catch (ApiException e)
 }
 ```
 
-## Example Response *(as JSON)*
+## Example Response
 
-```json
+```
 {
   "id": "11f11e85-e9e9-b198-b990-c3a715943241",
   "store_id": "11f0e274-1e3b-4752-9513-33d3e07ede13",
@@ -774,6 +949,363 @@ catch (ApiException e)
     {
        // TODO: Handle ApiErrorException exception here
     }
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Bad Request (400). The request was invalid or could not be processed.  Common codes: VALIDATION_ERROR, INVALID_TOKEN_TYPE, NOT_SUPPORTED_BY_PROCESSOR. | [`ApiErrorException`](../../doc/models/api-error-exception.md) |
+| 401 | Unauthorized (401). Authentication failed.  Common codes: AUTH_HEADER_MISSING, INVALID_APP_TOKEN, INVALID_CREDENTIALS. | [`ApiErrorException`](../../doc/models/api-error-exception.md) |
+| 403 | Forbidden (403). The request is understood, but access is refused.  This occurs if permissions are insufficient or if a security lock is triggered. | [`ApiErrorException`](../../doc/models/api-error-exception.md) |
+| 404 | Not Found (404). The requested resource (e.g., Store ID or Token ID) does not exist. | [`ApiErrorException`](../../doc/models/api-error-exception.md) |
+| 429 | Too Many Requests (429). Rate limit exceeded. Returns an empty JSON object in this spec. | `ApiException` |
+
+
+# Enable Token Three Ds
+
+Enables 3-D Secure on an existing `recurring` transaction token that was created without it. Only applies to `recurring` tokens; returns an error if 3DS is already enabled. After calling this endpoint, poll the token until `data.three_ds.status` becomes `awaiting`, then use the token 3DS issuer token endpoint to complete authentication.
+
+```csharp
+EnableTokenThreeDsAsync(
+    Guid storeId,
+    Guid id,
+    string idempotencyKey = null,
+    Models.EnableTokenThreeDsRequest body = null)
+```
+
+## Authentication
+
+This endpoint requires [JWT_TOKEN](../../doc/auth/oauth-2-bearer-token.md)
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `storeId` | `Guid` | Template, Required | The unique identifier of the store. |
+| `id` | `Guid` | Template, Required | The unique identifier of the resource. |
+| `idempotencyKey` | `string` | Header, Optional | An optional idempotency key to prevent double charges and duplicate operations. We recommend a randomly generated UUID (v4). |
+| `body` | [`EnableTokenThreeDsRequest`](../../doc/models/enable-token-three-ds-request.md) | Body, Optional | Optional request payload. Omit entirely, or omit `redirect_endpoint`, if no redirect is needed. |
+
+## Response Type
+
+**200**: 3DS enabled successfully. Returns the updated token.
+
+This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type TransactionToken.
+
+## Example Usage
+
+```csharp
+Guid storeId = new Guid("0cab399b-5621-425b-993b-f8507eba1e78");
+Guid id = new Guid("c4e87129-cad4-47fb-8ded-b4c0a4ae0dd4");
+EnableTokenThreeDsRequest body = new EnableTokenThreeDsRequest
+{
+    RedirectEndpoint = "https://univapay.com/3ds-redirect",
+};
+
+try
+{
+    ApiResponse<TransactionToken> result = await transactionTokensApi.EnableTokenThreeDsAsync(
+        storeId,
+        id,
+        null,
+        body
+    );
+    result.Data.Match<VoidType>(
+        cardTransactionToken: cardTransactionToken =>
+        {
+            // TODO: handle cardTransactionToken here
+            Console.WriteLine(cardTransactionToken);
+            return null;
+        },
+        konbiniTransactionToken: konbiniTransactionToken =>
+        {
+            // TODO: handle konbiniTransactionToken here
+            Console.WriteLine(konbiniTransactionToken);
+            return null;
+        },
+        onlineTransactionToken: onlineTransactionToken =>
+        {
+            // TODO: handle onlineTransactionToken here
+            Console.WriteLine(onlineTransactionToken);
+            return null;
+        },
+        bankTransferTransactionToken: bankTransferTransactionToken =>
+        {
+            // TODO: handle bankTransferTransactionToken here
+            Console.WriteLine(bankTransferTransactionToken);
+            return null;
+        },
+        paidyTransactionToken: paidyTransactionToken =>
+        {
+            // TODO: handle paidyTransactionToken here
+            Console.WriteLine(paidyTransactionToken);
+            return null;
+        },
+        qrScanTransactionToken: qrScanTransactionToken =>
+        {
+            // TODO: handle qrScanTransactionToken here
+            Console.WriteLine(qrScanTransactionToken);
+            return null;
+        },
+        qrMerchantTransactionToken: qrMerchantTransactionToken =>
+        {
+            // TODO: handle qrMerchantTransactionToken here
+            Console.WriteLine(qrMerchantTransactionToken);
+            return null;
+        });
+}
+catch (ApiException e)
+{
+    Console.WriteLine(e.Message);
+    if (e is ApiErrorException)
+    {
+       // TODO: Handle ApiErrorException exception here
+    }
+}
+```
+
+## Example Response
+
+```
+{
+  "id": "11f11e85-e9e9-b198-b990-c3a715943241",
+  "store_id": "11f0e274-1e3b-4752-9513-33d3e07ede13",
+  "email": "test@test.com",
+  "payment_type": "card",
+  "active": true,
+  "mode": "live",
+  "type": "recurring",
+  "usage_limit": null,
+  "confirmed": null,
+  "metadata": {
+    "univapay-link-id": "11f11e85-1b45-dace-bf3d-cbcae52f65fc",
+    "univapay-name": "test",
+    "univapay-phone-number": "+81 08012341234"
+  },
+  "created_on": "2026-03-13T02:39:52.908468Z",
+  "updated_on": "2026-03-13T02:39:52.908468Z",
+  "last_used_on": null,
+  "data": {
+    "card": {
+      "cardholder": "TEST TEST",
+      "exp_month": 9,
+      "exp_year": 2026,
+      "card_bin": "424242",
+      "last_four": "424242",
+      "brand": "visa",
+      "card_type": "credit",
+      "country": "JP",
+      "category": "standard",
+      "issuer": "issuer",
+      "sub_brand": "none"
+    },
+    "billing": {
+      "line1": null,
+      "line2": null,
+      "state": null,
+      "city": null,
+      "country": null,
+      "zip": null,
+      "phone_number": {
+        "country_code": 81,
+        "local_number": "08012341234"
+      }
+    },
+    "cvv_authorize": {
+      "enabled": false,
+      "status": null,
+      "charge_id": null,
+      "credentials_id": null,
+      "currency": null
+    },
+    "cvv_authorize_check": {
+      "status": null,
+      "charge_id": null,
+      "date": null
+    },
+    "three_ds": {
+      "enabled": true,
+      "status": "pending",
+      "redirect_endpoint": "https://univapay.com/redirect/index.html",
+      "error": null,
+      "exempted": false
+    }
+  }
+}
+```
+
+## Errors
+
+| HTTP Status Code | Error Description | Exception Class |
+|  --- | --- | --- |
+| 400 | Bad Request (400). The request was invalid or could not be processed.  Common codes: VALIDATION_ERROR, INVALID_TOKEN_TYPE, NOT_SUPPORTED_BY_PROCESSOR. | [`ApiErrorException`](../../doc/models/api-error-exception.md) |
+| 401 | Unauthorized (401). Authentication failed.  Common codes: AUTH_HEADER_MISSING, INVALID_APP_TOKEN, INVALID_CREDENTIALS. | [`ApiErrorException`](../../doc/models/api-error-exception.md) |
+| 403 | Forbidden (403). The request is understood, but access is refused.  This occurs if permissions are insufficient or if a security lock is triggered. | [`ApiErrorException`](../../doc/models/api-error-exception.md) |
+| 404 | Not Found (404). The requested resource (e.g., Store ID or Token ID) does not exist. | [`ApiErrorException`](../../doc/models/api-error-exception.md) |
+| 429 | Too Many Requests (429). Rate limit exceeded. Returns an empty JSON object in this spec. | `ApiException` |
+
+
+# Disable Token Three Ds
+
+Disables 3-D Secure on an existing `recurring` transaction token. Only applies to `recurring` tokens.
+
+```csharp
+DisableTokenThreeDsAsync(
+    Guid storeId,
+    Guid id)
+```
+
+## Authentication
+
+This endpoint requires [JWT_TOKEN](../../doc/auth/oauth-2-bearer-token.md)
+
+## Parameters
+
+| Parameter | Type | Tags | Description |
+|  --- | --- | --- | --- |
+| `storeId` | `Guid` | Template, Required | The unique identifier of the store. |
+| `id` | `Guid` | Template, Required | The unique identifier of the resource. |
+
+## Response Type
+
+**200**: 3DS disabled successfully. Returns the updated token.
+
+This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type TransactionToken.
+
+## Example Usage
+
+```csharp
+Guid storeId = new Guid("0cab399b-5621-425b-993b-f8507eba1e78");
+Guid id = new Guid("c4e87129-cad4-47fb-8ded-b4c0a4ae0dd4");
+try
+{
+    ApiResponse<TransactionToken> result = await transactionTokensApi.DisableTokenThreeDsAsync(
+        storeId,
+        id
+    );
+    result.Data.Match<VoidType>(
+        cardTransactionToken: cardTransactionToken =>
+        {
+            // TODO: handle cardTransactionToken here
+            Console.WriteLine(cardTransactionToken);
+            return null;
+        },
+        konbiniTransactionToken: konbiniTransactionToken =>
+        {
+            // TODO: handle konbiniTransactionToken here
+            Console.WriteLine(konbiniTransactionToken);
+            return null;
+        },
+        onlineTransactionToken: onlineTransactionToken =>
+        {
+            // TODO: handle onlineTransactionToken here
+            Console.WriteLine(onlineTransactionToken);
+            return null;
+        },
+        bankTransferTransactionToken: bankTransferTransactionToken =>
+        {
+            // TODO: handle bankTransferTransactionToken here
+            Console.WriteLine(bankTransferTransactionToken);
+            return null;
+        },
+        paidyTransactionToken: paidyTransactionToken =>
+        {
+            // TODO: handle paidyTransactionToken here
+            Console.WriteLine(paidyTransactionToken);
+            return null;
+        },
+        qrScanTransactionToken: qrScanTransactionToken =>
+        {
+            // TODO: handle qrScanTransactionToken here
+            Console.WriteLine(qrScanTransactionToken);
+            return null;
+        },
+        qrMerchantTransactionToken: qrMerchantTransactionToken =>
+        {
+            // TODO: handle qrMerchantTransactionToken here
+            Console.WriteLine(qrMerchantTransactionToken);
+            return null;
+        });
+}
+catch (ApiException e)
+{
+    Console.WriteLine(e.Message);
+    if (e is ApiErrorException)
+    {
+       // TODO: Handle ApiErrorException exception here
+    }
+}
+```
+
+## Example Response
+
+```
+{
+  "id": "11f11e85-e9e9-b198-b990-c3a715943241",
+  "store_id": "11f0e274-1e3b-4752-9513-33d3e07ede13",
+  "email": "test@test.com",
+  "payment_type": "card",
+  "active": true,
+  "mode": "live",
+  "type": "recurring",
+  "usage_limit": null,
+  "confirmed": null,
+  "metadata": {
+    "univapay-link-id": "11f11e85-1b45-dace-bf3d-cbcae52f65fc",
+    "univapay-name": "test",
+    "univapay-phone-number": "+81 08012341234"
+  },
+  "created_on": "2026-03-13T02:39:52.908468Z",
+  "updated_on": "2026-03-13T02:39:52.908468Z",
+  "last_used_on": null,
+  "data": {
+    "card": {
+      "cardholder": "TEST TEST",
+      "exp_month": 9,
+      "exp_year": 2026,
+      "card_bin": "424242",
+      "last_four": "424242",
+      "brand": "visa",
+      "card_type": "credit",
+      "country": "JP",
+      "category": "standard",
+      "issuer": "issuer",
+      "sub_brand": "none"
+    },
+    "billing": {
+      "line1": null,
+      "line2": null,
+      "state": null,
+      "city": null,
+      "country": null,
+      "zip": null,
+      "phone_number": {
+        "country_code": 81,
+        "local_number": "08012341234"
+      }
+    },
+    "cvv_authorize": {
+      "enabled": false,
+      "status": null,
+      "charge_id": null,
+      "credentials_id": null,
+      "currency": null
+    },
+    "cvv_authorize_check": {
+      "status": null,
+      "charge_id": null,
+      "date": null
+    },
+    "three_ds": {
+      "enabled": true,
+      "status": "pending",
+      "redirect_endpoint": "https://univapay.com/redirect/index.html",
+      "error": null,
+      "exempted": false
+    }
+  }
 }
 ```
 

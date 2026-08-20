@@ -21,13 +21,9 @@ Charge Three Ds schema.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 ChargeThreeDs chargeThreeDs = new ChargeThreeDs
 {
-    RedirectEndpoint = "redirect_endpoint0",
-    Mode = "mode6",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

@@ -21,13 +21,11 @@ Structured detail entry describing a single API validation or business error.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 ApiErrorDetail apiErrorDetail = new ApiErrorDetail
 {
     Field = "card_number",
     Reason = "INVALID_CARD_NUMBER",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

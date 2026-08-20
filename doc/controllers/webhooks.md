@@ -18,7 +18,6 @@ WebhooksApi webhooksApi = client.WebhooksApi;
 * [Update Webhook](../../doc/controllers/webhooks.md#update-webhook)
 * [Delete Webhook](../../doc/controllers/webhooks.md#delete-webhook)
 * [List Webhook Events](../../doc/controllers/webhooks.md#list-webhook-events)
-* [Redeliver Webhook Event](../../doc/controllers/webhooks.md#redeliver-webhook-event)
 
 
 # List Webhooks
@@ -546,78 +545,6 @@ catch (ApiException e)
   ],
   "has_more": false
 }
-```
-
-## Errors
-
-| HTTP Status Code | Error Description | Exception Class |
-|  --- | --- | --- |
-| 401 | Unauthorized (401). Authentication failed.  Common codes: AUTH_HEADER_MISSING, INVALID_APP_TOKEN, INVALID_CREDENTIALS. | [`ApiErrorException`](../../doc/models/api-error-exception.md) |
-| 403 | Forbidden (403). The request is understood, but access is refused.  This occurs if permissions are insufficient or if a security lock is triggered. | [`ApiErrorException`](../../doc/models/api-error-exception.md) |
-| 404 | Not Found (404). The requested resource (e.g., Store ID or Token ID) does not exist. | [`ApiErrorException`](../../doc/models/api-error-exception.md) |
-
-
-# Redeliver Webhook Event
-
-Re-sends the webhook payload for a previously delivered (or failed) event. Returns 202 Accepted immediately; delivery is asynchronous.
-
-```csharp
-RedeliverWebhookEventAsync(
-    Guid storeId,
-    Guid id,
-    Guid eventId,
-    string idempotencyKey = null)
-```
-
-## Authentication
-
-This endpoint requires [JWT_TOKEN](../../doc/auth/oauth-2-bearer-token.md)
-
-## Parameters
-
-| Parameter | Type | Tags | Description |
-|  --- | --- | --- | --- |
-| `storeId` | `Guid` | Template, Required | The unique identifier of the store. |
-| `id` | `Guid` | Template, Required | The unique identifier of the resource. |
-| `eventId` | `Guid` | Template, Required | The unique identifier of the webhook event. |
-| `idempotencyKey` | `string` | Header, Optional | An optional idempotency key to prevent double charges and duplicate operations. We recommend a randomly generated UUID (v4). |
-
-## Response Type
-
-**202**: Redelivery accepted. Returns an empty JSON object; delivery remains asynchronous.
-
-This method returns an [`ApiResponse`](../../doc/api-response.md) instance. The `Data` property of this instance returns the response data which is of type object.
-
-## Example Usage
-
-```csharp
-Guid storeId = new Guid("0cab399b-5621-425b-993b-f8507eba1e78");
-Guid id = new Guid("c4e87129-cad4-47fb-8ded-b4c0a4ae0dd4");
-Guid eventId = new Guid("e1f2a3b4-c5d6-7890-efab-123456789cde");
-string idempotencyKey = "f64be872-353d-4c3c-84cb-3dc617fe89f7";
-try
-{
-    ApiResponse<object> result = await webhooksApi.RedeliverWebhookEventAsync(
-        storeId,
-        id,
-        eventId,
-        idempotencyKey
-    );
-}
-catch (ApiException e)
-{
-    Console.WriteLine(e.Message);
-    if (e is ApiErrorException)
-    {
-       // TODO: Handle ApiErrorException exception here
-    }
-}
-```
-
-## Example Response
-
-```
-{}
 ```
 
 ## Errors

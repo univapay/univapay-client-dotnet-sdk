@@ -37,19 +37,15 @@ Merchant transaction notification settings.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookUserTransactionsConfiguration merchantWebhookUserTransactionsConfiguration = new MerchantWebhookUserTransactionsConfiguration
 {
     Enabled = true,
     NotifyCustomer = true,
     NotifyOnTest = false,
-    NotifyOnRecurringTokenCreation = false,
-    NotifyOnRecurringTokenCvvFailed = false,
     NotifyOnWebhookFailure = true,
     NotifyOnWebhookDisabled = true,
     NotifyOnSubscriptions = true,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

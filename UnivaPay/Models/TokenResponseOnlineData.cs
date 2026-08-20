@@ -3,7 +3,6 @@
 //
 // This file was automatically generated for Univapay by APIMATIC v3.0 ( https://www.apimatic.io ).
 // </copyright>
-using APIMatic.Core.Utilities.Converters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
@@ -118,7 +117,7 @@ namespace UnivaPay.Models
         }
 
         /// <summary>
-        /// Base Online Data Brand schema.
+        /// Base Online Data Brand schema. `alipay_china`, `alipay_hk`, `gcash`, `dana`, `truemoney`, `kakaopay`, `tng`, `rabbit_line_pay`, `bpi`, `boost`, `tinaba`, `naver_pay`, `toss_pay`, `maya`, `grab_sg`, `kredivo_id`, `k_plus`, and `kaspi_kz` are Alipay+ regional wallets routed through the `alipay_plus_online` gateway family.
         /// </summary>
         [JsonProperty("brand", NullValueHandling = NullValueHandling.Ignore)]
         public Models.BaseOnlineDataBrand? Brand { get; set; }
@@ -150,7 +149,6 @@ namespace UnivaPay.Models
         /// <summary>
         /// Consumer specific identifier required by some gateways for fraud prevention.
         /// </summary>
-        [JsonConverter(typeof(JsonStringConverter))]
         [JsonProperty("user_identifier")]
         public string UserIdentifier
         {
@@ -187,7 +185,6 @@ namespace UnivaPay.Models
         /// <summary>
         /// Token provided by the issuer (if applicable).
         /// </summary>
-        [JsonConverter(typeof(JsonStringConverter))]
         [JsonProperty("issuer_token")]
         public string IssuerToken
         {
@@ -206,7 +203,6 @@ namespace UnivaPay.Models
         /// <summary>
         /// Additional payload from the issuer.
         /// </summary>
-        [JsonConverter(typeof(JsonStringConverter))]
         [JsonProperty("issuer_token_payload")]
         public string IssuerTokenPayload
         {

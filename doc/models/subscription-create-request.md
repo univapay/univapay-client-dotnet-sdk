@@ -25,26 +25,20 @@ Request payload for creating a subscription.
 | `FirstChargeAuthorizationOnly` | `bool?` | Optional | If true, the first charge will only be an authorization (Hold).<br><br>**Default**: `false` |
 | `FirstChargeCaptureAfter` | `string` | Optional | ISO-8601 Duration for auto-capture if authorization only is true.  Allowed days: P1D to P6D. |
 | `Metadata` | [`GenericMetadata`](../../doc/models/generic-metadata.md) | Optional | A free-form dictionary for custom metadata. |
-| `ThreeDs` | [`ChargeCreateRequestThreeDs`](../../doc/models/charge-create-request-three-ds.md) | Optional | Charge Create Request Three Ds schema. |
+| `ThreeDs` | [`ChargeCreateRequestThreeDs`](../../doc/models/charge-create-request-three-ds.md) | Optional | Charge Create Request Three Ds schema. Either supply `mode` (and optionally `redirect_endpoint`) to have Univapay run 3DS, or supply all six external-MPI fields (`authentication_value` through `transaction_status`) when 3DS authentication was already completed outside of Univapay — in that case `mode` is set to `provided` automatically and must not be sent. |
 | `AdditionalProperties` | `object this[string key]` | Optional | - |
 
 ## Example
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 SubscriptionCreateRequest subscriptionCreateRequest = new SubscriptionCreateRequest
 {
     TransactionTokenId = new Guid("11ef32a7-3a71-8662-803f-1bc27702eeec"),
     Amount = 1250,
     Currency = "USD",
-    InitialAmount = 194,
     Period = SubscriptionPeriod.Monthly,
-    CyclicalPeriod = "cyclical_period4",
-    ScheduleSettings = null,
-    InstallmentPlan = null,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

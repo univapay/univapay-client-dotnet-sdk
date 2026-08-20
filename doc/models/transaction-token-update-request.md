@@ -22,8 +22,6 @@ Request payload for updating a transaction token.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Models.Containers;
-using UnivaPay.Utilities;
 
 TransactionTokenUpdateRequest transactionTokenUpdateRequest = new TransactionTokenUpdateRequest
 {
@@ -31,20 +29,14 @@ TransactionTokenUpdateRequest transactionTokenUpdateRequest = new TransactionTok
     Metadata = new GenericMetadata
     {
         OrderId = "12345",
-        UnivapayName = "univapay-name8",
-        UnivapayPhoneNumber = "univapay-phone-number2",
-        ["exampleAdditionalProperty"] = GenericMetadataValue.FromString("String4"),
     },
     Data = new TransactionTokenUpdateRequestData
     {
         Cvv = "123",
         Cardholder = "TARO YAMADA",
-        CardNumber = "card_number6",
         ExpMonth = 12,
         ExpYear = 2028,
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

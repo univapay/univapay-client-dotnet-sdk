@@ -58,6 +58,11 @@ namespace UnivaPay.Models
         /// </summary>
         /// <param name="transactionTokenId">transaction_token_id.</param>
         /// <param name="amount">amount.</param>
+        /// <param name="period">period.</param>
+        /// <param name="cyclicalPeriod">cyclical_period.</param>
+        /// <param name="initialAmount">initial_amount.</param>
+        /// <param name="subscriptionPlan">subscription_plan.</param>
+        /// <param name="installmentPlan">installment_plan.</param>
         /// <param name="metadata">metadata.</param>
         /// <param name="status">status.</param>
         /// <param name="scheduleSettings">schedule_settings.</param>
@@ -65,6 +70,11 @@ namespace UnivaPay.Models
         public SubscriptionUpdateRequest(
             Guid? transactionTokenId = null,
             int? amount = null,
+            Models.SubscriptionPeriod? period = null,
+            string cyclicalPeriod = null,
+            int? initialAmount = null,
+            Models.SubscriptionPlanSettings subscriptionPlan = null,
+            Models.SubscriptionInstallmentPlan installmentPlan = null,
             Models.GenericMetadata metadata = null,
             Models.SubscriptionUpdateStatus? status = null,
             Models.SubscriptionUpdateScheduleSettings scheduleSettings = null,
@@ -74,6 +84,11 @@ namespace UnivaPay.Models
             this.propertyName = this.GetPropertyNames();
             this.TransactionTokenId = transactionTokenId;
             this.Amount = amount;
+            this.Period = period;
+            this.CyclicalPeriod = cyclicalPeriod;
+            this.InitialAmount = initialAmount;
+            this.SubscriptionPlan = subscriptionPlan;
+            this.InstallmentPlan = installmentPlan;
             this.Metadata = metadata;
             this.Status = status;
             this.ScheduleSettings = scheduleSettings;
@@ -91,6 +106,36 @@ namespace UnivaPay.Models
         /// </summary>
         [JsonProperty("amount", NullValueHandling = NullValueHandling.Ignore)]
         public int? Amount { get; set; }
+
+        /// <summary>
+        /// Subscription Period schema.
+        /// </summary>
+        [JsonProperty("period", NullValueHandling = NullValueHandling.Ignore)]
+        public Models.SubscriptionPeriod? Period { get; set; }
+
+        /// <summary>
+        /// ISO-8601 Duration for custom frequency (e.g., P3D, P2M). Cannot be used together with `period`. Only allowed before the subscription's first payment has been paid.
+        /// </summary>
+        [JsonProperty("cyclical_period", NullValueHandling = NullValueHandling.Ignore)]
+        public string CyclicalPeriod { get; set; }
+
+        /// <summary>
+        /// Different amount for the first charge. Only allowed while the subscription status is still editable (before it has started) and requires the App Token Secret.
+        /// </summary>
+        [JsonProperty("initial_amount", NullValueHandling = NullValueHandling.Ignore)]
+        public int? InitialAmount { get; set; }
+
+        /// <summary>
+        /// Configuration for limited-cycle subscriptions (Univapay side).
+        /// </summary>
+        [JsonProperty("subscription_plan", NullValueHandling = NullValueHandling.Ignore)]
+        public Models.SubscriptionPlanSettings SubscriptionPlan { get; set; }
+
+        /// <summary>
+        /// Configuration for credit card company side installments.
+        /// </summary>
+        [JsonProperty("installment_plan", NullValueHandling = NullValueHandling.Ignore)]
+        public Models.SubscriptionInstallmentPlan InstallmentPlan { get; set; }
 
         /// <summary>
         /// A free-form dictionary for custom metadata.
@@ -132,6 +177,11 @@ namespace UnivaPay.Models
         {
             toStringOutput.Add($"TransactionTokenId = {(this.TransactionTokenId == null ? "null" : this.TransactionTokenId.ToString())}");
             toStringOutput.Add($"Amount = {(this.Amount == null ? "null" : this.Amount.ToString())}");
+            toStringOutput.Add($"Period = {(this.Period == null ? "null" : this.Period.ToString())}");
+            toStringOutput.Add($"CyclicalPeriod = {this.CyclicalPeriod ?? "null"}");
+            toStringOutput.Add($"InitialAmount = {(this.InitialAmount == null ? "null" : this.InitialAmount.ToString())}");
+            toStringOutput.Add($"SubscriptionPlan = {(this.SubscriptionPlan == null ? "null" : this.SubscriptionPlan.ToString())}");
+            toStringOutput.Add($"InstallmentPlan = {(this.InstallmentPlan == null ? "null" : this.InstallmentPlan.ToString())}");
             toStringOutput.Add($"Metadata = {(this.Metadata == null ? "null" : this.Metadata.ToString())}");
             toStringOutput.Add($"Status = {(this.Status == null ? "null" : this.Status.ToString())}");
             toStringOutput.Add($"ScheduleSettings = {(this.ScheduleSettings == null ? "null" : this.ScheduleSettings.ToString())}");

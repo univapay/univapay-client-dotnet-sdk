@@ -22,14 +22,12 @@ Transaction Token List Item User Data schema.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 TransactionTokenListItemUserData transactionTokenListItemUserData = new TransactionTokenListItemUserData
 {
     CardholderName = "TARO YAMADA",
     Email = "user@example.com",
     Brand = "visa",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

@@ -24,7 +24,6 @@ Webhook envelope for subscription lifecycle events. Fired as `subscription_creat
 ```csharp
 using System.Globalization;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 SubscriptionWebhookEvent subscriptionWebhookEvent = new SubscriptionWebhookEvent
 {
@@ -61,9 +60,7 @@ SubscriptionWebhookEvent subscriptionWebhookEvent = new SubscriptionWebhookEvent
             provider: CultureInfo.InvariantCulture,
             DateTimeStyles.RoundtripKind),
         Period = SubscriptionPeriod.Monthly,
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

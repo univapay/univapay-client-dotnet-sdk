@@ -769,14 +769,14 @@ catch (ApiException e)
 
 # Capture Charge
 
-Captures a previously authorized charge (where `capture` was set to false during creation).  The capture amount must be less than or equal to the authorized amount, and the currency must match.
+Captures a previously authorized charge (where `capture` was set to false during creation).  The capture amount must be less than or equal to the authorized amount, and the currency must match. The request body — and both of its fields — is optional: if omitted entirely, the full outstanding authorized amount (in the originally requested currency) is captured.
 
 ```csharp
 CaptureChargeAsync(
     Guid storeId,
     Guid id,
-    Models.ChargeCaptureRequest body,
-    string idempotencyKey = null)
+    string idempotencyKey = null,
+    Models.ChargeCaptureRequest body = null)
 ```
 
 ## Authentication
@@ -789,8 +789,8 @@ This endpoint requires [JWT_TOKEN](../../doc/auth/oauth-2-bearer-token.md)
 |  --- | --- | --- | --- |
 | `storeId` | `Guid` | Template, Required | The unique identifier of the store. |
 | `id` | `Guid` | Template, Required | The unique identifier of the resource. |
-| `body` | [`ChargeCaptureRequest`](../../doc/models/charge-capture-request.md) | Body, Required | Request payload for capturing an authorized charge. |
 | `idempotencyKey` | `string` | Header, Optional | An optional idempotency key to prevent double charges and duplicate operations. We recommend a randomly generated UUID (v4). |
+| `body` | [`ChargeCaptureRequest`](../../doc/models/charge-capture-request.md) | Body, Optional | Optional request payload for capturing an authorized charge. Omit entirely to capture the full outstanding authorized amount. |
 
 ## Response Type
 
@@ -814,6 +814,7 @@ try
     ApiResponse<object> result = await chargesApi.CaptureChargeAsync(
         storeId,
         id,
+        null,
         body
     );
 }

@@ -21,6 +21,11 @@ namespace UnivaPay
         string BaseUrl { get; }
 
         /// <summary>
+        /// Gets Base URL for the Direct Debit API
+        /// </summary>
+        string DirectDebitBaseUrl { get; }
+
+        /// <summary>
         /// Gets the URL for a particular alias in the current environment and appends it with template parameters.
         /// </summary>
         /// <param name="alias">Default value:DEFAULT.</param>

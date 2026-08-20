@@ -24,16 +24,14 @@ Token Response Card Data Cvv Authorize schema.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 TokenResponseCardDataCvvAuthorize tokenResponseCardDataCvvAuthorize = new TokenResponseCardDataCvvAuthorize
 {
     Enabled = true,
-    Status = "successful",
+    Status = "current",
     ChargeId = null,
     CredentialsId = null,
     Currency = "JPY",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

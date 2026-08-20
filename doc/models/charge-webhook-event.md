@@ -24,7 +24,6 @@ Webhook envelope for charge lifecycle events. Fired as `charge_updated` whenever
 ```csharp
 using System.Globalization;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 ChargeWebhookEvent chargeWebhookEvent = new ChargeWebhookEvent
 {
@@ -53,9 +52,7 @@ ChargeWebhookEvent chargeWebhookEvent = new ChargeWebhookEvent
         CreatedOn = DateTime.ParseExact("2024-06-26T01:51:30.000000Z", "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK",
             provider: CultureInfo.InvariantCulture,
             DateTimeStyles.RoundtripKind),
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

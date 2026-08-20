@@ -7,6 +7,7 @@ using APIMatic.Core.Utilities.Converters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace UnivaPay.Models.Containers
 {
@@ -18,7 +19,8 @@ namespace UnivaPay.Models.Containers
         new[] {
             typeof(MStringCase),
             typeof(PrecisionCase),
-            typeof(BooleanCase)
+            typeof(BooleanCase),
+            typeof(ListOfObjectCase)
         },
         false
     )]
@@ -58,6 +60,17 @@ namespace UnivaPay.Models.Containers
         }
 
         /// <summary>
+        /// This is List of Object case.
+        /// </summary>
+        /// <returns>
+        /// The GenericMetadataValue instance, wrapping the provided object value.
+        /// </returns>
+        public static GenericMetadataValue FromListOfObject(object listOfObject)
+        {
+            return new ListOfObjectCase().Set(listOfObject);
+        }
+
+        /// <summary>
         /// Method to match from the provided any-of cases. Here parameters
         /// represents the callback functions for any-of type cases. All
         /// callback functions must have the same return type T. This typeparam T
@@ -68,7 +81,8 @@ namespace UnivaPay.Models.Containers
         public abstract T Match<T>(
             Func<string, T> mString,
             Func<double, T> precision,
-            Func<bool, T> boolean);
+            Func<bool, T> boolean,
+            Func<object, T> listOfObject);
 
         /// <summary>
         /// Method to match from the provided any-of cases. The parameters represent
@@ -82,8 +96,9 @@ namespace UnivaPay.Models.Containers
         public T MatchSome<T>(
             Func<string, T> mString = null,
             Func<double, T> precision = null,
-            Func<bool, T> boolean = null) =>
-                Match(mString, precision, boolean);
+            Func<bool, T> boolean = null,
+            Func<object, T> listOfObject = null) =>
+                Match(mString, precision, boolean, listOfObject);
 
         [JsonConverter(typeof(UnionTypeCaseConverter<MStringCase, string>), JTokenType.String, JTokenType.Null)]
         private sealed class MStringCase : GenericMetadataValue, ICaseValue<MStringCase, string>
@@ -93,7 +108,8 @@ namespace UnivaPay.Models.Containers
             public override T Match<T>(
                 Func<string, T> mString,
                 Func<double, T> precision,
-                Func<bool, T> boolean) =>
+                Func<bool, T> boolean,
+                Func<object, T> listOfObject) =>
                    mString != null ? mString(Value) : default;
 
             public MStringCase Set(string value)
@@ -121,7 +137,8 @@ namespace UnivaPay.Models.Containers
             public override T Match<T>(
                 Func<string, T> mString,
                 Func<double, T> precision,
-                Func<bool, T> boolean) =>
+                Func<bool, T> boolean,
+                Func<object, T> listOfObject) =>
                    precision != null ? precision(Value) : default;
 
             public PrecisionCase Set(double value)
@@ -149,7 +166,8 @@ namespace UnivaPay.Models.Containers
             public override T Match<T>(
                 Func<string, T> mString,
                 Func<double, T> precision,
-                Func<bool, T> boolean) =>
+                Func<bool, T> boolean,
+                Func<object, T> listOfObject) =>
                    boolean != null ? boolean(Value) : default;
 
             public BooleanCase Set(bool value)
@@ -166,6 +184,35 @@ namespace UnivaPay.Models.Containers
             public override string ToString()
             {
                 return Value.ToString();
+            }
+        }
+
+        [JsonConverter(typeof(UnionTypeCaseConverter<ListOfObjectCase, object>))]
+        private sealed class ListOfObjectCase : GenericMetadataValue, ICaseValue<ListOfObjectCase, object>
+        {
+            public object Value;
+
+            public override T Match<T>(
+                Func<string, T> mString,
+                Func<double, T> precision,
+                Func<bool, T> boolean,
+                Func<object, T> listOfObject) =>
+                   listOfObject != null ? listOfObject(Value) : default;
+
+            public ListOfObjectCase Set(object value)
+            {
+                Value = value;
+                return this;
+            }
+
+            public object Get()
+            {
+                return Value;
+            }
+
+            public override string ToString()
+            {
+                return Value?.ToString();
             }
         }
     }

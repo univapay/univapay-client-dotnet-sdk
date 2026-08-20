@@ -20,16 +20,13 @@ Request body for suspending a subscription. The `schedule_settings.termination_m
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 SubscriptionSuspendRequest subscriptionSuspendRequest = new SubscriptionSuspendRequest
 {
     ScheduleSettings = new SuspendScheduleSettings
     {
         TerminationMode = SubscriptionTerminationMode.OnNextPayment,
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

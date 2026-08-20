@@ -15,12 +15,15 @@ Transaction Token Create Request Payment Type schema.
 | `Online` |
 | `Konbini` |
 | `BankTransfer` |
+| `QrScan` |
+| `QrMerchant` |
+| `Paidy` |
 
 ## Example
 
 ```csharp
 using UnivaPay.Models;
 
-TransactionTokenCreateRequestPaymentType transactionTokenCreateRequestPaymentType = TransactionTokenCreateRequestPaymentType.Konbini;
+TransactionTokenCreateRequestPaymentType transactionTokenCreateRequestPaymentType = TransactionTokenCreateRequestPaymentType.QrScan;
 ```
 

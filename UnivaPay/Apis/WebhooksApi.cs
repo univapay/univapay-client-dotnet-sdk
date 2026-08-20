@@ -322,58 +322,5 @@ namespace UnivaPay.Apis
                   .ErrorCase("504", CreateErrorCase("HTTP 504 Timeout: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
                   .ErrorCase("0", CreateErrorCase("HTTP {$statusCode}: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true)))
               .ExecuteAsync(cancellationToken).ConfigureAwait(false);
-
-        /// <summary>
-        /// Re-sends the webhook payload for a previously delivered (or failed) event. Returns 202 Accepted immediately; delivery is asynchronous.
-        /// </summary>
-        /// <param name="storeId">Required parameter: The unique identifier of the store..</param>
-        /// <param name="id">Required parameter: The unique identifier of the resource..</param>
-        /// <param name="eventId">Required parameter: The unique identifier of the webhook event..</param>
-        /// <param name="idempotencyKey">Optional parameter: An optional idempotency key to prevent double charges and duplicate operations. We recommend a randomly generated UUID (v4)..</param>
-        /// <returns>Returns the ApiResponse of object response from the API call.</returns>
-        public ApiResponse<object> RedeliverWebhookEvent(
-                Guid storeId,
-                Guid id,
-                Guid eventId,
-                string idempotencyKey = null)
-            => CoreHelper.RunTask(RedeliverWebhookEventAsync(storeId, id, eventId, idempotencyKey));
-
-        /// <summary>
-        /// Re-sends the webhook payload for a previously delivered (or failed) event. Returns 202 Accepted immediately; delivery is asynchronous.
-        /// </summary>
-        /// <param name="storeId">Required parameter: The unique identifier of the store..</param>
-        /// <param name="id">Required parameter: The unique identifier of the resource..</param>
-        /// <param name="eventId">Required parameter: The unique identifier of the webhook event..</param>
-        /// <param name="idempotencyKey">Optional parameter: An optional idempotency key to prevent double charges and duplicate operations. We recommend a randomly generated UUID (v4)..</param>
-        /// <param name="cancellationToken"> cancellationToken. </param>
-        /// <returns>Returns the ApiResponse of object response from the API call.</returns>
-        public async Task<ApiResponse<object>> RedeliverWebhookEventAsync(
-                Guid storeId,
-                Guid id,
-                Guid eventId,
-                string idempotencyKey = null,
-                CancellationToken cancellationToken = default)
-            => await CreateApiCall<object>()
-              .RequestBuilder(requestBuilder => requestBuilder
-                  .Setup(HttpMethod.Post, "/stores/{storeId}/webhooks/{id}/events/{eventId}/redeliver")
-                  .WithAuth("JWT_TOKEN")
-                  .Parameters(parameters => parameters
-                      .Template(template => template.Setup("storeId", storeId))
-                      .Template(template => template.Setup("id", id))
-                      .Template(template => template.Setup("eventId", eventId))
-                      .Header(header => header.Setup("Idempotency-Key", idempotencyKey))))
-              .ResponseHandler(responseHandler => responseHandler
-                  .ErrorCase("401", CreateErrorCase("HTTP 401 Unauthorized: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
-                  .ErrorCase("403", CreateErrorCase("HTTP 403 Forbidden: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
-                  .ErrorCase("404", CreateErrorCase("HTTP 404 Not Found: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
-                  .ErrorCase("400", CreateErrorCase("HTTP 400 Bad Request: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
-                  .ErrorCase("409", CreateErrorCase("HTTP 409 Conflict: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
-                  .ErrorCase("429", CreateErrorCase("HTTP 429 Rate Limited: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
-                  .ErrorCase("500", CreateErrorCase("HTTP 500 Server Error: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
-                  .ErrorCase("503", CreateErrorCase("HTTP 503 Unavailable: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
-                  .ErrorCase("504", CreateErrorCase("HTTP 504 Timeout: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
-                  .ErrorCase("0", CreateErrorCase("HTTP {$statusCode}: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
-                  .Deserializer(response => response))
-              .ExecuteAsync(cancellationToken).ConfigureAwait(false);
     }
 }

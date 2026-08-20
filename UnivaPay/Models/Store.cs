@@ -95,7 +95,7 @@ namespace UnivaPay.Models
         public DateTime? CreatedOn { get; set; }
 
         /// <summary>
-        /// Store-scoped configuration snapshot serialized by gyron-payments-api. It uses the same flattened serializer as merchant configuration, but omits `transfer_schedule`.
+        /// Store-scoped configuration snapshot as serialized by the backend. It uses the same flattened serializer as merchant configuration, but omits `transfer_schedule`.
         /// </summary>
         [JsonProperty("configuration", NullValueHandling = NullValueHandling.Ignore)]
         public Models.MerchantWebhookConfiguration Configuration { get; set; }

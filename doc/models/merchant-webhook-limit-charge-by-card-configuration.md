@@ -21,13 +21,11 @@ Per-card velocity limit configuration.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookLimitChargeByCardConfiguration merchantWebhookLimitChargeByCardConfiguration = new MerchantWebhookLimitChargeByCardConfiguration
 {
     QuantityOfCharges = 5,
     DurationWindow = "PT24H",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

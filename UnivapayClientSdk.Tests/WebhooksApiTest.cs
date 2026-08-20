@@ -303,53 +303,5 @@ namespace UnivaPay
                     false),
                     "Response body should have matching keys");
         }
-
-        /// <summary>
-        /// Re-sends the webhook payload for a previously delivered (or failed) event. Returns 202 Accepted immediately; delivery is asynchronous..
-        /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
-        [Test]
-        public async Task TestTestRedeliverWebhookEvent()
-        {
-            // Parameters for the API call
-            Guid storeId = Guid.Parse("0cab399b-5621-425b-993b-f8507eba1e78");
-            Guid id = Guid.Parse("c4e87129-cad4-47fb-8ded-b4c0a4ae0dd4");
-            Guid eventId = Guid.Parse("e1f2a3b4-c5d6-7890-efab-123456789cde");
-            string idempotencyKey = "f64be872-353d-4c3c-84cb-3dc617fe89f7";
-
-            // Perform API call
-            ApiResponse<object> result = null;
-            try
-            {
-                result = await this.controller.RedeliverWebhookEventAsync(storeId, id, eventId, idempotencyKey);
-            }
-            catch (ApiException)
-            {
-            }
-
-            // Test response code
-            Assert.AreEqual(202, HttpCallBack.Response.StatusCode, "Status should be 202");
-
-            // Test headers
-            Dictionary<string, string> headers = new Dictionary<string, string>();
-            headers.Add("Content-Type", "application/json");
-
-            Assert.IsTrue(
-                    TestHelper.AreHeadersProperSubsetOf (
-                    headers,
-                    HttpCallBack.Response.Headers),
-                    "Headers should match");
-
-            // Test whether the captured response is as we expected
-            Assert.IsNotNull(result, "Result should exist");
-            Assert.IsTrue(
-                    TestHelper.IsProperSubsetOf(
-                    "{}",
-                    TestHelper.ConvertStreamToString(HttpCallBack.Response.RawBody),
-                    false,
-                    true,
-                    false),
-                    "Response body should have matching keys");
-        }
     }
 }

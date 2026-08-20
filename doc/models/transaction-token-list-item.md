@@ -32,7 +32,6 @@ Transaction token entry returned in list responses.
 ```csharp
 using System.Globalization;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 TransactionTokenListItem transactionTokenListItem = new TransactionTokenListItem
 {
@@ -57,7 +56,6 @@ TransactionTokenListItem transactionTokenListItem = new TransactionTokenListItem
         Email = "user@example.com",
         Brand = "visa",
     },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

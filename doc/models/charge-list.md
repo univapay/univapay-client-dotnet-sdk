@@ -24,6 +24,7 @@ Paginated list of charges.
 using System.Collections.Generic;
 using System.Globalization;
 using UnivaPay.Models;
+using UnivaPay.Models.Containers;
 using UnivaPay.Utilities;
 
 ChargeList chargeList = new ChargeList
@@ -47,10 +48,17 @@ ChargeList chargeList = new ChargeList
             Status = ChargeStatus.Successful,
             Error = new PaymentError
             {
+                Code = 24,
+                Message = "message4",
+                Detail = "detail0",
+                ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
             },
             Metadata = new GenericMetadata
             {
                 OrderId = "ORD-2001",
+                UnivapayName = "univapay-name8",
+                UnivapayPhoneNumber = "univapay-phone-number2",
+                ["exampleAdditionalProperty"] = GenericMetadataValue.FromString("String4"),
             },
             Mode = ChargeMode.Test,
             CreatedOn = DateTime.ParseExact("2024-06-25T07:29:12.854865Z", "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK",
@@ -75,10 +83,17 @@ ChargeList chargeList = new ChargeList
             Status = ChargeStatus.Successful,
             Error = new PaymentError
             {
+                Code = 24,
+                Message = "message4",
+                Detail = "detail0",
+                ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
             },
             Metadata = new GenericMetadata
             {
                 OrderId = "ORD-2002",
+                UnivapayName = "univapay-name8",
+                UnivapayPhoneNumber = "univapay-phone-number2",
+                ["exampleAdditionalProperty"] = GenericMetadataValue.FromString("String4"),
             },
             Mode = ChargeMode.Test,
             CreatedOn = DateTime.ParseExact("2024-06-25T07:19:19.507637Z", "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK",

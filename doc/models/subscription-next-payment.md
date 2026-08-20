@@ -31,16 +31,9 @@ Next scheduled payment details for a subscription.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 SubscriptionNextPayment subscriptionNextPayment = new SubscriptionNextPayment
 {
-    Id = new Guid("00000e0e-0000-0000-0000-000000000000"),
-    DueDate = DateTime.Parse("2016-03-13"),
-    ZoneId = "zone_id4",
-    Amount = 176,
-    Currency = "currency8",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

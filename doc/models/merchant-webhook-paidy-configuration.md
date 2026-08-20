@@ -20,12 +20,10 @@ Paidy payment settings.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookPaidyConfiguration merchantWebhookPaidyConfiguration = new MerchantWebhookPaidyConfiguration
 {
     Enabled = false,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

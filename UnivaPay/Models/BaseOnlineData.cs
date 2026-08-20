@@ -99,7 +99,7 @@ namespace UnivaPay.Models
         }
 
         /// <summary>
-        /// Base Online Data Brand schema.
+        /// Base Online Data Brand schema. `alipay_china`, `alipay_hk`, `gcash`, `dana`, `truemoney`, `kakaopay`, `tng`, `rabbit_line_pay`, `bpi`, `boost`, `tinaba`, `naver_pay`, `toss_pay`, `maya`, `grab_sg`, `kredivo_id`, `k_plus`, and `kaspi_kz` are Alipay+ regional wallets routed through the `alipay_plus_online` gateway family.
         /// </summary>
         [JsonProperty("brand", NullValueHandling = NullValueHandling.Ignore)]
         public Models.BaseOnlineDataBrand? Brand { get; set; }

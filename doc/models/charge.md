@@ -48,6 +48,7 @@ Charge resource returned by the payments API.
 ```csharp
 using System.Globalization;
 using UnivaPay.Models;
+using UnivaPay.Models.Containers;
 using UnivaPay.Utilities;
 
 Charge charge = new Charge
@@ -79,10 +80,14 @@ Charge charge = new Charge
         Code = 301,
         Message = "Card number error.",
         Detail = "The provided card number failed validation.",
+        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
     Metadata = new GenericMetadata
     {
         OrderId = "12345",
+        UnivapayName = "univapay-name8",
+        UnivapayPhoneNumber = "univapay-phone-number2",
+        ["exampleAdditionalProperty"] = GenericMetadataValue.FromString("String4"),
     },
     Mode = ChargeMode.Live,
     CreatedOn = DateTime.ParseExact("2026-04-09T07:35:50Z", "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK",
@@ -92,9 +97,15 @@ Charge charge = new Charge
     StoreName = "Tokyo Store",
     Redirect = new ChargeRedirect
     {
+        Endpoint = "endpoint8",
+        RedirectId = new Guid("00000316-0000-0000-0000-000000000000"),
+        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
     ThreeDs = new ChargeThreeDs
     {
+        RedirectEndpoint = "redirect_endpoint8",
+        Mode = "mode2",
+        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
     ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };

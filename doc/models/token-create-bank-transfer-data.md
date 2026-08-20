@@ -23,7 +23,6 @@ Token Create Bank Transfer Data schema.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 TokenCreateBankTransferData tokenCreateBankTransferData = new TokenCreateBankTransferData
 {
@@ -31,7 +30,6 @@ TokenCreateBankTransferData tokenCreateBankTransferData = new TokenCreateBankTra
     ExpirationPeriod = "PT168H",
     ExpirationTimeShift = "23:59:59+09:00",
     Name = "Taro Yamada",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

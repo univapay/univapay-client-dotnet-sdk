@@ -36,7 +36,6 @@ Bank transfer payment settings.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookBankTransferConfiguration merchantWebhookBankTransferConfiguration = new MerchantWebhookBankTransferConfiguration
 {
@@ -52,7 +51,6 @@ MerchantWebhookBankTransferConfiguration merchantWebhookBankTransferConfiguratio
     DepositReceivedNotificationEnabled = true,
     RemindNotificationPeriod = "P2D",
     RemindNotificationEnabled = true,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

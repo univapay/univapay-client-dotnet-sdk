@@ -36,11 +36,11 @@ We will assume that all requests are going to originate from a backend server th
 If you are building with .NET CLI tools then you can also use the following command:
 
 ```bash
-dotnet add package Univapay.ClientSdk --version 1.0.0
+dotnet add package Univapay.ClientSdk --version 1.2.2
 ```
 
 You can also view the package at:
-https://www.nuget.org/packages/Univapay.ClientSdk/1.0.0
+https://www.nuget.org/packages/Univapay.ClientSdk/1.2.2
 
 ## Test the SDK
 
@@ -55,6 +55,7 @@ The following parameters are configurable for the API Client:
 | Parameter | Type | Description |
 |  --- | --- | --- |
 | BaseUrl | `string` | Base URL for the API<br>*Default*: `"https://api.univapay.com"` |
+| DirectDebitBaseUrl | `string` | Base URL for the Direct Debit API<br>*Default*: `"https://direct-debit.gopay-services.com"` |
 | Environment | [`Environment`](README.md#environments) | The API environment. <br> **Default: `Environment.Production`** |
 | Timeout | `TimeSpan` | Http client timeout.<br>*Default*: `TimeSpan.FromSeconds(30)` |
 | HttpClientConfiguration | [`Action<HttpClientConfiguration.Builder>`](doc/http-client-configuration-builder.md) | Action delegate that configures the HTTP client by using the HttpClientConfiguration.Builder for customizing API call settings.<br>*Default*: `new HttpClient()` |
@@ -82,6 +83,7 @@ UnivapayClientSdkClient client = new UnivapayClientSdkClient.Builder()
         httpClientConfig.Timeout(TimeSpan.FromSeconds(100)))
     .Environment(UnivaPay.Environment.Production)
     .BaseUrl("https://api.univapay.com")
+    .DirectDebitBaseUrl("https://direct-debit.gopay-services.com")
     .LoggingConfig(config => config
         .LogLevel(LogLevel.Information)
         .RequestConfig(reqConfig => reqConfig.Body(true))
@@ -130,6 +132,8 @@ This API uses the following authentication schemes.
 ## List of APIs
 
 * [Transaction Tokens](doc/controllers/transaction-tokens.md)
+* [Direct Debit](doc/controllers/direct-debit.md)
+* [Transaction History](doc/controllers/transaction-history.md)
 * [Charges](doc/controllers/charges.md)
 * [Refunds](doc/controllers/refunds.md)
 * [Subscriptions](doc/controllers/subscriptions.md)
@@ -137,6 +141,7 @@ This API uses the following authentication schemes.
 * [Merchants](doc/controllers/merchants.md)
 * [Stores](doc/controllers/stores.md)
 * [Webhooks](doc/controllers/webhooks.md)
+* [Checkout](doc/controllers/checkout.md)
 
 ## Webhooks
 

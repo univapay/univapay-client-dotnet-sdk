@@ -26,7 +26,6 @@ Token Response Card Data Billing schema.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 TokenResponseCardDataBilling tokenResponseCardDataBilling = new TokenResponseCardDataBilling
 {
@@ -41,7 +40,6 @@ TokenResponseCardDataBilling tokenResponseCardDataBilling = new TokenResponseCar
         CountryCode = 81,
         LocalNumber = "08012341234",
     },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

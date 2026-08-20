@@ -20,12 +20,10 @@ Request body for updating a customs declaration. Backend patch handling keeps th
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 CustomsDeclarationPatchRequest customsDeclarationPatchRequest = new CustomsDeclarationPatchRequest
 {
     MerchantCustomsNo = "1234567891",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

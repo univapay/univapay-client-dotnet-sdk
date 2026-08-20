@@ -20,24 +20,11 @@ CVV confirmation rules for recurring token charges.
 ## Example
 
 ```csharp
-using System.Collections.Generic;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookRecurringCvvConfirmationConfig merchantWebhookRecurringCvvConfirmationConfig = new MerchantWebhookRecurringCvvConfirmationConfig
 {
     Enabled = false,
-    Threshold = new List<MerchantWebhookMoneyAmount>
-    {
-        null,
-        new MerchantWebhookMoneyAmount
-        {
-        },
-        new MerchantWebhookMoneyAmount
-        {
-        },
-    },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

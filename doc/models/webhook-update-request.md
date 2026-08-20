@@ -22,21 +22,11 @@ Request body for updating a webhook. All fields are optional. Omitted fields are
 ## Example
 
 ```csharp
-using System.Collections.Generic;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 WebhookUpdateRequest webhookUpdateRequest = new WebhookUpdateRequest
 {
-    Triggers = new List<WebhookTrigger>
-    {
-        WebhookTrigger.SubscriptionCreated,
-        WebhookTrigger.BankTransferStatusUpdated,
-    },
-    Url = "url6",
-    AuthToken = "auth_token8",
     Active = false,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

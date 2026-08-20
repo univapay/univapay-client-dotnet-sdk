@@ -24,16 +24,9 @@ Schedule settings applied to a subscription.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 SubscriptionScheduleSettings subscriptionScheduleSettings = new SubscriptionScheduleSettings
 {
-    StartOn = DateTime.Parse("2016-03-13"),
-    ZoneId = "zone_id0",
-    PreserveEndOfMonth = false,
-    RetryInterval = "retry_interval4",
-    TerminationMode = SubscriptionTerminationMode.Immediate,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

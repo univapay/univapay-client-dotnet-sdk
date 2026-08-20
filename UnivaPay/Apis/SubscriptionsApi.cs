@@ -7,6 +7,7 @@ using APIMatic.Core;
 using APIMatic.Core.Types;
 using APIMatic.Core.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -71,25 +72,37 @@ namespace UnivaPay.Apis
         /// <summary>
         /// Lists all subscriptions across all stores.
         /// </summary>
+        /// <param name="search">Optional parameter: Search by metadata values..</param>
+        /// <param name="status">Optional parameter: Filter subscriptions by current status..</param>
+        /// <param name="mode">Optional parameter: Filter subscriptions by processing mode..</param>
         /// <param name="limit">Optional parameter: Maximum number of resources to return in one page..</param>
         /// <param name="cursor">Optional parameter: Cursor pointing to the resource after which pagination should continue..</param>
         /// <param name="cursorDirection">Optional parameter: Pagination direction relative to the supplied cursor..</param>
         /// <returns>Returns the ApiResponse of Models.SubscriptionList response from the API call.</returns>
         public ApiResponse<Models.SubscriptionList> ListAllSubscriptions(
+                string search = null,
+                Models.SubscriptionStatus? status = null,
+                Models.ChargeMode? mode = null,
                 int? limit = 10,
                 Guid? cursor = null,
                 Models.CursorDirectionQuery? cursorDirection = Models.CursorDirectionQuery.Desc)
-            => CoreHelper.RunTask(ListAllSubscriptionsAsync(limit, cursor, cursorDirection));
+            => CoreHelper.RunTask(ListAllSubscriptionsAsync(search, status, mode, limit, cursor, cursorDirection));
 
         /// <summary>
         /// Lists all subscriptions across all stores.
         /// </summary>
+        /// <param name="search">Optional parameter: Search by metadata values..</param>
+        /// <param name="status">Optional parameter: Filter subscriptions by current status..</param>
+        /// <param name="mode">Optional parameter: Filter subscriptions by processing mode..</param>
         /// <param name="limit">Optional parameter: Maximum number of resources to return in one page..</param>
         /// <param name="cursor">Optional parameter: Cursor pointing to the resource after which pagination should continue..</param>
         /// <param name="cursorDirection">Optional parameter: Pagination direction relative to the supplied cursor..</param>
         /// <param name="cancellationToken"> cancellationToken. </param>
         /// <returns>Returns the ApiResponse of Models.SubscriptionList response from the API call.</returns>
         public async Task<ApiResponse<Models.SubscriptionList>> ListAllSubscriptionsAsync(
+                string search = null,
+                Models.SubscriptionStatus? status = null,
+                Models.ChargeMode? mode = null,
                 int? limit = 10,
                 Guid? cursor = null,
                 Models.CursorDirectionQuery? cursorDirection = Models.CursorDirectionQuery.Desc,
@@ -99,6 +112,9 @@ namespace UnivaPay.Apis
                   .Setup(HttpMethod.Get, "/subscriptions")
                   .WithAuth("JWT_TOKEN")
                   .Parameters(parameters => parameters
+                      .Query(query => query.Setup("search", search))
+                      .Query(query => query.Setup("status", (status.HasValue) ? CoreHelper.JsonSerialize(status.Value).Trim('\"') : null))
+                      .Query(query => query.Setup("mode", (mode.HasValue) ? CoreHelper.JsonSerialize(mode.Value).Trim('\"') : null))
                       .Query(query => query.Setup("limit", limit ?? 10))
                       .Query(query => query.Setup("cursor", cursor))
                       .Query(query => query.Setup("cursor_direction", (cursorDirection.HasValue) ? CoreHelper.JsonSerialize(cursorDirection.Value).Trim('\"') : "desc"))))
@@ -109,6 +125,49 @@ namespace UnivaPay.Apis
                   .ErrorCase("404", CreateErrorCase("HTTP 404 Not Found: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
                   .ErrorCase("409", CreateErrorCase("HTTP 409 Conflict: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
                   .ErrorCase("429", CreateErrorCase("HTTP 429 Rate Limited: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("500", CreateErrorCase("HTTP 500 Server Error: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("503", CreateErrorCase("HTTP 503 Unavailable: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("504", CreateErrorCase("HTTP 504 Timeout: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("0", CreateErrorCase("HTTP {$statusCode}: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true)))
+              .ExecuteAsync(cancellationToken).ConfigureAwait(false);
+
+        /// <summary>
+        /// Simulates the payment schedule that a subscription would follow, without creating a live subscription or a transaction token. Returns a bare array of the scheduled payments that would result from the given amount, currency, period (or cyclical period), and plan settings.
+        /// </summary>
+        /// <param name="idempotencyKey">Optional parameter: An optional idempotency key to prevent double charges and duplicate operations. We recommend a randomly generated UUID (v4)..</param>
+        /// <param name="body">Optional parameter: Subscription Plan Simulation request.</param>
+        /// <returns>Returns the ApiResponse of List of Models.SubscriptionSimulationPayment response from the API call.</returns>
+        public ApiResponse<List<Models.SubscriptionSimulationPayment>> SimulateSubscriptionPlan(
+                string idempotencyKey = null,
+                Models.SubscriptionSimulationRequest body = null)
+            => CoreHelper.RunTask(SimulateSubscriptionPlanAsync(idempotencyKey, body));
+
+        /// <summary>
+        /// Simulates the payment schedule that a subscription would follow, without creating a live subscription or a transaction token. Returns a bare array of the scheduled payments that would result from the given amount, currency, period (or cyclical period), and plan settings.
+        /// </summary>
+        /// <param name="idempotencyKey">Optional parameter: An optional idempotency key to prevent double charges and duplicate operations. We recommend a randomly generated UUID (v4)..</param>
+        /// <param name="body">Optional parameter: Subscription Plan Simulation request.</param>
+        /// <param name="cancellationToken"> cancellationToken. </param>
+        /// <returns>Returns the ApiResponse of List of Models.SubscriptionSimulationPayment response from the API call.</returns>
+        public async Task<ApiResponse<List<Models.SubscriptionSimulationPayment>>> SimulateSubscriptionPlanAsync(
+                string idempotencyKey = null,
+                Models.SubscriptionSimulationRequest body = null,
+                CancellationToken cancellationToken = default)
+            => await CreateApiCall<List<Models.SubscriptionSimulationPayment>>()
+              .RequestBuilder(requestBuilder => requestBuilder
+                  .Setup(HttpMethod.Post, "/subscriptions/simulate_plan")
+                  .WithAuth("JWT_TOKEN")
+                  .Parameters(parameters => parameters
+                      .Body(b => b.Setup(body))
+                      .Header(header => header.Setup("Content-Type", "application/json"))
+                      .Header(header => header.Setup("Idempotency-Key", idempotencyKey))))
+              .ResponseHandler(responseHandler => responseHandler
+                  .ErrorCase("400", CreateErrorCase("HTTP 400 Bad Request: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
+                  .ErrorCase("401", CreateErrorCase("HTTP 401 Unauthorized: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
+                  .ErrorCase("403", CreateErrorCase("HTTP 403 Forbidden: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
+                  .ErrorCase("429", CreateErrorCase("HTTP 429 Rate Limited: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("404", CreateErrorCase("HTTP 404 Not Found: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("409", CreateErrorCase("HTTP 409 Conflict: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
                   .ErrorCase("500", CreateErrorCase("HTTP 500 Server Error: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
                   .ErrorCase("503", CreateErrorCase("HTTP 503 Unavailable: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
                   .ErrorCase("504", CreateErrorCase("HTTP 504 Timeout: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
@@ -176,6 +235,54 @@ namespace UnivaPay.Apis
                   .ErrorCase("404", CreateErrorCase("HTTP 404 Not Found: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
                   .ErrorCase("409", CreateErrorCase("HTTP 409 Conflict: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
                   .ErrorCase("429", CreateErrorCase("HTTP 429 Rate Limited: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("500", CreateErrorCase("HTTP 500 Server Error: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("503", CreateErrorCase("HTTP 503 Unavailable: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("504", CreateErrorCase("HTTP 504 Timeout: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("0", CreateErrorCase("HTTP {$statusCode}: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true)))
+              .ExecuteAsync(cancellationToken).ConfigureAwait(false);
+
+        /// <summary>
+        /// Simulates the payment schedule that a subscription would follow for a specific store, without creating a live subscription or a transaction token. Returns a bare array of the scheduled payments that would result from the given amount, currency, period (or cyclical period), and plan settings.
+        /// </summary>
+        /// <param name="storeId">Required parameter: The unique identifier of the store..</param>
+        /// <param name="idempotencyKey">Optional parameter: An optional idempotency key to prevent double charges and duplicate operations. We recommend a randomly generated UUID (v4)..</param>
+        /// <param name="body">Optional parameter: Subscription Plan Simulation request.</param>
+        /// <returns>Returns the ApiResponse of List of Models.SubscriptionSimulationPayment response from the API call.</returns>
+        public ApiResponse<List<Models.SubscriptionSimulationPayment>> SimulateStoreSubscriptionPlan(
+                Guid storeId,
+                string idempotencyKey = null,
+                Models.SubscriptionSimulationRequest body = null)
+            => CoreHelper.RunTask(SimulateStoreSubscriptionPlanAsync(storeId, idempotencyKey, body));
+
+        /// <summary>
+        /// Simulates the payment schedule that a subscription would follow for a specific store, without creating a live subscription or a transaction token. Returns a bare array of the scheduled payments that would result from the given amount, currency, period (or cyclical period), and plan settings.
+        /// </summary>
+        /// <param name="storeId">Required parameter: The unique identifier of the store..</param>
+        /// <param name="idempotencyKey">Optional parameter: An optional idempotency key to prevent double charges and duplicate operations. We recommend a randomly generated UUID (v4)..</param>
+        /// <param name="body">Optional parameter: Subscription Plan Simulation request.</param>
+        /// <param name="cancellationToken"> cancellationToken. </param>
+        /// <returns>Returns the ApiResponse of List of Models.SubscriptionSimulationPayment response from the API call.</returns>
+        public async Task<ApiResponse<List<Models.SubscriptionSimulationPayment>>> SimulateStoreSubscriptionPlanAsync(
+                Guid storeId,
+                string idempotencyKey = null,
+                Models.SubscriptionSimulationRequest body = null,
+                CancellationToken cancellationToken = default)
+            => await CreateApiCall<List<Models.SubscriptionSimulationPayment>>()
+              .RequestBuilder(requestBuilder => requestBuilder
+                  .Setup(HttpMethod.Post, "/stores/{storeId}/subscriptions/simulate_plan")
+                  .WithAuth("JWT_TOKEN")
+                  .Parameters(parameters => parameters
+                      .Body(b => b.Setup(body))
+                      .Template(template => template.Setup("storeId", storeId))
+                      .Header(header => header.Setup("Content-Type", "application/json"))
+                      .Header(header => header.Setup("Idempotency-Key", idempotencyKey))))
+              .ResponseHandler(responseHandler => responseHandler
+                  .ErrorCase("400", CreateErrorCase("HTTP 400 Bad Request: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
+                  .ErrorCase("401", CreateErrorCase("HTTP 401 Unauthorized: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
+                  .ErrorCase("403", CreateErrorCase("HTTP 403 Forbidden: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
+                  .ErrorCase("429", CreateErrorCase("HTTP 429 Rate Limited: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("404", CreateErrorCase("HTTP 404 Not Found: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("409", CreateErrorCase("HTTP 409 Conflict: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
                   .ErrorCase("500", CreateErrorCase("HTTP 500 Server Error: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
                   .ErrorCase("503", CreateErrorCase("HTTP 503 Unavailable: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
                   .ErrorCase("504", CreateErrorCase("HTTP 504 Timeout: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))

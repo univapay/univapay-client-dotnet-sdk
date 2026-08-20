@@ -32,7 +32,6 @@ Data payload for `bank_transfer_status_updated` webhook events. Contains the ban
 ```csharp
 using System.Globalization;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 BankTransferStatusData bankTransferStatusData = new BankTransferStatusData
 {
@@ -58,7 +57,6 @@ BankTransferStatusData bankTransferStatusData = new BankTransferStatusData
     {
         OrderId = "order_12345",
     },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

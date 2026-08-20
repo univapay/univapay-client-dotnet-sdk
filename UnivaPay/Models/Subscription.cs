@@ -49,12 +49,22 @@ namespace UnivaPay.Models
         private double? initialAmountFormatted;
         private DateTime? subsequentCyclesStart;
         private string firstChargeCaptureAfter;
+        private string cyclicalPeriod;
+        private int? cyclesLeft;
+        private Guid? chargeId;
+        private int? amountLeft;
+        private double? amountLeftFormatted;
         private Dictionary<string, bool> shouldSerialize = new Dictionary<string, bool>
         {
             { "initial_amount", false },
             { "initial_amount_formatted", false },
             { "subsequent_cycles_start", false },
             { "first_charge_capture_after", false },
+            { "cyclical_period", false },
+            { "cycles_left", false },
+            { "charge_id", false },
+            { "amount_left", false },
+            { "amount_left_formatted", false },
         };
 
         /// <summary>
@@ -86,8 +96,16 @@ namespace UnivaPay.Models
         /// <param name="metadata">metadata.</param>
         /// <param name="mode">mode.</param>
         /// <param name="createdOn">created_on.</param>
+        /// <param name="threeDs">three_ds.</param>
         /// <param name="period">period.</param>
+        /// <param name="cyclicalPeriod">cyclical_period.</param>
         /// <param name="nextPayment">next_payment.</param>
+        /// <param name="cyclesLeft">cycles_left.</param>
+        /// <param name="subscriptionPlan">subscription_plan.</param>
+        /// <param name="installmentPlan">installment_plan.</param>
+        /// <param name="chargeId">charge_id.</param>
+        /// <param name="amountLeft">amount_left.</param>
+        /// <param name="amountLeftFormatted">amount_left_formatted.</param>
         public Subscription(
             Guid? id = null,
             Guid? storeId = null,
@@ -106,8 +124,16 @@ namespace UnivaPay.Models
             Models.GenericMetadata metadata = null,
             Models.ChargeMode? mode = null,
             DateTime? createdOn = null,
+            Models.SubscriptionThreeDs threeDs = null,
             Models.SubscriptionPeriod? period = null,
-            Models.SubscriptionNextPayment nextPayment = null)
+            string cyclicalPeriod = null,
+            Models.SubscriptionNextPayment nextPayment = null,
+            int? cyclesLeft = null,
+            Models.SubscriptionPlanSettings subscriptionPlan = null,
+            Models.SubscriptionInstallmentPlanResponse installmentPlan = null,
+            Guid? chargeId = null,
+            int? amountLeft = null,
+            double? amountLeftFormatted = null)
         {
             this.additionalProperties = new Dictionary<string, JToken>();
             this.propertyName = this.GetPropertyNames();
@@ -144,8 +170,36 @@ namespace UnivaPay.Models
             this.Metadata = metadata;
             this.Mode = mode;
             this.CreatedOn = createdOn;
+            this.ThreeDs = threeDs;
             this.Period = period;
+
+            if (cyclicalPeriod != null)
+            {
+                this.CyclicalPeriod = cyclicalPeriod;
+            }
             this.NextPayment = nextPayment;
+
+            if (cyclesLeft != null)
+            {
+                this.CyclesLeft = cyclesLeft;
+            }
+            this.SubscriptionPlan = subscriptionPlan;
+            this.InstallmentPlan = installmentPlan;
+
+            if (chargeId != null)
+            {
+                this.ChargeId = chargeId;
+            }
+
+            if (amountLeft != null)
+            {
+                this.AmountLeft = amountLeft;
+            }
+
+            if (amountLeftFormatted != null)
+            {
+                this.AmountLeftFormatted = amountLeftFormatted;
+            }
         }
 
         /// <summary>
@@ -301,16 +355,124 @@ namespace UnivaPay.Models
         public DateTime? CreatedOn { get; set; }
 
         /// <summary>
+        /// 3-D Secure configuration and redirect details applied to the subscription's payments.
+        /// </summary>
+        [JsonProperty("three_ds", NullValueHandling = NullValueHandling.Ignore)]
+        public Models.SubscriptionThreeDs ThreeDs { get; set; }
+
+        /// <summary>
         /// Subscription Period schema.
         /// </summary>
         [JsonProperty("period", NullValueHandling = NullValueHandling.Ignore)]
         public Models.SubscriptionPeriod? Period { get; set; }
 
         /// <summary>
+        /// ISO-8601 Duration for a custom billing frequency (e.g., P3D, P1M), returned instead of `period` when the subscription uses a custom cycle length rather than one of the fixed period presets. Mutually exclusive with `period` — exactly one of the two is present.
+        /// </summary>
+        [JsonProperty("cyclical_period")]
+        public string CyclicalPeriod
+        {
+            get
+            {
+                return this.cyclicalPeriod;
+            }
+
+            set
+            {
+                this.shouldSerialize["cyclical_period"] = true;
+                this.cyclicalPeriod = value;
+            }
+        }
+
+        /// <summary>
         /// Next scheduled payment details for a subscription.
         /// </summary>
         [JsonProperty("next_payment", NullValueHandling = NullValueHandling.Ignore)]
         public Models.SubscriptionNextPayment NextPayment { get; set; }
+
+        /// <summary>
+        /// Number of remaining billing cycles before the subscription completes. Only present for cycle-limited plans (`subscription_plan` or `installment_plan`); `null` for indefinite subscriptions.
+        /// </summary>
+        [JsonProperty("cycles_left")]
+        public int? CyclesLeft
+        {
+            get
+            {
+                return this.cyclesLeft;
+            }
+
+            set
+            {
+                this.shouldSerialize["cycles_left"] = true;
+                this.cyclesLeft = value;
+            }
+        }
+
+        /// <summary>
+        /// Configuration for limited-cycle subscriptions (Univapay side).
+        /// </summary>
+        [JsonProperty("subscription_plan", NullValueHandling = NullValueHandling.Ignore)]
+        public Models.SubscriptionPlanSettings SubscriptionPlan { get; set; }
+
+        /// <summary>
+        /// Installment plan applied to the subscription, as returned by the API. Covers both card-network installment plans (`revolving`, `fixed_cycles`) and legacy fixed-amount installment plans (`fixed_cycle_amount`).
+        /// </summary>
+        [JsonProperty("installment_plan", NullValueHandling = NullValueHandling.Ignore)]
+        public Models.SubscriptionInstallmentPlanResponse InstallmentPlan { get; set; }
+
+        /// <summary>
+        /// Identifier of the charge associated with the subscription's installment plan. Only present when `installment_plan` is set.
+        /// </summary>
+        [JsonProperty("charge_id")]
+        public Guid? ChargeId
+        {
+            get
+            {
+                return this.chargeId;
+            }
+
+            set
+            {
+                this.shouldSerialize["charge_id"] = true;
+                this.chargeId = value;
+            }
+        }
+
+        /// <summary>
+        /// Remaining amount to be charged over the life of the plan, in the smallest currency unit. Only present for cycle-limited plans.
+        /// </summary>
+        [JsonProperty("amount_left")]
+        public int? AmountLeft
+        {
+            get
+            {
+                return this.amountLeft;
+            }
+
+            set
+            {
+                this.shouldSerialize["amount_left"] = true;
+                this.amountLeft = value;
+            }
+        }
+
+        /// <summary>
+        /// `amount_left` formatted for display.
+        /// </summary>
+        [JsonProperty("amount_left_formatted")]
+        public double? AmountLeftFormatted
+        {
+            get
+            {
+                return this.amountLeftFormatted;
+            }
+
+            set
+            {
+                this.shouldSerialize["amount_left_formatted"] = true;
+                this.amountLeftFormatted = value;
+            }
+        }
 
         /// <inheritdoc/>
         public override string ToString()
@@ -347,6 +509,41 @@ namespace UnivaPay.Models
         public void UnsetFirstChargeCaptureAfter()
         {
             this.shouldSerialize["first_charge_capture_after"] = false;
+        }
+        /// <summary>
+        /// Marks the field to not be serialized.
+        /// </summary>
+        public void UnsetCyclicalPeriod()
+        {
+            this.shouldSerialize["cyclical_period"] = false;
+        }
+        /// <summary>
+        /// Marks the field to not be serialized.
+        /// </summary>
+        public void UnsetCyclesLeft()
+        {
+            this.shouldSerialize["cycles_left"] = false;
+        }
+        /// <summary>
+        /// Marks the field to not be serialized.
+        /// </summary>
+        public void UnsetChargeId()
+        {
+            this.shouldSerialize["charge_id"] = false;
+        }
+        /// <summary>
+        /// Marks the field to not be serialized.
+        /// </summary>
+        public void UnsetAmountLeft()
+        {
+            this.shouldSerialize["amount_left"] = false;
+        }
+        /// <summary>
+        /// Marks the field to not be serialized.
+        /// </summary>
+        public void UnsetAmountLeftFormatted()
+        {
+            this.shouldSerialize["amount_left_formatted"] = false;
         }
 
         /// <summary>
@@ -386,6 +583,51 @@ namespace UnivaPay.Models
         }
 
         /// <summary>
+        /// Checks if the field should be serialized or not.
+        /// </summary>
+        /// <returns>A boolean weather the field should be serialized or not.</returns>
+        public bool ShouldSerializeCyclicalPeriod()
+        {
+            return this.shouldSerialize["cyclical_period"];
+        }
+
+        /// <summary>
+        /// Checks if the field should be serialized or not.
+        /// </summary>
+        /// <returns>A boolean weather the field should be serialized or not.</returns>
+        public bool ShouldSerializeCyclesLeft()
+        {
+            return this.shouldSerialize["cycles_left"];
+        }
+
+        /// <summary>
+        /// Checks if the field should be serialized or not.
+        /// </summary>
+        /// <returns>A boolean weather the field should be serialized or not.</returns>
+        public bool ShouldSerializeChargeId()
+        {
+            return this.shouldSerialize["charge_id"];
+        }
+
+        /// <summary>
+        /// Checks if the field should be serialized or not.
+        /// </summary>
+        /// <returns>A boolean weather the field should be serialized or not.</returns>
+        public bool ShouldSerializeAmountLeft()
+        {
+            return this.shouldSerialize["amount_left"];
+        }
+
+        /// <summary>
+        /// Checks if the field should be serialized or not.
+        /// </summary>
+        /// <returns>A boolean weather the field should be serialized or not.</returns>
+        public bool ShouldSerializeAmountLeftFormatted()
+        {
+            return this.shouldSerialize["amount_left_formatted"];
+        }
+
+        /// <summary>
         /// ToString overload.
         /// </summary>
         /// <param name="toStringOutput">List of strings.</param>
@@ -408,8 +650,16 @@ namespace UnivaPay.Models
             toStringOutput.Add($"Metadata = {(this.Metadata == null ? "null" : this.Metadata.ToString())}");
             toStringOutput.Add($"Mode = {(this.Mode == null ? "null" : this.Mode.ToString())}");
             toStringOutput.Add($"CreatedOn = {(this.CreatedOn == null ? "null" : this.CreatedOn.ToString())}");
+            toStringOutput.Add($"ThreeDs = {(this.ThreeDs == null ? "null" : this.ThreeDs.ToString())}");
             toStringOutput.Add($"Period = {(this.Period == null ? "null" : this.Period.ToString())}");
+            toStringOutput.Add($"CyclicalPeriod = {this.CyclicalPeriod ?? "null"}");
             toStringOutput.Add($"NextPayment = {(this.NextPayment == null ? "null" : this.NextPayment.ToString())}");
+            toStringOutput.Add($"CyclesLeft = {(this.CyclesLeft == null ? "null" : this.CyclesLeft.ToString())}");
+            toStringOutput.Add($"SubscriptionPlan = {(this.SubscriptionPlan == null ? "null" : this.SubscriptionPlan.ToString())}");
+            toStringOutput.Add($"InstallmentPlan = {(this.InstallmentPlan == null ? "null" : this.InstallmentPlan.ToString())}");
+            toStringOutput.Add($"ChargeId = {(this.ChargeId == null ? "null" : this.ChargeId.ToString())}");
+            toStringOutput.Add($"AmountLeft = {(this.AmountLeft == null ? "null" : this.AmountLeft.ToString())}");
+            toStringOutput.Add($"AmountLeftFormatted = {(this.AmountLeftFormatted == null ? "null" : this.AmountLeftFormatted.ToString())}");
 
             additionalProperties?
                 .Select(kvp => $"[{kvp.Key}] = {kvp.Value.ToString(Formatting.None)}")

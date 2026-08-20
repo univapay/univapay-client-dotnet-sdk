@@ -21,21 +21,17 @@ Checkout field collection settings.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookCheckoutConfiguration merchantWebhookCheckoutConfiguration = new MerchantWebhookCheckoutConfiguration
 {
     EcEmail = new MerchantWebhookCheckoutToggle
     {
         Enabled = true,
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
     EcProducts = new MerchantWebhookCheckoutToggle
     {
         Enabled = true,
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

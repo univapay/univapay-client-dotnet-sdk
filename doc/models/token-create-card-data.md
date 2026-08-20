@@ -33,19 +33,12 @@ Token Create Card Data schema.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 TokenCreateCardData tokenCreateCardData = new TokenCreateCardData
 {
     CardNumber = "4242424242424242",
     ExpMonth = "12",
     ExpYear = "2026",
-    Cardholder = "cardholder8",
-    Cvv = "cvv0",
-    Line1 = "line14",
-    Line2 = "line26",
-    State = "state2",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

@@ -20,12 +20,9 @@ Schedule-related settings.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 SuspendScheduleSettings suspendScheduleSettings = new SuspendScheduleSettings
 {
-    TerminationMode = SubscriptionTerminationMode.Immediate,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

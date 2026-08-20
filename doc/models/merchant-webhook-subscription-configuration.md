@@ -24,7 +24,6 @@ Subscription feature configuration.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookSubscriptionConfiguration merchantWebhookSubscriptionConfiguration = new MerchantWebhookSubscriptionConfiguration
 {
@@ -33,7 +32,6 @@ MerchantWebhookSubscriptionConfiguration merchantWebhookSubscriptionConfiguratio
     SuspendOnCancel = true,
     AllowMerchantAmountPatch = false,
     AllowMerchantDueDatePatch = false,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

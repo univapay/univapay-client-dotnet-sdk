@@ -22,14 +22,9 @@ Fields that can be updated on the next scheduled payment.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 SubscriptionUpdateNextPayment subscriptionUpdateNextPayment = new SubscriptionUpdateNextPayment
 {
-    DueDate = DateTime.Parse("2016-03-13"),
-    Amount = 120,
-    TerminateWithStatus = SubscriptionTerminateWithStatus.Suspended,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

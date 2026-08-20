@@ -25,16 +25,9 @@ Customer-facing payment method summary data.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 SubscriptionUserData subscriptionUserData = new SubscriptionUserData
 {
-    Type = "type8",
-    CardholderName = "cardholder_name2",
-    Email = "email4",
-    Brand = "brand6",
-    Gateway = "gateway2",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

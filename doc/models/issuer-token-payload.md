@@ -23,15 +23,9 @@ A dictionary containing necessary key-value pairs for sending the request.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 IssuerTokenPayload issuerTokenPayload = new IssuerTokenPayload
 {
-    RequestData = "request_data2",
-    SSpcd = "sSpcd2",
-    SCptok = "sCptok4",
-    STerkn = "sTerkn2",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

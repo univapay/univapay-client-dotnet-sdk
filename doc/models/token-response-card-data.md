@@ -25,7 +25,6 @@ Token Response Card Data schema.
 ```csharp
 using System.Globalization;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 TokenResponseCardData tokenResponseCardData = new TokenResponseCardData
 {
@@ -42,7 +41,6 @@ TokenResponseCardData tokenResponseCardData = new TokenResponseCardData
         Category = "standard",
         Issuer = null,
         SubBrand = "none",
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
     Billing = new TokenResponseCardDataBilling
     {
@@ -57,7 +55,6 @@ TokenResponseCardData tokenResponseCardData = new TokenResponseCardData
             CountryCode = 81,
             LocalNumber = "08012341234",
         },
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
     CvvAuthorize = new TokenResponseCardDataCvvAuthorize
     {
@@ -66,7 +63,6 @@ TokenResponseCardData tokenResponseCardData = new TokenResponseCardData
         ChargeId = null,
         CredentialsId = null,
         Currency = "JPY",
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
     CvvAuthorizeCheck = new TokenResponseCardDataCvvAuthorizeCheck
     {
@@ -75,7 +71,6 @@ TokenResponseCardData tokenResponseCardData = new TokenResponseCardData
         Date = DateTime.ParseExact("2026-04-09T07:35:50Z", "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK",
             provider: CultureInfo.InvariantCulture,
             DateTimeStyles.RoundtripKind),
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
     ThreeDs = new TokenResponseCardDataThreeDs
     {
@@ -85,9 +80,7 @@ TokenResponseCardData tokenResponseCardData = new TokenResponseCardData
         RedirectId = null,
         Exempted = false,
         Error = null,
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

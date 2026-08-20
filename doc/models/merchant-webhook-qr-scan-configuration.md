@@ -22,7 +22,6 @@ QR scan payment settings.
 ```csharp
 using System.Collections.Generic;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookQrScanConfiguration merchantWebhookQrScanConfiguration = new MerchantWebhookQrScanConfiguration
 {
@@ -31,7 +30,6 @@ MerchantWebhookQrScanConfiguration merchantWebhookQrScanConfiguration = new Merc
     {
         "wechat",
     },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

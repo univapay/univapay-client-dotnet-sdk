@@ -26,7 +26,6 @@ Subscription plan configuration.
 ```csharp
 using System.Collections.Generic;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookSubscriptionPlanConfiguration merchantWebhookSubscriptionPlanConfiguration = new MerchantWebhookSubscriptionPlanConfiguration
 {
@@ -41,10 +40,8 @@ MerchantWebhookSubscriptionPlanConfiguration merchantWebhookSubscriptionPlanConf
     {
         Amount = 3000,
         Currency = "JPY",
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
     MaxPayoutPeriod = "P12M",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

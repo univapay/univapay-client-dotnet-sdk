@@ -21,7 +21,6 @@ Cancel-specific webhook payload extension.
 ```csharp
 using System.Globalization;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 CancelWebhookCallbackExtension cancelWebhookCallbackExtension = new CancelWebhookCallbackExtension
 {
@@ -43,9 +42,7 @@ CancelWebhookCallbackExtension cancelWebhookCallbackExtension = new CancelWebhoo
         UpdatedOn = DateTime.ParseExact("2026-04-09T07:36:00.000000Z", "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK",
             provider: CultureInfo.InvariantCulture,
             DateTimeStyles.RoundtripKind),
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

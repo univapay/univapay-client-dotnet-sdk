@@ -23,7 +23,6 @@ Request body to create a new store-level webhook subscription.
 ```csharp
 using System.Collections.Generic;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 WebhookCreateRequest webhookCreateRequest = new WebhookCreateRequest
 {
@@ -33,7 +32,6 @@ WebhookCreateRequest webhookCreateRequest = new WebhookCreateRequest
     },
     Url = "https://example.com/webhooks/payments",
     AuthToken = "my-secret-token",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

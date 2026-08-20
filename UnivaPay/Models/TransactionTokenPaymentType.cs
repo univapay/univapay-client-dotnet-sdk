@@ -44,6 +44,18 @@ namespace UnivaPay.Models
         /// BankTransfer.
         /// </summary>
         [EnumMember(Value = "bank_transfer")]
-        BankTransfer
+        BankTransfer,
+
+        /// <summary>
+        /// QrScan.
+        /// </summary>
+        [EnumMember(Value = "qr_scan")]
+        QrScan,
+
+        /// <summary>
+        /// QrMerchant.
+        /// </summary>
+        [EnumMember(Value = "qr_merchant")]
+        QrMerchant
     }
 }

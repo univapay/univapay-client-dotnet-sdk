@@ -43,6 +43,7 @@ var client = UnivapayClientSdkClient.Builder
   "UnivapayClientSdk": {
     "Environment": "production",
     "BaseUrl": "baseUrl",
+    "DirectDebitBaseUrl": "directDebitBaseUrl",
     "BearerAuthCredentials": {
       "AccessToken": "accessToken",
     },

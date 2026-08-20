@@ -1,13 +1,13 @@
 
-# Transaction Token
+# Konbini Transaction Token
 
-Stored transaction token resource.
+Stored transaction token resource for a `konbini` payment type.
 
 *This model accepts additional fields of type object.*
 
 ## Structure
 
-`TransactionToken`
+`KonbiniTransactionToken`
 
 ## Fields
 
@@ -16,7 +16,6 @@ Stored transaction token resource.
 | `Id` | `Guid?` | Optional | Unique identifier. |
 | `StoreId` | `Guid?` | Optional | Store identifier. |
 | `Email` | `string` | Optional | Customer email address. |
-| `PaymentType` | [`TransactionTokenPaymentType?`](../../doc/models/transaction-token-payment-type.md) | Optional | Transaction Token Payment Type schema. |
 | `Active` | `bool?` | Optional | Whether the resource is active. |
 | `Mode` | [`TransactionTokenMode?`](../../doc/models/transaction-token-mode.md) | Optional | Transaction Token Mode schema. |
 | `Type` | [`TransactionTokenType?`](../../doc/models/transaction-token-type.md) | Optional | Transaction Token Type schema. |
@@ -26,7 +25,8 @@ Stored transaction token resource.
 | `CreatedOn` | `DateTime?` | Optional | Timestamp when the resource was created. |
 | `UpdatedOn` | `DateTime?` | Optional | Timestamp when the resource was last updated. |
 | `LastUsedOn` | `DateTime?` | Optional | Timestamp when the token was last used. |
-| `Data` | [`TransactionTokenData`](../../doc/models/containers/transaction-token-data.md) | Optional | Transaction token data payload. The actual structure depends on `payment_type` — card, konbini, online (QR / 3DS), or bank transfer. |
+| `PaymentType` | `string` | Required, Constant | Payment method type. Always `konbini` for this variant.<br><br>**Value**: `"konbini"` |
+| `Data` | [`TokenResponseKonbiniData`](../../doc/models/token-response-konbini-data.md) | Required | Token Response Konbini Data schema. |
 | `AdditionalProperties` | `object this[string key]` | Optional | - |
 
 ## Example
@@ -38,12 +38,26 @@ using UnivaPay.Models;
 using UnivaPay.Models.Containers;
 using UnivaPay.Utilities;
 
-TransactionToken transactionToken = new TransactionToken
+KonbiniTransactionToken konbiniTransactionToken = new KonbiniTransactionToken
 {
+    PaymentType = "konbini",
+    Data = new TokenResponseKonbiniData
+    {
+        CustomerName = "Taro Yamada",
+        ConvenienceStore = BaseKonbiniDataConvenienceStore.SevenEleven,
+        ExpirationPeriod = "P7D",
+        ExpirationTimeShift = null,
+        PhoneNumber = new TokenResponsePhoneNumber
+        {
+            CountryCode = 81,
+            LocalNumber = "08012341234",
+            ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
+        },
+        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
+    },
     Id = new Guid("6426bbd2-17bd-41bf-883b-1fe970db48ee"),
     StoreId = new Guid("fc264608-9a9e-495e-844e-a08129a81af4"),
     Email = "test@univapay.com",
-    PaymentType = TransactionTokenPaymentType.Card,
     Active = true,
     Mode = TransactionTokenMode.Live,
     Type = TransactionTokenType.OneTime,
@@ -51,7 +65,7 @@ TransactionToken transactionToken = new TransactionToken
     Confirmed = true,
     Metadata = new Dictionary<string, TransactionTokenMetadataAdditionalProperties>
     {
-        ["customer_id"] = ,
+        ["customer_id"] = TransactionTokenMetadataAdditionalProperties.FromString("cust_12345"),
     },
     CreatedOn = DateTime.ParseExact("2026-04-09T07:35:50Z", "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK",
         provider: CultureInfo.InvariantCulture,
@@ -62,7 +76,6 @@ TransactionToken transactionToken = new TransactionToken
     LastUsedOn = DateTime.ParseExact("2026-04-09T07:35:50.000000Z", "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK",
         provider: CultureInfo.InvariantCulture,
         DateTimeStyles.RoundtripKind),
-    Data = ,
     ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```

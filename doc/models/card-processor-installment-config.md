@@ -21,13 +21,11 @@ Card-processor capabilities available for installment payments.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 CardProcessorInstallmentConfig cardProcessorInstallmentConfig = new CardProcessorInstallmentConfig
 {
     Revolving = true,
     FixedCycle = true,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

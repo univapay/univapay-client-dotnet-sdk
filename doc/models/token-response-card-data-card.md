@@ -30,7 +30,6 @@ Token Response Card Data Card schema.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 TokenResponseCardDataCard tokenResponseCardDataCard = new TokenResponseCardDataCard
 {
@@ -45,7 +44,6 @@ TokenResponseCardDataCard tokenResponseCardDataCard = new TokenResponseCardDataC
     Category = "standard",
     Issuer = null,
     SubBrand = "none",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

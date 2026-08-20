@@ -20,19 +20,13 @@ Request body to create a cancel for a charge. Only `metadata` is accepted; all o
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Models.Containers;
-using UnivaPay.Utilities;
 
 CancelCreateRequest cancelCreateRequest = new CancelCreateRequest
 {
     Metadata = new GenericMetadata
     {
         OrderId = "ORD-987",
-        UnivapayName = "univapay-name8",
-        UnivapayPhoneNumber = "univapay-phone-number2",
-        ["exampleAdditionalProperty"] = GenericMetadataValue.FromString("String4"),
     },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

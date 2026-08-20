@@ -23,7 +23,6 @@ Request body for updating a scheduled payment. All fields are optional. Omitted 
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 SubscriptionPatchPaymentRequest subscriptionPatchPaymentRequest = new SubscriptionPatchPaymentRequest
 {
@@ -31,7 +30,6 @@ SubscriptionPatchPaymentRequest subscriptionPatchPaymentRequest = new Subscripti
     IsPaid = false,
     TerminateWithStatus = null,
     RetryInterval = "P3D",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

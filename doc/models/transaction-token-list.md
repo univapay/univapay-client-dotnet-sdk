@@ -51,6 +51,8 @@ TransactionTokenList transactionTokenList = new TransactionTokenList
             {
                 CardholderName = "TARO YAMADA",
                 Email = "taro@example.com",
+                Brand = "brand0",
+                ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
             },
             ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
         },
@@ -75,6 +77,8 @@ TransactionTokenList transactionTokenList = new TransactionTokenList
             {
                 CardholderName = "HANAKO SUZUKI",
                 Email = "hanako@example.com",
+                Brand = "brand0",
+                ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
             },
             ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
         },

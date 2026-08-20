@@ -20,12 +20,9 @@ Charge Create Request Redirect schema.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 ChargeCreateRequestRedirect chargeCreateRequestRedirect = new ChargeCreateRequestRedirect
 {
-    Endpoint = "endpoint8",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

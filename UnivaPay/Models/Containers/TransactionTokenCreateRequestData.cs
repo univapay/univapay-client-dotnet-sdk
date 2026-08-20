@@ -18,7 +18,10 @@ namespace UnivaPay.Models.Containers
             typeof(TokenCreateCardDataCase),
             typeof(TokenCreateKonbiniDataCase),
             typeof(TokenCreateOnlineDataCase),
-            typeof(TokenCreateBankTransferDataCase)
+            typeof(TokenCreateBankTransferDataCase),
+            typeof(TokenCreatePaidyDataCase),
+            typeof(TokenCreateQrScanDataCase),
+            typeof(TokenCreateQrMerchantDataCase)
         },
         false
     )]
@@ -69,6 +72,39 @@ namespace UnivaPay.Models.Containers
         }
 
         /// <summary>
+        /// This is TokenCreatePaidyData case.
+        /// </summary>
+        /// <returns>
+        /// The TransactionTokenCreateRequestData instance, wrapping the provided TokenCreatePaidyData value.
+        /// </returns>
+        public static TransactionTokenCreateRequestData FromTokenCreatePaidyData(TokenCreatePaidyData tokenCreatePaidyData)
+        {
+            return new TokenCreatePaidyDataCase().Set(tokenCreatePaidyData);
+        }
+
+        /// <summary>
+        /// This is TokenCreateQrScanData case.
+        /// </summary>
+        /// <returns>
+        /// The TransactionTokenCreateRequestData instance, wrapping the provided TokenCreateQrScanData value.
+        /// </returns>
+        public static TransactionTokenCreateRequestData FromTokenCreateQrScanData(TokenCreateQrScanData tokenCreateQrScanData)
+        {
+            return new TokenCreateQrScanDataCase().Set(tokenCreateQrScanData);
+        }
+
+        /// <summary>
+        /// This is TokenCreateQrMerchantData case.
+        /// </summary>
+        /// <returns>
+        /// The TransactionTokenCreateRequestData instance, wrapping the provided TokenCreateQrMerchantData value.
+        /// </returns>
+        public static TransactionTokenCreateRequestData FromTokenCreateQrMerchantData(TokenCreateQrMerchantData tokenCreateQrMerchantData)
+        {
+            return new TokenCreateQrMerchantDataCase().Set(tokenCreateQrMerchantData);
+        }
+
+        /// <summary>
         /// Method to match from the provided any-of cases. Here parameters
         /// represents the callback functions for any-of type cases. All
         /// callback functions must have the same return type T. This typeparam T
@@ -80,7 +116,10 @@ namespace UnivaPay.Models.Containers
             Func<TokenCreateCardData, T> tokenCreateCardData,
             Func<TokenCreateKonbiniData, T> tokenCreateKonbiniData,
             Func<TokenCreateOnlineData, T> tokenCreateOnlineData,
-            Func<TokenCreateBankTransferData, T> tokenCreateBankTransferData);
+            Func<TokenCreateBankTransferData, T> tokenCreateBankTransferData,
+            Func<TokenCreatePaidyData, T> tokenCreatePaidyData,
+            Func<TokenCreateQrScanData, T> tokenCreateQrScanData,
+            Func<TokenCreateQrMerchantData, T> tokenCreateQrMerchantData);
 
         /// <summary>
         /// Method to match from the provided any-of cases. The parameters represent
@@ -95,8 +134,11 @@ namespace UnivaPay.Models.Containers
             Func<TokenCreateCardData, T> tokenCreateCardData = null,
             Func<TokenCreateKonbiniData, T> tokenCreateKonbiniData = null,
             Func<TokenCreateOnlineData, T> tokenCreateOnlineData = null,
-            Func<TokenCreateBankTransferData, T> tokenCreateBankTransferData = null) =>
-                Match(tokenCreateCardData, tokenCreateKonbiniData, tokenCreateOnlineData, tokenCreateBankTransferData);
+            Func<TokenCreateBankTransferData, T> tokenCreateBankTransferData = null,
+            Func<TokenCreatePaidyData, T> tokenCreatePaidyData = null,
+            Func<TokenCreateQrScanData, T> tokenCreateQrScanData = null,
+            Func<TokenCreateQrMerchantData, T> tokenCreateQrMerchantData = null) =>
+                Match(tokenCreateCardData, tokenCreateKonbiniData, tokenCreateOnlineData, tokenCreateBankTransferData, tokenCreatePaidyData, tokenCreateQrScanData, tokenCreateQrMerchantData);
 
         [JsonConverter(typeof(UnionTypeCaseConverter<TokenCreateCardDataCase, TokenCreateCardData>))]
         private sealed class TokenCreateCardDataCase : TransactionTokenCreateRequestData, ICaseValue<TokenCreateCardDataCase, TokenCreateCardData>
@@ -107,7 +149,10 @@ namespace UnivaPay.Models.Containers
                 Func<TokenCreateCardData, T> tokenCreateCardData,
                 Func<TokenCreateKonbiniData, T> tokenCreateKonbiniData,
                 Func<TokenCreateOnlineData, T> tokenCreateOnlineData,
-                Func<TokenCreateBankTransferData, T> tokenCreateBankTransferData) =>
+                Func<TokenCreateBankTransferData, T> tokenCreateBankTransferData,
+                Func<TokenCreatePaidyData, T> tokenCreatePaidyData,
+                Func<TokenCreateQrScanData, T> tokenCreateQrScanData,
+                Func<TokenCreateQrMerchantData, T> tokenCreateQrMerchantData) =>
                    tokenCreateCardData != null ? tokenCreateCardData(Value) : default;
 
             public TokenCreateCardDataCase Set(TokenCreateCardData value)
@@ -136,7 +181,10 @@ namespace UnivaPay.Models.Containers
                 Func<TokenCreateCardData, T> tokenCreateCardData,
                 Func<TokenCreateKonbiniData, T> tokenCreateKonbiniData,
                 Func<TokenCreateOnlineData, T> tokenCreateOnlineData,
-                Func<TokenCreateBankTransferData, T> tokenCreateBankTransferData) =>
+                Func<TokenCreateBankTransferData, T> tokenCreateBankTransferData,
+                Func<TokenCreatePaidyData, T> tokenCreatePaidyData,
+                Func<TokenCreateQrScanData, T> tokenCreateQrScanData,
+                Func<TokenCreateQrMerchantData, T> tokenCreateQrMerchantData) =>
                    tokenCreateKonbiniData != null ? tokenCreateKonbiniData(Value) : default;
 
             public TokenCreateKonbiniDataCase Set(TokenCreateKonbiniData value)
@@ -165,7 +213,10 @@ namespace UnivaPay.Models.Containers
                 Func<TokenCreateCardData, T> tokenCreateCardData,
                 Func<TokenCreateKonbiniData, T> tokenCreateKonbiniData,
                 Func<TokenCreateOnlineData, T> tokenCreateOnlineData,
-                Func<TokenCreateBankTransferData, T> tokenCreateBankTransferData) =>
+                Func<TokenCreateBankTransferData, T> tokenCreateBankTransferData,
+                Func<TokenCreatePaidyData, T> tokenCreatePaidyData,
+                Func<TokenCreateQrScanData, T> tokenCreateQrScanData,
+                Func<TokenCreateQrMerchantData, T> tokenCreateQrMerchantData) =>
                    tokenCreateOnlineData != null ? tokenCreateOnlineData(Value) : default;
 
             public TokenCreateOnlineDataCase Set(TokenCreateOnlineData value)
@@ -194,7 +245,10 @@ namespace UnivaPay.Models.Containers
                 Func<TokenCreateCardData, T> tokenCreateCardData,
                 Func<TokenCreateKonbiniData, T> tokenCreateKonbiniData,
                 Func<TokenCreateOnlineData, T> tokenCreateOnlineData,
-                Func<TokenCreateBankTransferData, T> tokenCreateBankTransferData) =>
+                Func<TokenCreateBankTransferData, T> tokenCreateBankTransferData,
+                Func<TokenCreatePaidyData, T> tokenCreatePaidyData,
+                Func<TokenCreateQrScanData, T> tokenCreateQrScanData,
+                Func<TokenCreateQrMerchantData, T> tokenCreateQrMerchantData) =>
                    tokenCreateBankTransferData != null ? tokenCreateBankTransferData(Value) : default;
 
             public TokenCreateBankTransferDataCase Set(TokenCreateBankTransferData value)
@@ -204,6 +258,102 @@ namespace UnivaPay.Models.Containers
             }
 
             public TokenCreateBankTransferData Get()
+            {
+                return Value;
+            }
+
+            public override string ToString()
+            {
+                return Value?.ToString();
+            }
+        }
+
+        [JsonConverter(typeof(UnionTypeCaseConverter<TokenCreatePaidyDataCase, TokenCreatePaidyData>))]
+        private sealed class TokenCreatePaidyDataCase : TransactionTokenCreateRequestData, ICaseValue<TokenCreatePaidyDataCase, TokenCreatePaidyData>
+        {
+            public TokenCreatePaidyData Value;
+
+            public override T Match<T>(
+                Func<TokenCreateCardData, T> tokenCreateCardData,
+                Func<TokenCreateKonbiniData, T> tokenCreateKonbiniData,
+                Func<TokenCreateOnlineData, T> tokenCreateOnlineData,
+                Func<TokenCreateBankTransferData, T> tokenCreateBankTransferData,
+                Func<TokenCreatePaidyData, T> tokenCreatePaidyData,
+                Func<TokenCreateQrScanData, T> tokenCreateQrScanData,
+                Func<TokenCreateQrMerchantData, T> tokenCreateQrMerchantData) =>
+                   tokenCreatePaidyData != null ? tokenCreatePaidyData(Value) : default;
+
+            public TokenCreatePaidyDataCase Set(TokenCreatePaidyData value)
+            {
+                Value = value;
+                return this;
+            }
+
+            public TokenCreatePaidyData Get()
+            {
+                return Value;
+            }
+
+            public override string ToString()
+            {
+                return Value?.ToString();
+            }
+        }
+
+        [JsonConverter(typeof(UnionTypeCaseConverter<TokenCreateQrScanDataCase, TokenCreateQrScanData>))]
+        private sealed class TokenCreateQrScanDataCase : TransactionTokenCreateRequestData, ICaseValue<TokenCreateQrScanDataCase, TokenCreateQrScanData>
+        {
+            public TokenCreateQrScanData Value;
+
+            public override T Match<T>(
+                Func<TokenCreateCardData, T> tokenCreateCardData,
+                Func<TokenCreateKonbiniData, T> tokenCreateKonbiniData,
+                Func<TokenCreateOnlineData, T> tokenCreateOnlineData,
+                Func<TokenCreateBankTransferData, T> tokenCreateBankTransferData,
+                Func<TokenCreatePaidyData, T> tokenCreatePaidyData,
+                Func<TokenCreateQrScanData, T> tokenCreateQrScanData,
+                Func<TokenCreateQrMerchantData, T> tokenCreateQrMerchantData) =>
+                   tokenCreateQrScanData != null ? tokenCreateQrScanData(Value) : default;
+
+            public TokenCreateQrScanDataCase Set(TokenCreateQrScanData value)
+            {
+                Value = value;
+                return this;
+            }
+
+            public TokenCreateQrScanData Get()
+            {
+                return Value;
+            }
+
+            public override string ToString()
+            {
+                return Value?.ToString();
+            }
+        }
+
+        [JsonConverter(typeof(UnionTypeCaseConverter<TokenCreateQrMerchantDataCase, TokenCreateQrMerchantData>))]
+        private sealed class TokenCreateQrMerchantDataCase : TransactionTokenCreateRequestData, ICaseValue<TokenCreateQrMerchantDataCase, TokenCreateQrMerchantData>
+        {
+            public TokenCreateQrMerchantData Value;
+
+            public override T Match<T>(
+                Func<TokenCreateCardData, T> tokenCreateCardData,
+                Func<TokenCreateKonbiniData, T> tokenCreateKonbiniData,
+                Func<TokenCreateOnlineData, T> tokenCreateOnlineData,
+                Func<TokenCreateBankTransferData, T> tokenCreateBankTransferData,
+                Func<TokenCreatePaidyData, T> tokenCreatePaidyData,
+                Func<TokenCreateQrScanData, T> tokenCreateQrScanData,
+                Func<TokenCreateQrMerchantData, T> tokenCreateQrMerchantData) =>
+                   tokenCreateQrMerchantData != null ? tokenCreateQrMerchantData(Value) : default;
+
+            public TokenCreateQrMerchantDataCase Set(TokenCreateQrMerchantData value)
+            {
+                Value = value;
+                return this;
+            }
+
+            public TokenCreateQrMerchantData Get()
             {
                 return Value;
             }

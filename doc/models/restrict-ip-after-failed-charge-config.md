@@ -22,14 +22,12 @@ IP restriction policy applied after repeated failed charges.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 RestrictIpAfterFailedChargeConfig restrictIpAfterFailedChargeConfig = new RestrictIpAfterFailedChargeConfig
 {
     Enabled = true,
     Count = 5,
     Cooldown = "PT1H",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

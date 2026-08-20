@@ -117,5 +117,48 @@ namespace UnivaPay.Apis
                   .ErrorCase("504", CreateErrorCase("HTTP 504 Timeout: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
                   .ErrorCase("0", CreateErrorCase("HTTP {$statusCode}: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true)))
               .ExecuteAsync(cancellationToken).ConfigureAwait(false);
+
+        /// <summary>
+        /// Derives a deterministic, store-scoped UUID from a local customer identifier supplied by the merchant. Calling this endpoint again with the same `customer_id` for the same store always returns the same UUID — the operation has no side effects (nothing is persisted), so it is safe to call repeatedly and does not require an `Idempotency-Key`. App Token Secret is required.
+        /// </summary>
+        /// <param name="storeId">Required parameter: The unique identifier of the store..</param>
+        /// <param name="body">Required parameter: Request payload for deriving a customer ID..</param>
+        /// <returns>Returns the ApiResponse of Models.CreateCustomerIdResponse response from the API call.</returns>
+        public ApiResponse<Models.CreateCustomerIdResponse> CreateCustomerId(
+                Guid storeId,
+                Models.CreateCustomerIdRequest body)
+            => CoreHelper.RunTask(CreateCustomerIdAsync(storeId, body));
+
+        /// <summary>
+        /// Derives a deterministic, store-scoped UUID from a local customer identifier supplied by the merchant. Calling this endpoint again with the same `customer_id` for the same store always returns the same UUID — the operation has no side effects (nothing is persisted), so it is safe to call repeatedly and does not require an `Idempotency-Key`. App Token Secret is required.
+        /// </summary>
+        /// <param name="storeId">Required parameter: The unique identifier of the store..</param>
+        /// <param name="body">Required parameter: Request payload for deriving a customer ID..</param>
+        /// <param name="cancellationToken"> cancellationToken. </param>
+        /// <returns>Returns the ApiResponse of Models.CreateCustomerIdResponse response from the API call.</returns>
+        public async Task<ApiResponse<Models.CreateCustomerIdResponse>> CreateCustomerIdAsync(
+                Guid storeId,
+                Models.CreateCustomerIdRequest body,
+                CancellationToken cancellationToken = default)
+            => await CreateApiCall<Models.CreateCustomerIdResponse>()
+              .RequestBuilder(requestBuilder => requestBuilder
+                  .Setup(HttpMethod.Post, "/stores/{storeId}/create_customer_id")
+                  .WithAuth("JWT_TOKEN")
+                  .Parameters(parameters => parameters
+                      .Body(b => b.Setup(body).Required())
+                      .Template(template => template.Setup("storeId", storeId))
+                      .Header(header => header.Setup("Content-Type", "application/json"))))
+              .ResponseHandler(responseHandler => responseHandler
+                  .ErrorCase("400", CreateErrorCase("HTTP 400 Bad Request: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
+                  .ErrorCase("401", CreateErrorCase("HTTP 401 Unauthorized: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
+                  .ErrorCase("403", CreateErrorCase("HTTP 403 Forbidden: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
+                  .ErrorCase("404", CreateErrorCase("HTTP 404 Not Found: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
+                  .ErrorCase("429", CreateErrorCase("HTTP 429 Rate Limited: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("409", CreateErrorCase("HTTP 409 Conflict: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("500", CreateErrorCase("HTTP 500 Server Error: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("503", CreateErrorCase("HTTP 503 Unavailable: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("504", CreateErrorCase("HTTP 504 Timeout: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("0", CreateErrorCase("HTTP {$statusCode}: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true)))
+              .ExecuteAsync(cancellationToken).ConfigureAwait(false);
     }
 }

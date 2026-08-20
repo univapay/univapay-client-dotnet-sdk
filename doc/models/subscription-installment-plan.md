@@ -21,13 +21,9 @@ Configuration for credit card company side installments.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 SubscriptionInstallmentPlan subscriptionInstallmentPlan = new SubscriptionInstallmentPlan
 {
-    PlanType = InstallmentPlanType.Revolving,
-    FixedCycles = InstallmentFixedCycles.Cycles3,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

@@ -24,7 +24,6 @@ Error payload returned when customs declaration processing fails.
 ```csharp
 using System.Collections.Generic;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 CustomsDeclarationWebhookError customsDeclarationWebhookError = new CustomsDeclarationWebhookError
 {
@@ -36,18 +35,9 @@ CustomsDeclarationWebhookError customsDeclarationWebhookError = new CustomsDecla
         new CustomsDeclarationWebhookOtherError
         {
             Type = "related_item",
-            CredentialsId = new Guid("000013b6-0000-0000-0000-000000000000"),
-            Message = new List<string>
-            {
-                "message4",
-                "message5",
-                "message6",
-            },
             ItemName = "charge",
-            ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
         },
     },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

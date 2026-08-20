@@ -29,6 +29,7 @@ Represents a cancellation request for a charge.
 ```csharp
 using System.Globalization;
 using UnivaPay.Models;
+using UnivaPay.Models.Containers;
 using UnivaPay.Utilities;
 
 Cancel cancel = new Cancel
@@ -47,6 +48,9 @@ Cancel cancel = new Cancel
     Metadata = new GenericMetadata
     {
         OrderId = "12345",
+        UnivapayName = "univapay-name8",
+        UnivapayPhoneNumber = "univapay-phone-number2",
+        ["exampleAdditionalProperty"] = GenericMetadataValue.FromString("String4"),
     },
     Mode = ChargeMode.Live,
     CreatedOn = DateTime.ParseExact("2026-04-09T07:35:50.000000Z", "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK",

@@ -24,7 +24,6 @@ Request body for creating a refund against a successful charge. Konbini and bank
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 RefundCreateRequest refundCreateRequest = new RefundCreateRequest
 {
@@ -32,8 +31,6 @@ RefundCreateRequest refundCreateRequest = new RefundCreateRequest
     Currency = "JPY",
     Reason = RefundReasonRequest.CustomerRequest,
     Message = "Customer returned item",
-    Metadata = null,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

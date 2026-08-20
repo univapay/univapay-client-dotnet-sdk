@@ -22,14 +22,9 @@ Configuration for limited-cycle subscriptions (Univapay side).
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 SubscriptionPlanSettings subscriptionPlanSettings = new SubscriptionPlanSettings
 {
-    PlanType = PlanSettingsType.FixedCycles,
-    FixedCycles = 240,
-    FixedCycleAmount = 50,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

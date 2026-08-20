@@ -2,9 +2,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnivaPay", "UnivaPay/UnivaPay.csproj", "{f8dbd91f-f6d3-421b-be9b-06a5c8c8e2c3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnivaPay", "UnivaPay/UnivaPay.csproj", "{7511db42-fe72-43a3-ac0d-77ad08cd240d}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnivapayClientSdk.Tests", "UnivapayClientSdk.Tests/UnivapayClientSdk.Tests.csproj", "{5a9b57eb-b881-49c3-8f1c-4a6fa765c493}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnivapayClientSdk.Tests", "UnivapayClientSdk.Tests/UnivapayClientSdk.Tests.csproj", "{41d52fbd-96d7-4ec5-89a7-2c820171c63a}"
 EndProject
 Global
     GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,14 +12,14 @@ Global
         Release|Any CPU = Release|Any CPU
     EndGlobalSection
     GlobalSection(ProjectConfigurationPlatforms) = postSolution
-        {f8dbd91f-f6d3-421b-be9b-06a5c8c8e2c3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-        {f8dbd91f-f6d3-421b-be9b-06a5c8c8e2c3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-        {f8dbd91f-f6d3-421b-be9b-06a5c8c8e2c3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-        {f8dbd91f-f6d3-421b-be9b-06a5c8c8e2c3}.Release|Any CPU.Build.0 = Release|Any CPU
-        {5a9b57eb-b881-49c3-8f1c-4a6fa765c493}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-        {5a9b57eb-b881-49c3-8f1c-4a6fa765c493}.Debug|Any CPU.Build.0 = Debug|Any CPU
-        {5a9b57eb-b881-49c3-8f1c-4a6fa765c493}.Release|Any CPU.ActiveCfg = Release|Any CPU
-        {5a9b57eb-b881-49c3-8f1c-4a6fa765c493}.Release|Any CPU.Build.0 = Release|Any CPU
+        {7511db42-fe72-43a3-ac0d-77ad08cd240d}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {7511db42-fe72-43a3-ac0d-77ad08cd240d}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {7511db42-fe72-43a3-ac0d-77ad08cd240d}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {7511db42-fe72-43a3-ac0d-77ad08cd240d}.Release|Any CPU.Build.0 = Release|Any CPU
+        {41d52fbd-96d7-4ec5-89a7-2c820171c63a}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {41d52fbd-96d7-4ec5-89a7-2c820171c63a}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {41d52fbd-96d7-4ec5-89a7-2c820171c63a}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {41d52fbd-96d7-4ec5-89a7-2c820171c63a}.Release|Any CPU.Build.0 = Release|Any CPU
     EndGlobalSection
     GlobalSection(SolutionProperties) = preSolution
         HideSolutionNode = FALSE

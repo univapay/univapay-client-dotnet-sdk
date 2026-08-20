@@ -23,7 +23,6 @@ Request body for creating a customs declaration. Backend currently accepts this 
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 CustomsDeclarationCreateRequest customsDeclarationCreateRequest = new CustomsDeclarationCreateRequest
 {
@@ -31,7 +30,6 @@ CustomsDeclarationCreateRequest customsDeclarationCreateRequest = new CustomsDec
     MerchantCustomsNo = "1234567890",
     CertificateId = "AB1234567",
     CertificateName = "TARO YAMADA",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

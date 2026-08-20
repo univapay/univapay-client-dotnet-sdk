@@ -20,12 +20,10 @@ Checkout feature toggle.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookCheckoutToggle merchantWebhookCheckoutToggle = new MerchantWebhookCheckoutToggle
 {
     Enabled = true,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

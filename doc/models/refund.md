@@ -34,6 +34,7 @@ Represents a refund issued against a charge.
 ```csharp
 using System.Globalization;
 using UnivaPay.Models;
+using UnivaPay.Models.Containers;
 using UnivaPay.Utilities;
 
 Refund refund = new Refund
@@ -52,10 +53,14 @@ Refund refund = new Refund
         Code = 301,
         Message = "Card number error.",
         Detail = "The provided card number failed validation.",
+        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
     Metadata = new GenericMetadata
     {
         OrderId = "12345",
+        UnivapayName = "univapay-name8",
+        UnivapayPhoneNumber = "univapay-phone-number2",
+        ["exampleAdditionalProperty"] = GenericMetadataValue.FromString("String4"),
     },
     Mode = ChargeMode.Live,
     CreatedOn = DateTime.ParseExact("2026-04-09T07:35:50Z", "yyyy'-'MM'-'dd'T'HH':'mm':'ss.FFFFFFFK",

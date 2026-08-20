@@ -13,7 +13,7 @@ Base Online Data schema.
 
 | Name | Type | Tags | Description |
 |  --- | --- | --- | --- |
-| `Brand` | [`BaseOnlineDataBrand?`](../../doc/models/base-online-data-brand.md) | Optional | Base Online Data Brand schema. |
+| `Brand` | [`BaseOnlineDataBrand?`](../../doc/models/base-online-data-brand.md) | Optional | Base Online Data Brand schema. `alipay_china`, `alipay_hk`, `gcash`, `dana`, `truemoney`, `kakaopay`, `tng`, `rabbit_line_pay`, `bpi`, `boost`, `tinaba`, `naver_pay`, `toss_pay`, `maya`, `grab_sg`, `kredivo_id`, `k_plus`, and `kaspi_kz` are Alipay+ regional wallets routed through the `alipay_plus_online` gateway family. |
 | `CallMethod` | [`BaseOnlineDataCallMethod?`](../../doc/models/base-online-data-call-method.md) | Optional | Base Online Data Call Method schema. |
 | `OsType` | [`BaseOnlineDataOsType?`](../../doc/models/base-online-data-os-type.md) | Optional | Base Online Data Os Type schema. |
 | `UserIdentifier` | `string` | Optional | Consumer specific identifier required by some gateways for fraud prevention. |
@@ -24,16 +24,9 @@ Base Online Data schema.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 BaseOnlineData baseOnlineData = new BaseOnlineData
 {
-    Brand = BaseOnlineDataBrand.PayPayOnline,
-    CallMethod = BaseOnlineDataCallMethod.Web,
-    OsType = BaseOnlineDataOsType.Android,
-    UserIdentifier = "user_identifier4",
-    UserIdentifierSource = BaseOnlineDataUserIdentifierSource.Provided,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

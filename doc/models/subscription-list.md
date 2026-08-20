@@ -38,6 +38,20 @@ SubscriptionList subscriptionList = new SubscriptionList
             Currency = "USD",
             AmountFormatted = 12.5,
             Status = SubscriptionStatus.Current,
+            ThreeDs = new SubscriptionThreeDs
+            {
+                Mode = SubscriptionThreeDsMode.Normal,
+                RedirectEndpoint = null,
+                RedirectId = null,
+                ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
+            },
+            SubscriptionPlan = new SubscriptionPlanSettings
+            {
+                PlanType = PlanSettingsType.FixedCycles,
+                FixedCycles = 12,
+                FixedCycleAmount = 112,
+                ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
+            },
             MerchantName = "管理画面ガイド",
             StoreName = "管理画面ガイド_TEST店舗",
             PaymentType = "card",
@@ -48,6 +62,8 @@ SubscriptionList subscriptionList = new SubscriptionList
                 CardholderName = "taro yamada",
                 Email = "taro@test.com",
                 Brand = "visa",
+                Gateway = "gateway6",
+                ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
             },
             ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
         },
@@ -60,6 +76,20 @@ SubscriptionList subscriptionList = new SubscriptionList
             Currency = "JPY",
             AmountFormatted = 3000,
             Status = SubscriptionStatus.Current,
+            ThreeDs = new SubscriptionThreeDs
+            {
+                Mode = SubscriptionThreeDsMode.Normal,
+                RedirectEndpoint = null,
+                RedirectId = null,
+                ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
+            },
+            InstallmentPlan = new SubscriptionInstallmentPlanResponse
+            {
+                PlanType = CombinedPlanType.FixedCycleAmount,
+                FixedCycles = null,
+                FixedCyclesAmount = 30000,
+                ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
+            },
             MerchantName = "管理画面ガイド",
             StoreName = "管理画面ガイド_Online店舗",
             PaymentType = "card",
@@ -70,6 +100,8 @@ SubscriptionList subscriptionList = new SubscriptionList
                 CardholderName = "hanako suzuki",
                 Email = "hanako@test.com",
                 Brand = "mastercard",
+                Gateway = "gateway6",
+                ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
             },
             ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
         },

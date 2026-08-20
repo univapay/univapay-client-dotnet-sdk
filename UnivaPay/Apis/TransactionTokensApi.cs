@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnivaPay.Exceptions;
 using UnivaPay.Http.Response;
+using UnivaPay.Models.Containers;
 
 namespace UnivaPay.Apis
 {
@@ -30,8 +31,8 @@ namespace UnivaPay.Apis
         /// </summary>
         /// <param name="body">Required parameter: Request payload for creating a transaction token..</param>
         /// <param name="idempotencyKey">Optional parameter: An optional idempotency key to prevent double charges and duplicate operations. We recommend a randomly generated UUID (v4)..</param>
-        /// <returns>Returns the ApiResponse of Models.TransactionToken response from the API call.</returns>
-        public ApiResponse<Models.TransactionToken> CreateTransactionToken(
+        /// <returns>Returns the ApiResponse of TransactionToken response from the API call.</returns>
+        public ApiResponse<TransactionToken> CreateTransactionToken(
                 Models.TransactionTokenCreateRequest body,
                 string idempotencyKey = null)
             => CoreHelper.RunTask(CreateTransactionTokenAsync(body, idempotencyKey));
@@ -42,12 +43,12 @@ namespace UnivaPay.Apis
         /// <param name="body">Required parameter: Request payload for creating a transaction token..</param>
         /// <param name="idempotencyKey">Optional parameter: An optional idempotency key to prevent double charges and duplicate operations. We recommend a randomly generated UUID (v4)..</param>
         /// <param name="cancellationToken"> cancellationToken. </param>
-        /// <returns>Returns the ApiResponse of Models.TransactionToken response from the API call.</returns>
-        public async Task<ApiResponse<Models.TransactionToken>> CreateTransactionTokenAsync(
+        /// <returns>Returns the ApiResponse of TransactionToken response from the API call.</returns>
+        public async Task<ApiResponse<TransactionToken>> CreateTransactionTokenAsync(
                 Models.TransactionTokenCreateRequest body,
                 string idempotencyKey = null,
                 CancellationToken cancellationToken = default)
-            => await CreateApiCall<Models.TransactionToken>()
+            => await CreateApiCall<TransactionToken>()
               .RequestBuilder(requestBuilder => requestBuilder
                   .Setup(HttpMethod.Post, "/tokens")
                   .WithAuth("JWT_TOKEN")
@@ -71,25 +72,45 @@ namespace UnivaPay.Apis
         /// <summary>
         /// Lists all transaction tokens across all stores.
         /// </summary>
+        /// <param name="search">Optional parameter: Case-insensitive free-text search..</param>
+        /// <param name="customerId">Optional parameter: Filter by customer ID..</param>
+        /// <param name="type">Optional parameter: Filter by token type. `one_time` tokens are excluded from listings and cannot be filtered on; filtering to `recurring` requires the App Token Secret..</param>
+        /// <param name="mode">Optional parameter: Filter by environment mode..</param>
+        /// <param name="active">Optional parameter: Filter recurring tokens by whether they are still active..</param>
         /// <param name="limit">Optional parameter: Maximum number of resources to return in one page..</param>
         /// <param name="cursor">Optional parameter: Cursor pointing to the resource after which pagination should continue..</param>
         /// <param name="cursorDirection">Optional parameter: Pagination direction relative to the supplied cursor..</param>
         /// <returns>Returns the ApiResponse of Models.TransactionTokenList response from the API call.</returns>
         public ApiResponse<Models.TransactionTokenList> ListAllTransactionTokens(
+                string search = null,
+                Guid? customerId = null,
+                Models.TransactionTokenListType? type = null,
+                Models.ModeQuery? mode = null,
+                Models.TransactionTokenActiveFilter? active = Models.TransactionTokenActiveFilter.Active,
                 int? limit = 10,
                 Guid? cursor = null,
                 Models.CursorDirectionQuery? cursorDirection = Models.CursorDirectionQuery.Desc)
-            => CoreHelper.RunTask(ListAllTransactionTokensAsync(limit, cursor, cursorDirection));
+            => CoreHelper.RunTask(ListAllTransactionTokensAsync(search, customerId, type, mode, active, limit, cursor, cursorDirection));
 
         /// <summary>
         /// Lists all transaction tokens across all stores.
         /// </summary>
+        /// <param name="search">Optional parameter: Case-insensitive free-text search..</param>
+        /// <param name="customerId">Optional parameter: Filter by customer ID..</param>
+        /// <param name="type">Optional parameter: Filter by token type. `one_time` tokens are excluded from listings and cannot be filtered on; filtering to `recurring` requires the App Token Secret..</param>
+        /// <param name="mode">Optional parameter: Filter by environment mode..</param>
+        /// <param name="active">Optional parameter: Filter recurring tokens by whether they are still active..</param>
         /// <param name="limit">Optional parameter: Maximum number of resources to return in one page..</param>
         /// <param name="cursor">Optional parameter: Cursor pointing to the resource after which pagination should continue..</param>
         /// <param name="cursorDirection">Optional parameter: Pagination direction relative to the supplied cursor..</param>
         /// <param name="cancellationToken"> cancellationToken. </param>
         /// <returns>Returns the ApiResponse of Models.TransactionTokenList response from the API call.</returns>
         public async Task<ApiResponse<Models.TransactionTokenList>> ListAllTransactionTokensAsync(
+                string search = null,
+                Guid? customerId = null,
+                Models.TransactionTokenListType? type = null,
+                Models.ModeQuery? mode = null,
+                Models.TransactionTokenActiveFilter? active = Models.TransactionTokenActiveFilter.Active,
                 int? limit = 10,
                 Guid? cursor = null,
                 Models.CursorDirectionQuery? cursorDirection = Models.CursorDirectionQuery.Desc,
@@ -99,6 +120,11 @@ namespace UnivaPay.Apis
                   .Setup(HttpMethod.Get, "/tokens")
                   .WithAuth("JWT_TOKEN")
                   .Parameters(parameters => parameters
+                      .Query(query => query.Setup("search", search))
+                      .Query(query => query.Setup("customer_id", customerId))
+                      .Query(query => query.Setup("type", (type.HasValue) ? CoreHelper.JsonSerialize(type.Value).Trim('\"') : null))
+                      .Query(query => query.Setup("mode", (mode.HasValue) ? CoreHelper.JsonSerialize(mode.Value).Trim('\"') : null))
+                      .Query(query => query.Setup("active", (active.HasValue) ? CoreHelper.JsonSerialize(active.Value).Trim('\"') : "active"))
                       .Query(query => query.Setup("limit", limit ?? 10))
                       .Query(query => query.Setup("cursor", cursor))
                       .Query(query => query.Setup("cursor_direction", (cursorDirection.HasValue) ? CoreHelper.JsonSerialize(cursorDirection.Value).Trim('\"') : "desc"))))
@@ -119,21 +145,36 @@ namespace UnivaPay.Apis
         /// Lists all transaction tokens for a specific store.
         /// </summary>
         /// <param name="storeId">Required parameter: The unique identifier of the store..</param>
+        /// <param name="search">Optional parameter: Case-insensitive free-text search..</param>
+        /// <param name="customerId">Optional parameter: Filter by customer ID..</param>
+        /// <param name="type">Optional parameter: Filter by token type. `one_time` tokens are excluded from listings and cannot be filtered on; filtering to `recurring` requires the App Token Secret..</param>
+        /// <param name="mode">Optional parameter: Filter by environment mode..</param>
+        /// <param name="active">Optional parameter: Filter recurring tokens by whether they are still active..</param>
         /// <param name="limit">Optional parameter: Maximum number of resources to return in one page..</param>
         /// <param name="cursor">Optional parameter: Cursor pointing to the resource after which pagination should continue..</param>
         /// <param name="cursorDirection">Optional parameter: Pagination direction relative to the supplied cursor..</param>
         /// <returns>Returns the ApiResponse of Models.TransactionTokenList response from the API call.</returns>
         public ApiResponse<Models.TransactionTokenList> ListStoreTransactionTokens(
                 Guid storeId,
+                string search = null,
+                Guid? customerId = null,
+                Models.TransactionTokenListType? type = null,
+                Models.ModeQuery? mode = null,
+                Models.TransactionTokenActiveFilter? active = Models.TransactionTokenActiveFilter.Active,
                 int? limit = 10,
                 Guid? cursor = null,
                 Models.CursorDirectionQuery? cursorDirection = Models.CursorDirectionQuery.Desc)
-            => CoreHelper.RunTask(ListStoreTransactionTokensAsync(storeId, limit, cursor, cursorDirection));
+            => CoreHelper.RunTask(ListStoreTransactionTokensAsync(storeId, search, customerId, type, mode, active, limit, cursor, cursorDirection));
 
         /// <summary>
         /// Lists all transaction tokens for a specific store.
         /// </summary>
         /// <param name="storeId">Required parameter: The unique identifier of the store..</param>
+        /// <param name="search">Optional parameter: Case-insensitive free-text search..</param>
+        /// <param name="customerId">Optional parameter: Filter by customer ID..</param>
+        /// <param name="type">Optional parameter: Filter by token type. `one_time` tokens are excluded from listings and cannot be filtered on; filtering to `recurring` requires the App Token Secret..</param>
+        /// <param name="mode">Optional parameter: Filter by environment mode..</param>
+        /// <param name="active">Optional parameter: Filter recurring tokens by whether they are still active..</param>
         /// <param name="limit">Optional parameter: Maximum number of resources to return in one page..</param>
         /// <param name="cursor">Optional parameter: Cursor pointing to the resource after which pagination should continue..</param>
         /// <param name="cursorDirection">Optional parameter: Pagination direction relative to the supplied cursor..</param>
@@ -141,6 +182,11 @@ namespace UnivaPay.Apis
         /// <returns>Returns the ApiResponse of Models.TransactionTokenList response from the API call.</returns>
         public async Task<ApiResponse<Models.TransactionTokenList>> ListStoreTransactionTokensAsync(
                 Guid storeId,
+                string search = null,
+                Guid? customerId = null,
+                Models.TransactionTokenListType? type = null,
+                Models.ModeQuery? mode = null,
+                Models.TransactionTokenActiveFilter? active = Models.TransactionTokenActiveFilter.Active,
                 int? limit = 10,
                 Guid? cursor = null,
                 Models.CursorDirectionQuery? cursorDirection = Models.CursorDirectionQuery.Desc,
@@ -151,6 +197,11 @@ namespace UnivaPay.Apis
                   .WithAuth("JWT_TOKEN")
                   .Parameters(parameters => parameters
                       .Template(template => template.Setup("storeId", storeId))
+                      .Query(query => query.Setup("search", search))
+                      .Query(query => query.Setup("customer_id", customerId))
+                      .Query(query => query.Setup("type", (type.HasValue) ? CoreHelper.JsonSerialize(type.Value).Trim('\"') : null))
+                      .Query(query => query.Setup("mode", (mode.HasValue) ? CoreHelper.JsonSerialize(mode.Value).Trim('\"') : null))
+                      .Query(query => query.Setup("active", (active.HasValue) ? CoreHelper.JsonSerialize(active.Value).Trim('\"') : "active"))
                       .Query(query => query.Setup("limit", limit ?? 10))
                       .Query(query => query.Setup("cursor", cursor))
                       .Query(query => query.Setup("cursor_direction", (cursorDirection.HasValue) ? CoreHelper.JsonSerialize(cursorDirection.Value).Trim('\"') : "desc"))))
@@ -172,30 +223,35 @@ namespace UnivaPay.Apis
         /// </summary>
         /// <param name="storeId">Required parameter: The unique identifier of the store..</param>
         /// <param name="id">Required parameter: The unique identifier of the resource..</param>
-        /// <returns>Returns the ApiResponse of Models.TransactionToken response from the API call.</returns>
-        public ApiResponse<Models.TransactionToken> GetTransactionToken(
+        /// <param name="polling">Optional parameter: If set to true, instructs the API to internally poll the token's 3DS or CVV authorization sub-status until it transitions to another status, or until the ~3 second server-side timeout is reached..</param>
+        /// <returns>Returns the ApiResponse of TransactionToken response from the API call.</returns>
+        public ApiResponse<TransactionToken> GetTransactionToken(
                 Guid storeId,
-                Guid id)
-            => CoreHelper.RunTask(GetTransactionTokenAsync(storeId, id));
+                Guid id,
+                bool? polling = null)
+            => CoreHelper.RunTask(GetTransactionTokenAsync(storeId, id, polling));
 
         /// <summary>
         /// Retrieves the details of an existing transaction token.
         /// </summary>
         /// <param name="storeId">Required parameter: The unique identifier of the store..</param>
         /// <param name="id">Required parameter: The unique identifier of the resource..</param>
+        /// <param name="polling">Optional parameter: If set to true, instructs the API to internally poll the token's 3DS or CVV authorization sub-status until it transitions to another status, or until the ~3 second server-side timeout is reached..</param>
         /// <param name="cancellationToken"> cancellationToken. </param>
-        /// <returns>Returns the ApiResponse of Models.TransactionToken response from the API call.</returns>
-        public async Task<ApiResponse<Models.TransactionToken>> GetTransactionTokenAsync(
+        /// <returns>Returns the ApiResponse of TransactionToken response from the API call.</returns>
+        public async Task<ApiResponse<TransactionToken>> GetTransactionTokenAsync(
                 Guid storeId,
                 Guid id,
+                bool? polling = null,
                 CancellationToken cancellationToken = default)
-            => await CreateApiCall<Models.TransactionToken>()
+            => await CreateApiCall<TransactionToken>()
               .RequestBuilder(requestBuilder => requestBuilder
                   .Setup(HttpMethod.Get, "/stores/{storeId}/tokens/{id}")
                   .WithAuth("JWT_TOKEN")
                   .Parameters(parameters => parameters
                       .Template(template => template.Setup("storeId", storeId))
-                      .Template(template => template.Setup("id", id))))
+                      .Template(template => template.Setup("id", id))
+                      .Query(query => query.Setup("polling", polling))))
               .ResponseHandler(responseHandler => responseHandler
                   .ErrorCase("400", CreateErrorCase("HTTP 400 Bad Request: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
                   .ErrorCase("401", CreateErrorCase("HTTP 401 Unauthorized: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
@@ -220,8 +276,8 @@ namespace UnivaPay.Apis
         /// <param name="id">Required parameter: The unique identifier of the resource..</param>
         /// <param name="idempotencyKey">Optional parameter: An optional idempotency key to prevent double charges and duplicate operations. We recommend a randomly generated UUID (v4)..</param>
         /// <param name="body">Optional parameter: Request payload for updating a transaction token..</param>
-        /// <returns>Returns the ApiResponse of Models.TransactionToken response from the API call.</returns>
-        public ApiResponse<Models.TransactionToken> UpdateTransactionToken(
+        /// <returns>Returns the ApiResponse of TransactionToken response from the API call.</returns>
+        public ApiResponse<TransactionToken> UpdateTransactionToken(
                 Guid storeId,
                 Guid id,
                 string idempotencyKey = null,
@@ -240,14 +296,14 @@ namespace UnivaPay.Apis
         /// <param name="idempotencyKey">Optional parameter: An optional idempotency key to prevent double charges and duplicate operations. We recommend a randomly generated UUID (v4)..</param>
         /// <param name="body">Optional parameter: Request payload for updating a transaction token..</param>
         /// <param name="cancellationToken"> cancellationToken. </param>
-        /// <returns>Returns the ApiResponse of Models.TransactionToken response from the API call.</returns>
-        public async Task<ApiResponse<Models.TransactionToken>> UpdateTransactionTokenAsync(
+        /// <returns>Returns the ApiResponse of TransactionToken response from the API call.</returns>
+        public async Task<ApiResponse<TransactionToken>> UpdateTransactionTokenAsync(
                 Guid storeId,
                 Guid id,
                 string idempotencyKey = null,
                 Models.TransactionTokenUpdateRequest body = null,
                 CancellationToken cancellationToken = default)
-            => await CreateApiCall<Models.TransactionToken>()
+            => await CreateApiCall<TransactionToken>()
               .RequestBuilder(requestBuilder => requestBuilder
                   .Setup(new HttpMethod("PATCH"), "/stores/{storeId}/tokens/{id}")
                   .WithAuth("JWT_TOKEN")
@@ -298,6 +354,101 @@ namespace UnivaPay.Apis
             => await CreateApiCall<VoidType>()
               .RequestBuilder(requestBuilder => requestBuilder
                   .Setup(HttpMethod.Delete, "/stores/{storeId}/tokens/{id}")
+                  .WithAuth("JWT_TOKEN")
+                  .Parameters(parameters => parameters
+                      .Template(template => template.Setup("storeId", storeId))
+                      .Template(template => template.Setup("id", id))))
+              .ResponseHandler(responseHandler => responseHandler
+                  .ErrorCase("400", CreateErrorCase("HTTP 400 Bad Request: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
+                  .ErrorCase("401", CreateErrorCase("HTTP 401 Unauthorized: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
+                  .ErrorCase("403", CreateErrorCase("HTTP 403 Forbidden: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
+                  .ErrorCase("404", CreateErrorCase("HTTP 404 Not Found: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
+                  .ErrorCase("429", CreateErrorCase("HTTP 429 Rate Limited: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("409", CreateErrorCase("HTTP 409 Conflict: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("500", CreateErrorCase("HTTP 500 Server Error: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("503", CreateErrorCase("HTTP 503 Unavailable: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("504", CreateErrorCase("HTTP 504 Timeout: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("0", CreateErrorCase("HTTP {$statusCode}: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true)))
+              .ExecuteAsync(cancellationToken).ConfigureAwait(false);
+
+        /// <summary>
+        /// Enables 3-D Secure on an existing `recurring` transaction token that was created without it. Only applies to `recurring` tokens; returns an error if 3DS is already enabled. After calling this endpoint, poll the token until `data.three_ds.status` becomes `awaiting`, then use the token 3DS issuer token endpoint to complete authentication.
+        /// </summary>
+        /// <param name="storeId">Required parameter: The unique identifier of the store..</param>
+        /// <param name="id">Required parameter: The unique identifier of the resource..</param>
+        /// <param name="idempotencyKey">Optional parameter: An optional idempotency key to prevent double charges and duplicate operations. We recommend a randomly generated UUID (v4)..</param>
+        /// <param name="body">Optional parameter: Optional request payload. Omit entirely, or omit `redirect_endpoint`, if no redirect is needed..</param>
+        /// <returns>Returns the ApiResponse of TransactionToken response from the API call.</returns>
+        public ApiResponse<TransactionToken> EnableTokenThreeDs(
+                Guid storeId,
+                Guid id,
+                string idempotencyKey = null,
+                Models.EnableTokenThreeDsRequest body = null)
+            => CoreHelper.RunTask(EnableTokenThreeDsAsync(storeId, id, idempotencyKey, body));
+
+        /// <summary>
+        /// Enables 3-D Secure on an existing `recurring` transaction token that was created without it. Only applies to `recurring` tokens; returns an error if 3DS is already enabled. After calling this endpoint, poll the token until `data.three_ds.status` becomes `awaiting`, then use the token 3DS issuer token endpoint to complete authentication.
+        /// </summary>
+        /// <param name="storeId">Required parameter: The unique identifier of the store..</param>
+        /// <param name="id">Required parameter: The unique identifier of the resource..</param>
+        /// <param name="idempotencyKey">Optional parameter: An optional idempotency key to prevent double charges and duplicate operations. We recommend a randomly generated UUID (v4)..</param>
+        /// <param name="body">Optional parameter: Optional request payload. Omit entirely, or omit `redirect_endpoint`, if no redirect is needed..</param>
+        /// <param name="cancellationToken"> cancellationToken. </param>
+        /// <returns>Returns the ApiResponse of TransactionToken response from the API call.</returns>
+        public async Task<ApiResponse<TransactionToken>> EnableTokenThreeDsAsync(
+                Guid storeId,
+                Guid id,
+                string idempotencyKey = null,
+                Models.EnableTokenThreeDsRequest body = null,
+                CancellationToken cancellationToken = default)
+            => await CreateApiCall<TransactionToken>()
+              .RequestBuilder(requestBuilder => requestBuilder
+                  .Setup(HttpMethod.Post, "/stores/{storeId}/tokens/{id}/three_ds")
+                  .WithAuth("JWT_TOKEN")
+                  .Parameters(parameters => parameters
+                      .Body(b => b.Setup(body))
+                      .Template(template => template.Setup("storeId", storeId))
+                      .Template(template => template.Setup("id", id))
+                      .Header(header => header.Setup("Content-Type", "application/json"))
+                      .Header(header => header.Setup("Idempotency-Key", idempotencyKey))))
+              .ResponseHandler(responseHandler => responseHandler
+                  .ErrorCase("400", CreateErrorCase("HTTP 400 Bad Request: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
+                  .ErrorCase("401", CreateErrorCase("HTTP 401 Unauthorized: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
+                  .ErrorCase("403", CreateErrorCase("HTTP 403 Forbidden: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
+                  .ErrorCase("404", CreateErrorCase("HTTP 404 Not Found: {$response.body#/code}", (errorReason, context) => new ApiErrorException(errorReason, context), true))
+                  .ErrorCase("429", CreateErrorCase("HTTP 429 Rate Limited: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("409", CreateErrorCase("HTTP 409 Conflict: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("500", CreateErrorCase("HTTP 500 Server Error: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("503", CreateErrorCase("HTTP 503 Unavailable: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("504", CreateErrorCase("HTTP 504 Timeout: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true))
+                  .ErrorCase("0", CreateErrorCase("HTTP {$statusCode}: {$response.body#/code}", (errorReason, context) => new ApiException(errorReason, context), true)))
+              .ExecuteAsync(cancellationToken).ConfigureAwait(false);
+
+        /// <summary>
+        /// Disables 3-D Secure on an existing `recurring` transaction token. Only applies to `recurring` tokens.
+        /// </summary>
+        /// <param name="storeId">Required parameter: The unique identifier of the store..</param>
+        /// <param name="id">Required parameter: The unique identifier of the resource..</param>
+        /// <returns>Returns the ApiResponse of TransactionToken response from the API call.</returns>
+        public ApiResponse<TransactionToken> DisableTokenThreeDs(
+                Guid storeId,
+                Guid id)
+            => CoreHelper.RunTask(DisableTokenThreeDsAsync(storeId, id));
+
+        /// <summary>
+        /// Disables 3-D Secure on an existing `recurring` transaction token. Only applies to `recurring` tokens.
+        /// </summary>
+        /// <param name="storeId">Required parameter: The unique identifier of the store..</param>
+        /// <param name="id">Required parameter: The unique identifier of the resource..</param>
+        /// <param name="cancellationToken"> cancellationToken. </param>
+        /// <returns>Returns the ApiResponse of TransactionToken response from the API call.</returns>
+        public async Task<ApiResponse<TransactionToken>> DisableTokenThreeDsAsync(
+                Guid storeId,
+                Guid id,
+                CancellationToken cancellationToken = default)
+            => await CreateApiCall<TransactionToken>()
+              .RequestBuilder(requestBuilder => requestBuilder
+                  .Setup(HttpMethod.Delete, "/stores/{storeId}/tokens/{id}/three_ds")
                   .WithAuth("JWT_TOKEN")
                   .Parameters(parameters => parameters
                       .Template(template => template.Setup("storeId", storeId))

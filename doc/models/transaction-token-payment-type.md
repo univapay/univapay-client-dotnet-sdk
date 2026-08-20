@@ -16,12 +16,14 @@ Transaction Token Payment Type schema.
 | `Online` |
 | `Konbini` |
 | `BankTransfer` |
+| `QrScan` |
+| `QrMerchant` |
 
 ## Example
 
 ```csharp
 using UnivaPay.Models;
 
-TransactionTokenPaymentType transactionTokenPaymentType = TransactionTokenPaymentType.Paidy;
+TransactionTokenPaymentType transactionTokenPaymentType = TransactionTokenPaymentType.Card;
 ```
 

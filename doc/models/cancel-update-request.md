@@ -20,19 +20,13 @@ Request body for updating a cancel. Only `metadata` is settable by merchants. Al
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Models.Containers;
-using UnivaPay.Utilities;
 
 CancelUpdateRequest cancelUpdateRequest = new CancelUpdateRequest
 {
     Metadata = new GenericMetadata
     {
         OrderId = "12345",
-        UnivapayName = "univapay-name8",
-        UnivapayPhoneNumber = "univapay-phone-number2",
-        ["exampleAdditionalProperty"] = GenericMetadataValue.FromString("String4"),
     },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

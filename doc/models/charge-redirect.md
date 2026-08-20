@@ -21,13 +21,9 @@ Charge Redirect schema.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 ChargeRedirect chargeRedirect = new ChargeRedirect
 {
-    Endpoint = "endpoint8",
-    RedirectId = new Guid("00001874-0000-0000-0000-000000000000"),
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

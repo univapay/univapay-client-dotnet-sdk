@@ -127,7 +127,53 @@ namespace UnivaPay
             Assert.IsNotNull(result, "Result should exist");
             Assert.IsTrue(
                     TestHelper.IsProperSubsetOf(
-                    "{\"id\":\"11ef0000-0000-4000-8000-000000000022\",\"name\":\"Tokyo Store\",\"created_on\":\"2026-04-09T07:35:50.000000Z\",\"configuration\":{\"percent_fee\":3.6,\"country\":\"JP\",\"language\":\"ja\",\"minimum_charge_amounts\":[{\"amount\":100,\"currency\":\"JPY\"}],\"maximum_charge_amounts\":[{\"amount\":100000,\"currency\":\"JPY\"}],\"user_transactions_configuration\":{\"enabled\":true,\"notify_customer\":true,\"notify_on_webhook_failure\":true},\"card_configuration\":{\"enabled\":true,\"debit_enabled\":true,\"prepaid_enabled\":false,\"three_ds_required\":true},\"online_configuration\":{\"enabled\":true},\"bank_transfer_configuration\":{\"enabled\":true,\"match_amount\":true,\"expiration\":\"P7D\"}}}",
+                    "{\"id\":\"11ef0000-0000-4000-8000-000000000022\",\"name\":\"Tokyo Store\",\"created_on\":\"2026-04-09T07:35:50.000000Z\",\"configuration\":{\"percent_fee\":3.6,\"country\":\"JP\",\"language\":\"ja\",\"minimum_charge_amounts\":[{\"amount\":100,\"currency\":\"JPY\"}],\"maximum_charge_amounts\":[{\"amount\":100000,\"currency\":\"JPY\"}],\"user_transactions_configuration\":{\"enabled\":true,\"notify_customer\":true,\"notify_on_webhook_failure\":true},\"card_configuration\":{\"enabled\":true,\"debit_enabled\":true,\"prepaid_enabled\":false,\"three_ds_required\":true},\"online_configuration\":{\"enabled\":true},\"bank_transfer_configuration\":{\"enabled\":true,\"match_amount\":true,\"expiration\":\"P7D\"},\"qr_scan_configuration\":{\"enabled\":true,\"forbidden_qr_scan_gateways\":[\"wechat\"]},\"convenience_configuration\":{\"enabled\":true,\"expiration\":\"P3D\"},\"paidy_configuration\":{\"enabled\":false},\"recurring_token_configuration\":{\"recurring_type\":\"infinite\",\"charge_wait_period\":\"P7D\",\"card_charge_cvv_confirmation\":{\"enabled\":false}},\"security_configuration\":{\"card_charge_cooldown\":\"PT5M\",\"subscription_cooldown\":\"PT10M\",\"restrict_ip_after_failed_charge\":{\"enabled\":true,\"count\":5,\"cooldown\":\"PT1H\"},\"refund_percent_limit\":100,\"confirmation_required\":false,\"min_refund_threshold\":100,\"limit_refund_by_sales\":{\"enabled\":true,\"period\":\"monthly\",\"rolling_window\":true}},\"installments_configuration\":{\"enabled\":true,\"card_processor\":{\"revolving\":true,\"fixed_cycle\":true},\"supported_payment_types\":[\"card\"],\"min_charge_amount\":{\"amount\":3000,\"currency\":\"JPY\"},\"max_payout_period\":\"P12M\",\"only_with_processor\":true},\"card_brand_percent_fees\":{\"visa\":3.6,\"mastercard\":3.6,\"jcb\":3.8}}}",
+                    TestHelper.ConvertStreamToString(HttpCallBack.Response.RawBody),
+                    false,
+                    true,
+                    false),
+                    "Response body should have matching keys");
+        }
+
+        /// <summary>
+        /// Derives a deterministic, store-scoped UUID from a local customer identifier supplied by the merchant. Calling this endpoint again with the same `customer_id` for the same store always returns the same UUID — the operation has no side effects (nothing is persisted), so it is safe to call repeatedly and does not require an `Idempotency-Key`. App Token Secret is required..
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
+        [Test]
+        public async Task TestTestCreateCustomerId()
+        {
+            // Parameters for the API call
+            Guid storeId = Guid.Parse("0cab399b-5621-425b-993b-f8507eba1e78");
+            Models.CreateCustomerIdRequest body = ApiHelper.JsonDeserialize<Models.CreateCustomerIdRequest>("{\"customer_id\":\"local-customer-1902\"}");
+
+            // Perform API call
+            ApiResponse<Models.CreateCustomerIdResponse> result = null;
+            try
+            {
+                result = await this.controller.CreateCustomerIdAsync(storeId, body);
+            }
+            catch (ApiException)
+            {
+            }
+
+            // Test response code
+            Assert.AreEqual(200, HttpCallBack.Response.StatusCode, "Status should be 200");
+
+            // Test headers
+            Dictionary<string, string> headers = new Dictionary<string, string>();
+            headers.Add("Content-Type", "application/json");
+
+            Assert.IsTrue(
+                    TestHelper.AreHeadersProperSubsetOf (
+                    headers,
+                    HttpCallBack.Response.Headers),
+                    "Headers should match");
+
+            // Test whether the captured response is as we expected
+            Assert.IsNotNull(result, "Result should exist");
+            Assert.IsTrue(
+                    TestHelper.IsProperSubsetOf(
+                    "{\"customer_id\":\"8a3f1b8e-2c1a-4b7a-9c2e-6f6b6f6e2b10\"}",
                     TestHelper.ConvertStreamToString(HttpCallBack.Response.RawBody),
                     false,
                     true,

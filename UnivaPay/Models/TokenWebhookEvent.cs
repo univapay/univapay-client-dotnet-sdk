@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using UnivaPay.Models.Containers;
 using UnivaPay.Utilities;
 
 namespace UnivaPay.Models
@@ -65,7 +66,7 @@ namespace UnivaPay.Models
             Guid id,
             Models.TokenEvent mEvent,
             DateTime createdOn,
-            Models.TransactionToken data = null)
+            TransactionToken data = null)
         {
             this.additionalProperties = new Dictionary<string, JToken>();
             this.propertyName = this.GetPropertyNames();
@@ -88,10 +89,10 @@ namespace UnivaPay.Models
         public Models.TokenEvent MEvent { get; set; }
 
         /// <summary>
-        /// Stored transaction token resource.
+        /// Stored transaction token resource. `payment_type` discriminates which variant applies — and therefore the concrete shape of `data` — per the mapping above.
         /// </summary>
         [JsonProperty("data", NullValueHandling = NullValueHandling.Ignore)]
-        public Models.TransactionToken Data { get; set; }
+        public TransactionToken Data { get; set; }
 
         /// <summary>
         /// Timestamp when the event was fired.

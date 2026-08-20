@@ -191,7 +191,7 @@ namespace UnivaPay.Models
         public bool? Verified { get; set; }
 
         /// <summary>
-        /// Merchant configuration snapshot serialized by gyron-payments-api.
+        /// Merchant configuration snapshot as serialized by the backend.
         /// </summary>
         [JsonProperty("configuration", NullValueHandling = NullValueHandling.Ignore)]
         public Models.MerchantWebhookConfiguration Configuration { get; set; }

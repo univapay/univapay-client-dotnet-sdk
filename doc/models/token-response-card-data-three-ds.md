@@ -25,7 +25,6 @@ Token Response Card Data Three Ds schema.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 TokenResponseCardDataThreeDs tokenResponseCardDataThreeDs = new TokenResponseCardDataThreeDs
 {
@@ -35,7 +34,6 @@ TokenResponseCardDataThreeDs tokenResponseCardDataThreeDs = new TokenResponseCar
     RedirectId = null,
     Exempted = false,
     Error = null,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

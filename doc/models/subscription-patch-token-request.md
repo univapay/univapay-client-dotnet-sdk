@@ -20,12 +20,10 @@ Request body for updating the payment method (transaction token) of a subscripti
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 SubscriptionPatchTokenRequest subscriptionPatchTokenRequest = new SubscriptionPatchTokenRequest
 {
     TransactionTokenId = new Guid("11ef3362-3700-c54a-9baa-6f7e6527c9d9"),
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

@@ -31,13 +31,14 @@ namespace UnivaPay
                 Environment.Production, new Dictionary<Enum, string>
                 {
                     { Server.Default, "{baseUrl}" },
+                    { Server.DirectDebit, "{directDebitBaseUrl}" },
                 }
             },
         };
 
         private readonly GlobalConfiguration globalConfiguration;
         private SdkLoggingConfiguration sdkLoggingConfiguration;
-        private const string userAgent = "DotNet-SDK/1.0.0 (OS: {os-info}, Engine: {engine}/{engine-version})";
+        private const string userAgent = "DotNet-SDK/1.2.2 (OS: {os-info}, Engine: {engine}/{engine-version})";
         private readonly HttpCallback httpCallback;
         private readonly Lazy<ChargesApi> charges;
         private readonly Lazy<TransactionTokensApi> transactionTokens;
@@ -47,10 +48,14 @@ namespace UnivaPay
         private readonly Lazy<MerchantsApi> merchants;
         private readonly Lazy<StoresApi> stores;
         private readonly Lazy<WebhooksApi> webhooks;
+        private readonly Lazy<DirectDebitApi> directDebit;
+        private readonly Lazy<CheckoutApi> checkout;
+        private readonly Lazy<TransactionHistoryApi> transactionHistory;
 
         private UnivapayClientSdkClient(
             Environment environment,
             string baseUrl,
+            string directDebitBaseUrl,
             BearerAuthModel bearerAuthModel,
             HttpCallback httpCallback,
             IHttpClientConfiguration httpClientConfiguration,
@@ -58,6 +63,7 @@ namespace UnivaPay
         {
             this.Environment = environment;
             this.BaseUrl = baseUrl;
+            this.DirectDebitBaseUrl = directDebitBaseUrl;
             this.httpCallback = httpCallback;
             this.HttpClientConfiguration = httpClientConfiguration;
             this.sdkLoggingConfiguration = sdkLoggingConfiguration;
@@ -73,6 +79,7 @@ namespace UnivaPay
                 .LoggingConfig(sdkLoggingConfiguration)
                 .Parameters(globalParameter => globalParameter
                     .Template(templateParameter => templateParameter.Setup("baseUrl", this.BaseUrl))
+                    .Template(templateParameter => templateParameter.Setup("directDebitBaseUrl", this.DirectDebitBaseUrl))
                 )
                 .UserAgent(userAgent)
                 .Build();
@@ -94,6 +101,12 @@ namespace UnivaPay
                 () => new StoresApi(globalConfiguration));
             this.webhooks = new Lazy<WebhooksApi>(
                 () => new WebhooksApi(globalConfiguration));
+            this.directDebit = new Lazy<DirectDebitApi>(
+                () => new DirectDebitApi(globalConfiguration));
+            this.checkout = new Lazy<CheckoutApi>(
+                () => new CheckoutApi(globalConfiguration));
+            this.transactionHistory = new Lazy<TransactionHistoryApi>(
+                () => new TransactionHistoryApi(globalConfiguration));
         }
 
         /// <summary>
@@ -137,6 +150,21 @@ namespace UnivaPay
         public WebhooksApi WebhooksApi => this.webhooks.Value;
 
         /// <summary>
+        /// Gets DirectDebitApi.
+        /// </summary>
+        public DirectDebitApi DirectDebitApi => this.directDebit.Value;
+
+        /// <summary>
+        /// Gets CheckoutApi.
+        /// </summary>
+        public CheckoutApi CheckoutApi => this.checkout.Value;
+
+        /// <summary>
+        /// Gets TransactionHistoryApi.
+        /// </summary>
+        public TransactionHistoryApi TransactionHistoryApi => this.transactionHistory.Value;
+
+        /// <summary>
         /// Gets the configuration of the Http Client associated with this client.
         /// </summary>
         public IHttpClientConfiguration HttpClientConfiguration { get; }
@@ -152,6 +180,12 @@ namespace UnivaPay
         /// Base URL for the API.
         /// </summary>
         public string BaseUrl { get; }
+
+        /// <summary>
+        /// Gets DirectDebitBaseUrl.
+        /// Base URL for the Direct Debit API.
+        /// </summary>
+        public string DirectDebitBaseUrl { get; }
 
         /// <summary>
         /// Gets http callback.
@@ -198,6 +232,7 @@ namespace UnivaPay
             Builder builder = new Builder()
                 .Environment(this.Environment)
                 .BaseUrl(this.BaseUrl)
+                .DirectDebitBaseUrl(this.DirectDebitBaseUrl)
                 .HttpCallback(httpCallback)
                 .LoggingConfig(sdkLoggingConfiguration)
                 .HttpClientConfig(config => config.Build());
@@ -216,6 +251,7 @@ namespace UnivaPay
             return
                 $"Environment = {this.Environment}, " +
                 $"BaseUrl = {this.BaseUrl}, " +
+                $"DirectDebitBaseUrl = {this.DirectDebitBaseUrl}, " +
                 $"HttpClientConfiguration = {this.HttpClientConfiguration}, ";
         }
 
@@ -228,9 +264,9 @@ namespace UnivaPay
             var builder = new Builder();
 
             string environment = System.Environment.GetEnvironmentVariable("UNIVA_PAY_ENVIRONMENT");
-            string baseUrl = System.Environment.GetEnvironmentVariable("BASE_URL");
-            string secretKey = System.Environment.GetEnvironmentVariable("SECRET_KEY");
-            string jwtToken = System.Environment.GetEnvironmentVariable("JWT_TOKEN");
+            string baseUrl = System.Environment.GetEnvironmentVariable("UNIVA_PAY_BASE_URL");
+            string directDebitBaseUrl = System.Environment.GetEnvironmentVariable("UNIVA_PAY_DIRECT_DEBIT_BASE_URL");
+            string accessToken = System.Environment.GetEnvironmentVariable("UNIVA_PAY_ACCESS_TOKEN");
 
             if (environment != null)
             {
@@ -241,6 +277,26 @@ namespace UnivaPay
             {
                 builder.BaseUrl(baseUrl);
             }
+
+            if (directDebitBaseUrl != null)
+            {
+                builder.DirectDebitBaseUrl(directDebitBaseUrl);
+            }
+
+            if (accessToken != null)
+            {
+                builder.BearerAuthCredentials(new BearerAuthModel
+                .Builder(accessToken)
+                .Build());
+            }
+
+            // Hand-authored: this SDK authenticates with a secret key plus a JWT token, so
+            // the generated single-token branch above is inert (UNIVA_PAY_ACCESS_TOKEN is
+            // never set). Appended here, and the generated lines left alone, because they
+            // sit directly beside the base-URL block codegen inserts whenever the server
+            // list changes — editing them conflicts on every regeneration.
+            string secretKey = System.Environment.GetEnvironmentVariable("UNIVA_PAY_SECRET_KEY");
+            string jwtToken = System.Environment.GetEnvironmentVariable("UNIVA_PAY_JWT_TOKEN");
 
             if (secretKey != null && jwtToken != null)
             {
@@ -266,6 +322,7 @@ namespace UnivaPay
         {
             private Environment _environment = UnivaPay.Environment.Production;
             private string _baseUrl = "https://api.univapay.com";
+            private string _directDebitBaseUrl = "https://direct-debit.gopay-services.com";
             private BearerAuthModel _bearerAuthModel = new BearerAuthModel();
             private HttpClientConfiguration.Builder _httpClientConfig = new HttpClientConfiguration.Builder();
             private HttpCallback _httpCallback;
@@ -302,6 +359,17 @@ namespace UnivaPay
             public Builder BaseUrl(string baseUrl)
             {
                 _baseUrl = baseUrl ?? throw new ArgumentNullException(nameof(baseUrl));
+                return this;
+            }
+
+            /// <summary>
+            /// Sets DirectDebitBaseUrl.
+            /// </summary>
+            /// <param name="directDebitBaseUrl"> DirectDebitBaseUrl. </param>
+            /// <returns> Builder. </returns>
+            public Builder DirectDebitBaseUrl(string directDebitBaseUrl)
+            {
+                _directDebitBaseUrl = directDebitBaseUrl ?? throw new ArgumentNullException(nameof(directDebitBaseUrl));
                 return this;
             }
 
@@ -387,6 +455,7 @@ namespace UnivaPay
                 return new UnivapayClientSdkClient(
                     _environment,
                     _baseUrl,
+                    _directDebitBaseUrl,
                     _bearerAuthModel,
                     _httpCallback,
                     _httpClientConfig.Build(),
@@ -406,6 +475,8 @@ namespace UnivaPay
                     builder.Environment(options.Environment.Value);
                 if (options.BaseUrl != null)
                     builder.BaseUrl(options.BaseUrl);
+                if (options.DirectDebitBaseUrl != null)
+                    builder.DirectDebitBaseUrl(options.DirectDebitBaseUrl);
                 if (options.BearerAuthCredentials != null)
                     builder.BearerAuthCredentials(BearerAuthModel.FromOptions(options.BearerAuthCredentials));
                 if (options.HttpClientConfig != null)
@@ -420,6 +491,7 @@ namespace UnivaPay
         {
             public Environment? Environment { get; set; }
             public string BaseUrl { get; set; }
+            public string DirectDebitBaseUrl { get; set; }
             public BearerAuthModelOptions BearerAuthCredentials { get; set; }
             public HttpClientConfigurationOptions HttpClientConfig { get; set; }
             public LoggingConfigOptions LoggingConfig { get; set; }

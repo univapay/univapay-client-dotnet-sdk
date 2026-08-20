@@ -28,17 +28,12 @@ Per-card-brand percent fee overrides.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookCardBrandPercentFees merchantWebhookCardBrandPercentFees = new MerchantWebhookCardBrandPercentFees
 {
     Visa = 3.6,
-    AmericanExpress = 133.02,
     Mastercard = 3.6,
-    Maestro = 115.58,
-    Discover = 104.6,
     Jcb = 3.8,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

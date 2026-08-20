@@ -21,13 +21,9 @@ Token Create Card Data Three Ds schema.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 TokenCreateCardDataThreeDs tokenCreateCardDataThreeDs = new TokenCreateCardDataThreeDs
 {
-    Enabled = false,
-    RedirectEndpoint = "redirect_endpoint0",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

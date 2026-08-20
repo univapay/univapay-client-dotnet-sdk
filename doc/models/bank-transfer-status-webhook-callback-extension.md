@@ -21,7 +21,6 @@ Bank-transfer-specific webhook payload extension.
 ```csharp
 using System.Globalization;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 BankTransferStatusWebhookCallbackExtension bankTransferStatusWebhookCallbackExtension = new BankTransferStatusWebhookCallbackExtension
 {
@@ -49,9 +48,7 @@ BankTransferStatusWebhookCallbackExtension bankTransferStatusWebhookCallbackExte
         {
             OrderId = "order_12345",
         },
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

@@ -22,21 +22,14 @@ Request body for updating a refund. All fields are optional. Omitted fields are 
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Models.Containers;
-using UnivaPay.Utilities;
 
 RefundUpdateRequest refundUpdateRequest = new RefundUpdateRequest
 {
     Metadata = new GenericMetadata
     {
         OrderId = "12345",
-        UnivapayName = "univapay-name8",
-        UnivapayPhoneNumber = "univapay-phone-number2",
-        ["exampleAdditionalProperty"] = GenericMetadataValue.FromString("String4"),
     },
     Message = "Updated reason note",
-    Reason = RefundReasonRequest.Duplicate,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

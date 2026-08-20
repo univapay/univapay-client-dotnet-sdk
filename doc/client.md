@@ -6,6 +6,7 @@ The following parameters are configurable for the API Client:
 | Parameter | Type | Description |
 |  --- | --- | --- |
 | BaseUrl | `string` | Base URL for the API<br>*Default*: `"https://api.univapay.com"` |
+| DirectDebitBaseUrl | `string` | Base URL for the Direct Debit API<br>*Default*: `"https://direct-debit.gopay-services.com"` |
 | Environment | [`Environment`](../README.md#environments) | The API environment. <br> **Default: `Environment.Production`** |
 | Timeout | `TimeSpan` | Http client timeout.<br>*Default*: `TimeSpan.FromSeconds(30)` |
 | HttpClientConfiguration | [`Action<HttpClientConfiguration.Builder>`](../doc/http-client-configuration-builder.md) | Action delegate that configures the HTTP client by using the HttpClientConfiguration.Builder for customizing API call settings.<br>*Default*: `new HttpClient()` |
@@ -33,6 +34,7 @@ UnivapayClientSdkClient client = new UnivapayClientSdkClient.Builder()
         httpClientConfig.Timeout(TimeSpan.FromSeconds(100)))
     .Environment(UnivaPay.Environment.Production)
     .BaseUrl("https://api.univapay.com")
+    .DirectDebitBaseUrl("https://direct-debit.gopay-services.com")
     .LoggingConfig(config => config
         .LogLevel(LogLevel.Information)
         .RequestConfig(reqConfig => reqConfig.Body(true))
@@ -78,6 +80,9 @@ The gateway for the SDK. This class acts as a factory for the Apis and also hold
 | MerchantsApi | Gets MerchantsApi. |
 | StoresApi | Gets StoresApi. |
 | WebhooksApi | Gets WebhooksApi. |
+| DirectDebitApi | Gets DirectDebitApi. |
+| CheckoutApi | Gets CheckoutApi. |
+| TransactionHistoryApi | Gets TransactionHistoryApi. |
 
 ### Properties
 
@@ -87,6 +92,7 @@ The gateway for the SDK. This class acts as a factory for the Apis and also hold
 | Timeout | Http client timeout. | `TimeSpan` |
 | Environment | Current API environment. | `Environment` |
 | BaseUrl | Base URL for the API | `string` |
+| DirectDebitBaseUrl | Base URL for the Direct Debit API | `string` |
 | BearerAuthCredentials | Gets the credentials to use with BearerAuth. | [`IBearerAuthCredentials`](auth/oauth-2-bearer-token.md) |
 
 ### Methods
@@ -108,5 +114,6 @@ Class to build instances of Univapay Public APIClient.
 | `Timeout(TimeSpan timeout)` | Http client timeout. | `Builder` |
 | `Environment(Environment environment)` | Current API environment. | `Builder` |
 | `BaseUrl(string baseUrl)` | Base URL for the API | `Builder` |
+| `DirectDebitBaseUrl(string directDebitBaseUrl)` | Base URL for the Direct Debit API | `Builder` |
 | `BearerAuthCredentials(Action<BearerAuthModel.Builder> action)` | Sets credentials for BearerAuth. | `Builder` |
 

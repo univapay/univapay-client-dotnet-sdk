@@ -16,20 +16,16 @@ A free-form dictionary for custom metadata.
 | `OrderId` | `string` | Optional | Example of a custom metadata key. |
 | `UnivapayName` | `string` | Optional | Consumer name passed to payment processors that require it (e.g., konbini, bank transfer). |
 | `UnivapayPhoneNumber` | `string` | Optional | Consumer phone number passed to payment processors that require it. |
-| `AdditionalProperties` | [`GenericMetadataValue this[string key]`](../../doc/models/containers/generic-metadata-value.md) | Optional | Allowed values for metadata properties. |
+| `AdditionalProperties` | [`GenericMetadataValue this[string key]`](../../doc/models/containers/generic-metadata-value.md) | Optional | Allowed values for metadata properties. Values may be a string, number, boolean, null, or an array of any of the above — but not a nested object; the server rejects metadata whose direct property values are JSON objects. |
 
 ## Example
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Models.Containers;
 
 GenericMetadata genericMetadata = new GenericMetadata
 {
     OrderId = "12345",
-    UnivapayName = "univapay-name4",
-    UnivapayPhoneNumber = "univapay-phone-number8",
-    ["exampleAdditionalProperty"] = GenericMetadataValue.FromString("String4"),
 };
 ```
 

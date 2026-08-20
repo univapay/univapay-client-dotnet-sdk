@@ -4,7 +4,6 @@
 // This file was automatically generated for Univapay by APIMATIC v3.0 ( https://www.apimatic.io ).
 // </copyright>
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -59,16 +58,19 @@ namespace UnivaPay.Models
         /// </summary>
         /// <param name="terminationMode">termination_mode.</param>
         /// <param name="startOn">start_on.</param>
+        /// <param name="preserveEndOfMonth">preserve_end_of_month.</param>
         /// <param name="retryInterval">retry_interval.</param>
         public SubscriptionUpdateScheduleSettings(
             Models.SubscriptionTerminationMode? terminationMode = Models.SubscriptionTerminationMode.Immediate,
             DateTime? startOn = null,
+            bool? preserveEndOfMonth = null,
             string retryInterval = null)
         {
             this.additionalProperties = new Dictionary<string, JToken>();
             this.propertyName = this.GetPropertyNames();
             this.TerminationMode = terminationMode;
             this.StartOn = startOn;
+            this.PreserveEndOfMonth = preserveEndOfMonth;
             this.RetryInterval = retryInterval;
         }
 
@@ -79,11 +81,17 @@ namespace UnivaPay.Models
         public Models.SubscriptionTerminationMode? TerminationMode { get; set; }
 
         /// <summary>
-        /// Subscription start date. Used to change the first actual charge date  for subscriptions that initially only registered a payment method.
+        /// Subscription start date (YYYY-MM-DD). Used to change the first actual charge date for subscriptions that initially only registered a payment method. Must be in the future; only available before the subscription has more than one paid payment.
         /// </summary>
-        [JsonConverter(typeof(IsoDateTimeConverter))]
+        [JsonConverter(typeof(CustomDateTimeConverter), "yyyy'-'MM'-'dd")]
         [JsonProperty("start_on", NullValueHandling = NullValueHandling.Ignore)]
         public DateTime? StartOn { get; set; }
+
+        /// <summary>
+        /// If true, subsequent charges will always occur on the last day of the month.
+        /// </summary>
+        [JsonProperty("preserve_end_of_month", NullValueHandling = NullValueHandling.Ignore)]
+        public bool? PreserveEndOfMonth { get; set; }
 
         /// <summary>
         /// ISO-8601 Duration for retry interval if payment fails  (e.g., P3D for 3 days, PT48H for 48 hours).
@@ -107,6 +115,7 @@ namespace UnivaPay.Models
         {
             toStringOutput.Add($"TerminationMode = {(this.TerminationMode == null ? "null" : this.TerminationMode.ToString())}");
             toStringOutput.Add($"StartOn = {(this.StartOn == null ? "null" : this.StartOn.ToString())}");
+            toStringOutput.Add($"PreserveEndOfMonth = {(this.PreserveEndOfMonth == null ? "null" : this.PreserveEndOfMonth.ToString())}");
             toStringOutput.Add($"RetryInterval = {this.RetryInterval ?? "null"}");
 
             additionalProperties?

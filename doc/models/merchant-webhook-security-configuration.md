@@ -30,20 +30,16 @@ Merchant-level fraud and refund safety settings.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookSecurityConfiguration merchantWebhookSecurityConfiguration = new MerchantWebhookSecurityConfiguration
 {
     CardChargeCooldown = "PT5M",
     SubscriptionCooldown = "PT10M",
-    IdempotentCardChargeCooldown = "idempotent_card_charge_cooldown2",
-    IdempotentSubscriptionCooldown = "idempotent_subscription_cooldown6",
     RestrictIpAfterFailedCharge = new RestrictIpAfterFailedChargeConfig
     {
         Enabled = true,
         Count = 5,
         Cooldown = "PT1H",
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
     RefundPercentLimit = 100,
     ConfirmationRequired = false,
@@ -54,7 +50,6 @@ MerchantWebhookSecurityConfiguration merchantWebhookSecurityConfiguration = new 
         Period = "monthly",
         RollingWindow = true,
     },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

@@ -22,14 +22,12 @@ Refund-limiting configuration based on sales history.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 MerchantWebhookLimitRefundBySalesConfiguration merchantWebhookLimitRefundBySalesConfiguration = new MerchantWebhookLimitRefundBySalesConfiguration
 {
     Enabled = true,
     Period = "monthly",
     RollingWindow = true,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

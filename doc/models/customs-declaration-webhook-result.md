@@ -23,7 +23,6 @@ Result payload returned by the customs declaration formatter.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 CustomsDeclarationWebhookResult customsDeclarationWebhookResult = new CustomsDeclarationWebhookResult
 {
@@ -31,7 +30,6 @@ CustomsDeclarationWebhookResult customsDeclarationWebhookResult = new CustomsDec
     TradeId = "wx_trade_12345",
     TransactionId = "wx_txn_12345",
     ChargeTransactionId = "wx_charge_12345",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

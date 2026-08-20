@@ -38,6 +38,18 @@ namespace UnivaPay.Models
         /// Skip.
         /// </summary>
         [EnumMember(Value = "skip")]
-        Skip
+        Skip,
+
+        /// <summary>
+        /// IfAvailable.
+        /// </summary>
+        [EnumMember(Value = "if_available")]
+        IfAvailable,
+
+        /// <summary>
+        /// Provided.
+        /// </summary>
+        [EnumMember(Value = "provided")]
+        Provided
     }
 }

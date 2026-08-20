@@ -23,7 +23,6 @@ WeChat customs declaration payload returned by the backend formatter.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 CustomsDeclarationWebhookDeclaration customsDeclarationWebhookDeclaration = new CustomsDeclarationWebhookDeclaration
 {
@@ -31,7 +30,6 @@ CustomsDeclarationWebhookDeclaration customsDeclarationWebhookDeclaration = new 
     MerchantCustomsNo = "1234567890",
     CertificateId = "AB1234567",
     CertificateName = "TARO YAMADA",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

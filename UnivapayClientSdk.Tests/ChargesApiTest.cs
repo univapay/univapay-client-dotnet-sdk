@@ -306,7 +306,7 @@ namespace UnivaPay
         }
 
         /// <summary>
-        /// Captures a previously authorized charge (where `capture` was set to false during creation).  The capture amount must be less than or equal to the authorized amount, and the currency must match..
+        /// Captures a previously authorized charge (where `capture` was set to false during creation).  The capture amount must be less than or equal to the authorized amount, and the currency must match. The request body — and both of its fields — is optional: if omitted entirely, the full outstanding authorized amount (in the originally requested currency) is captured..
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous unit test.</returns>
         [Test]
@@ -315,14 +315,14 @@ namespace UnivaPay
             // Parameters for the API call
             Guid storeId = Guid.Parse("0cab399b-5621-425b-993b-f8507eba1e78");
             Guid id = Guid.Parse("c4e87129-cad4-47fb-8ded-b4c0a4ae0dd4");
-            Models.ChargeCaptureRequest body = ApiHelper.JsonDeserialize<Models.ChargeCaptureRequest>("{\"amount\":1000,\"currency\":\"JPY\"}");
             string idempotencyKey = "f64be872-353d-4c3c-84cb-3dc617fe89f7";
+            Models.ChargeCaptureRequest body = ApiHelper.JsonDeserialize<Models.ChargeCaptureRequest>("{\"amount\":1000,\"currency\":\"JPY\"}");
 
             // Perform API call
             ApiResponse<object> result = null;
             try
             {
-                result = await this.controller.CaptureChargeAsync(storeId, id, body, idempotencyKey);
+                result = await this.controller.CaptureChargeAsync(storeId, id, idempotencyKey, body);
             }
             catch (ApiException)
             {

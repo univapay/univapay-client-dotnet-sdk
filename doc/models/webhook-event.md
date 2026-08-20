@@ -27,16 +27,9 @@ Represents a single delivery attempt of a webhook event, including the payload s
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 WebhookEvent webhookEvent = new WebhookEvent
 {
-    Id = new Guid("000000b4-0000-0000-0000-000000000000"),
-    WebhookId = new Guid("00002482-0000-0000-0000-000000000000"),
-    MEvent = WebhookTrigger.TokenCvvAuthUpdated,
-    Data = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
-    Successful = false,
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

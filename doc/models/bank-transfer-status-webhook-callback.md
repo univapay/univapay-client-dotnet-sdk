@@ -24,7 +24,6 @@ Webhook envelope whose `data` payload is a BankTransferStatusData resource.
 ```csharp
 using System.Globalization;
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 BankTransferStatusWebhookCallback bankTransferStatusWebhookCallback = new BankTransferStatusWebhookCallback
 {
@@ -57,9 +56,7 @@ BankTransferStatusWebhookCallback bankTransferStatusWebhookCallback = new BankTr
         {
             OrderId = "order_12345",
         },
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

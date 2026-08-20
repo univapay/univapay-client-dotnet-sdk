@@ -24,7 +24,6 @@ Token Create Konbini Data schema.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 TokenCreateKonbiniData tokenCreateKonbiniData = new TokenCreateKonbiniData
 {
@@ -34,11 +33,9 @@ TokenCreateKonbiniData tokenCreateKonbiniData = new TokenCreateKonbiniData
     {
         CountryCode = "81",
         LocalNumber = "08012341234",
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
     ExpirationPeriod = "P7D",
     ExpirationTimeShift = "23:59:59+09:00",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

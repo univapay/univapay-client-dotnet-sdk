@@ -57,14 +57,32 @@ namespace UnivaPay.Models
         /// </summary>
         /// <param name="redirectEndpoint">redirect_endpoint.</param>
         /// <param name="mode">mode.</param>
+        /// <param name="authenticationValue">authentication_value.</param>
+        /// <param name="eci">eci.</param>
+        /// <param name="dsTransactionId">ds_transaction_id.</param>
+        /// <param name="serverTransactionId">server_transaction_id.</param>
+        /// <param name="messageVersion">message_version.</param>
+        /// <param name="transactionStatus">transaction_status.</param>
         public ChargeCreateRequestThreeDs(
             string redirectEndpoint = null,
-            Models.ChargeCreateRequestThreeDsMode? mode = Models.ChargeCreateRequestThreeDsMode.Normal)
+            Models.ChargeCreateRequestThreeDsMode? mode = null,
+            string authenticationValue = null,
+            string eci = null,
+            string dsTransactionId = null,
+            string serverTransactionId = null,
+            string messageVersion = null,
+            string transactionStatus = null)
         {
             this.additionalProperties = new Dictionary<string, JToken>();
             this.propertyName = this.GetPropertyNames();
             this.RedirectEndpoint = redirectEndpoint;
             this.Mode = mode;
+            this.AuthenticationValue = authenticationValue;
+            this.Eci = eci;
+            this.DsTransactionId = dsTransactionId;
+            this.ServerTransactionId = serverTransactionId;
+            this.MessageVersion = messageVersion;
+            this.TransactionStatus = transactionStatus;
         }
 
         /// <summary>
@@ -74,10 +92,46 @@ namespace UnivaPay.Models
         public string RedirectEndpoint { get; set; }
 
         /// <summary>
-        /// 3D-Secure authentication type. App Token Secret is required to use 'skip'.
+        /// 3D-Secure authentication type. App Token Secret is required to use 'skip'. `if_available` enforces 3DS only if credentials are available for the recurring token and it has not already completed 3DS. `provided` is set automatically by the server when external MPI authentication data (`authentication_value`, `eci`, etc.) is submitted on the request and cannot be set manually. When omitted, the store's default 3DS policy applies — do not assume 'normal'.
         /// </summary>
         [JsonProperty("mode", NullValueHandling = NullValueHandling.Ignore)]
         public Models.ChargeCreateRequestThreeDsMode? Mode { get; set; }
+
+        /// <summary>
+        /// External MPI: the cardholder authentication value (CAVV/AAV) returned by the 3-D Secure directory server. Submit together with `eci`, `ds_transaction_id`, `server_transaction_id`, `message_version`, and `transaction_status` to provide externally completed 3DS authentication data — either all six fields must be present, or none of them.
+        /// </summary>
+        [JsonProperty("authentication_value", NullValueHandling = NullValueHandling.Ignore)]
+        public string AuthenticationValue { get; set; }
+
+        /// <summary>
+        /// External MPI: the two-digit Electronic Commerce Indicator returned by the directory server. Submit together with the other external MPI fields.
+        /// </summary>
+        [JsonProperty("eci", NullValueHandling = NullValueHandling.Ignore)]
+        public string Eci { get; set; }
+
+        /// <summary>
+        /// External MPI: the directory server transaction ID. Submit together with the other external MPI fields.
+        /// </summary>
+        [JsonProperty("ds_transaction_id", NullValueHandling = NullValueHandling.Ignore)]
+        public string DsTransactionId { get; set; }
+
+        /// <summary>
+        /// External MPI: the 3DS server transaction ID. Submit together with the other external MPI fields.
+        /// </summary>
+        [JsonProperty("server_transaction_id", NullValueHandling = NullValueHandling.Ignore)]
+        public string ServerTransactionId { get; set; }
+
+        /// <summary>
+        /// External MPI: the 3-D Secure protocol message version (e.g., '2.1.0', '2.2.0'). Submit together with the other external MPI fields.
+        /// </summary>
+        [JsonProperty("message_version", NullValueHandling = NullValueHandling.Ignore)]
+        public string MessageVersion { get; set; }
+
+        /// <summary>
+        /// External MPI: the 3-D Secure directory server transaction status. Only a successful authentication status is accepted. Submit together with the other external MPI fields.
+        /// </summary>
+        [JsonProperty("transaction_status", NullValueHandling = NullValueHandling.Ignore)]
+        public string TransactionStatus { get; set; }
 
         /// <inheritdoc/>
         public override string ToString()
@@ -95,6 +149,12 @@ namespace UnivaPay.Models
         {
             toStringOutput.Add($"RedirectEndpoint = {this.RedirectEndpoint ?? "null"}");
             toStringOutput.Add($"Mode = {(this.Mode == null ? "null" : this.Mode.ToString())}");
+            toStringOutput.Add($"AuthenticationValue = {this.AuthenticationValue ?? "null"}");
+            toStringOutput.Add($"Eci = {this.Eci ?? "null"}");
+            toStringOutput.Add($"DsTransactionId = {this.DsTransactionId ?? "null"}");
+            toStringOutput.Add($"ServerTransactionId = {this.ServerTransactionId ?? "null"}");
+            toStringOutput.Add($"MessageVersion = {this.MessageVersion ?? "null"}");
+            toStringOutput.Add($"TransactionStatus = {this.TransactionStatus ?? "null"}");
 
             additionalProperties?
                 .Select(kvp => $"[{kvp.Key}] = {kvp.Value.ToString(Formatting.None)}")

@@ -22,14 +22,12 @@ Base Konbini Data schema.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 BaseKonbiniData baseKonbiniData = new BaseKonbiniData
 {
     CustomerName = "Taro Yamada",
     ConvenienceStore = BaseKonbiniDataConvenienceStore.SevenEleven,
     ExpirationPeriod = "P7D",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

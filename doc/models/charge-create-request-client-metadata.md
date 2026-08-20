@@ -20,12 +20,10 @@ Charge Create Request Client Metadata schema.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 ChargeCreateRequestClientMetadata chargeCreateRequestClientMetadata = new ChargeCreateRequestClientMetadata
 {
     IpAddress = "198.51.100.14",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 

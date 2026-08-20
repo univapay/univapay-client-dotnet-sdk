@@ -28,7 +28,6 @@ Issuer token or bank transfer instruction payload.
 
 ```csharp
 using UnivaPay.Models;
-using UnivaPay.Utilities;
 
 IssuerToken issuerToken = new IssuerToken
 {
@@ -38,14 +37,7 @@ IssuerToken issuerToken = new IssuerToken
     Payload = new IssuerTokenPayload
     {
         RequestData = "example",
-        SSpcd = "sSpcd6",
-        SCptok = "sCptok0",
-        STerkn = "sTerkn6",
-        ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
     },
-    AccountId = "account_id2",
-    BranchCode = "branch_code8",
-    ["exampleAdditionalProperty"] = ApiHelper.JsonDeserialize<object>("{\"key1\":\"val1\",\"key2\":\"val2\"}"),
 };
 ```
 
